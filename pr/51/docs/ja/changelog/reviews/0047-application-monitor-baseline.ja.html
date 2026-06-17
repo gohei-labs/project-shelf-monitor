@@ -31,7 +31,7 @@
   <section>
     <h2>Decision Summary</h2>
     <div class="panel">
-      <p>`product/application-monitor.json` を application development rules、requirements、architecture assumptions の source of truth にします。rules、requirements、architecture を別々の monitor pages として生成します。</p>
+      <p>`product/application-monitor.json` を application development rules、requirements、architecture assumptions の source of truth にします。default の application monitor page を rules page にし、requirements と architecture は別ページにします。</p>
     </div>
   </section>
 
@@ -40,7 +40,8 @@
     <ul>
       <li>structured application monitor source data は、隠しフォルダではなく見える root の `product/` に置く。</li>
       <li>application monitor を guardrail monitor / review monitor とは別の monitor として扱う。</li>
-      <li>application-specific development rules を application monitor の最初の dedicated page にする。</li>
+      <li>application-specific development rules を default の application monitor page にする。</li>
+      <li>rules の前に、低情報量な目次だけのページを作らない。</li>
       <li>requirements と architecture / component decisions は別ページに分ける。</li>
       <li>将来、実装 directory が monitor source と component contract に載らずに増えた場合、check を fail させる。</li>
       <li>monitor HTML は source から生成し、手で編集しない。</li>
@@ -92,7 +93,7 @@
 
   <section>
     <h2>Next Step</h2>
-    <p>承認後、まず application development rules page を確認し、implementation directories を追加する前に development environment と最初の component contract を作ります。</p>
+    <p>承認後、application monitor page 自体を development-rules page として確認し、implementation directories を追加する前に development environment と最初の component contract を作ります。</p>
   </section>
 </main>
 </body>

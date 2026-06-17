@@ -31,7 +31,7 @@
   <section>
     <h2>Decision Summary</h2>
     <div class="panel">
-      <p>Create `product/application-monitor.json` as the source of truth for application development rules, requirements, and architecture assumptions. Generate separate monitor pages for rules, requirements, and architecture.</p>
+      <p>Create `product/application-monitor.json` as the source of truth for application development rules, requirements, and architecture assumptions. Make the default application monitor page the rules page, with separate detail pages for requirements and architecture.</p>
     </div>
   </section>
 
@@ -40,7 +40,8 @@
     <ul>
       <li>Use visible root `product/` for structured application monitor source data, not a hidden folder.</li>
       <li>Treat the application monitor as separate from the guardrail and review monitors.</li>
-      <li>Make application-specific development rules the first dedicated application monitor page.</li>
+      <li>Make application-specific development rules the default application monitor page.</li>
+      <li>Do not add a low-information table-of-contents page before the rules.</li>
       <li>Keep requirements and architecture/component decisions on separate pages.</li>
       <li>Fail future checks if implementation directories appear without monitor-source and component-contract coverage.</li>
       <li>Keep the monitor generated from source; do not hand-edit monitor HTML.</li>
@@ -92,7 +93,7 @@
 
   <section>
     <h2>Next Step</h2>
-    <p>After approval, review the application development rules page first, then create the development environment and the first component contract before adding implementation directories.</p>
+    <p>After approval, review the application monitor page itself as the development-rules page, then create the development environment and the first component contract before adding implementation directories.</p>
   </section>
 </main>
 </body>
