@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Application Monitor</title>
+  <title>アプリケーション要求</title>
   <style>
     :root {
       --bg:#F5F6F8;
@@ -77,38 +77,68 @@
 <body>
   <main>
     <nav class="topnav">
-      <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="reviews.html">Reviews</a>
-      <a class="here" aria-current="page">Application</a>
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="reviews.ja.html">レビュー</a>
+      <a class="here" aria-current="page">アプリケーション</a>
     </nav>
     <nav class="subnav">
-      <a class="here" aria-current="page">Application Monitor</a>
-      <a href="application-rules.html">Development rules</a>
-      <a href="application-requirements.html">Requirements</a>
-      <a href="application-architecture.html">Architecture</a>
+      <a href="application-monitor.ja.html">アプリケーションモニター</a>
+      <a href="application-rules.ja.html">開発ルール</a>
+      <a class="here" aria-current="page">要求</a>
+      <a href="application-architecture.ja.html">アーキテクチャ</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
-      <h1 class="hero">Application Monitor</h1>
-      <p class="sub">A product-facing monitor split into development rules, requirements, and architecture pages.</p>
+      <h1 class="hero">アプリケーション要求</h1>
+      <p class="sub">product requirements と、それに結びつく feature を確認するページ。</p>
     </header>
     <dl class="facts">
-      <div class="fact"><dt>Current slice</dt><dd>Phase 1 skeleton <span class="pill status-planned">Planned</span></dd></div>
-      <div class="fact"><dt>Managed root</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
-      <div class="fact"><dt>Source</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">Monitor source: <code>product/application-monitor.json</code></p></dd></div>
+      <div class="fact"><dt>現在のスライス</dt><dd>Phase 1 スケルトン <span class="pill status-planned">計画</span></dd></div>
+      <div class="fact"><dt>管理対象ルート</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
+      <div class="fact"><dt>情報源</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">モニター正本: <code>product/application-monitor.json</code></p></dd></div>
     </dl>
-    <section><h2>Pages</h2><div class="deck">
-      <div class="row page-row">
-        <div class="rid"><a href="application-rules.html">Development rules</a></div>
-        <div><p class="title">Development rules</p><p class="desc">The application-specific rules that should be reviewed before development work moves forward.</p></div>
+    <section><h2>要求</h2><div class="deck">
+      <div class="row req-row">
+        <div class="rid">REQ-001</div>
+        <div><p class="title">読み取り専用の本棚表示</p><p class="desc">最初の画面は、ファイルの移動、削除、コピー、インポート、書き換えを行わずに管理対象の本棚を表示する。</p><div class="mini"><span>FEAT-002</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-requirements.html">Requirements</a></div>
-        <div><p class="title">Requirements</p><p class="desc">The current requirement set, kept separate from development rules.</p></div>
+      <div class="row req-row">
+        <div class="rid">REQ-002</div>
+        <div><p class="title">明示的な managed-root 境界</p><p class="desc">バックエンドは MANAGED_ROOT を使い、そのルート外に解決されるリクエストパスを拒否する。</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-architecture.html">Architecture</a></div>
-        <div><p class="title">Architecture</p><p class="desc">The planned component and connection shape, kept separate from requirements.</p></div>
+      <div class="row req-row">
+        <div class="rid">REQ-003</div>
+        <div><p class="title">状態と最近のログ</p><p class="desc">最初の画面は、アプリケーション状態、managed-root 設定、本棚読み取り結果、最近の JSONL ログイベントを表示する。</p><div class="mini"><span>FEAT-001</span><span>FEAT-003</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
+      </div>
+      <div class="row req-row">
+        <div class="rid">REQ-004</div>
+        <div><p class="title">構造化された運用ログ</p><p class="desc">起動、設定、本棚読み取り、ブロックされたパス試行を、秘密情報や私的ファイル内容を含めず JSONL として記録する。</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
+      </div>
+    </div></section>
+    <section><h2>機能</h2><div class="deck">
+      <div class="row feat-row">
+        <div class="rid">FEAT-001</div>
+        <div><p class="title">ヘルスと状態</p><p class="desc">バックエンドの health、設定済み managed root、アプリケーション準備状態を UI に渡す。</p><div class="mini"><span>REQ-003</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat-row">
+        <div class="rid">FEAT-002</div>
+        <div><p class="title">読み取り専用の本棚一覧</p><p class="desc">ファイルを変更せず、バックエンド経由で管理対象の本棚内容を一覧する。</p><div class="mini"><span>REQ-001</span><span>REQ-002</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat-row">
+        <div class="rid">FEAT-003</div>
+        <div><p class="title">最近の運用ログ</p><p class="desc">最近の構造化ログイベントを読み、アプリが何をしているかをオーナーが確認できるようにする。</p><div class="mini"><span>REQ-003</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat-row">
+        <div class="rid">FEAT-004</div>
+        <div><p class="title">パス境界の強制</p><p class="desc">ファイルシステムに触る前にリクエストパスを正規化し、MANAGED_ROOT 外をブロックする。</p><div class="mini"><span>REQ-002</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span></div></div>
       </div>
     </div></section>
   </main>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Application Monitor</title>
+  <title>Application Architecture</title>
   <style>
     :root {
       --bg:#F5F6F8;
@@ -82,33 +82,72 @@
       <a class="here" aria-current="page">Application</a>
     </nav>
     <nav class="subnav">
-      <a class="here" aria-current="page">Application Monitor</a>
+      <a href="application-monitor.html">Application Monitor</a>
       <a href="application-rules.html">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
-      <a href="application-architecture.html">Architecture</a>
+      <a class="here" aria-current="page">Architecture</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
-      <h1 class="hero">Application Monitor</h1>
-      <p class="sub">A product-facing monitor split into development rules, requirements, and architecture pages.</p>
+      <h1 class="hero">Application Architecture</h1>
+      <p class="sub">Component, folder, stack, and connection decisions for the current slice.</p>
     </header>
     <dl class="facts">
       <div class="fact"><dt>Current slice</dt><dd>Phase 1 skeleton <span class="pill status-planned">Planned</span></dd></div>
       <div class="fact"><dt>Managed root</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
       <div class="fact"><dt>Source</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">Monitor source: <code>product/application-monitor.json</code></p></dd></div>
     </dl>
-    <section><h2>Pages</h2><div class="deck">
-      <div class="row page-row">
-        <div class="rid"><a href="application-rules.html">Development rules</a></div>
-        <div><p class="title">Development rules</p><p class="desc">The application-specific rules that should be reviewed before development work moves forward.</p></div>
+    <section><h2>Components</h2><div class="deck">
+      <div class="row comp-row">
+        <div class="rid">api</div>
+        <div><code>apps/api</code><p class="meta">Not created</p></div>
+        <div><p class="title">Backend API</p><p class="meta">Type: backend / Stack: FastAPI / Python</p><div class="mini"><span>REQ-001</span><span>REQ-002</span><span>REQ-003</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">Planned</span><p class="meta">Contract: <span class="pill status-planned">Planned</span></p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-requirements.html">Requirements</a></div>
-        <div><p class="title">Requirements</p><p class="desc">The current requirement set, kept separate from development rules.</p></div>
+      <div class="row comp-row">
+        <div class="rid">web</div>
+        <div><code>apps/web</code><p class="meta">Not created</p></div>
+        <div><p class="title">Web UI</p><p class="meta">Type: frontend / Stack: React / Vite / TypeScript</p><div class="mini"><span>REQ-001</span><span>REQ-003</span></div></div>
+        <div><span class="pill status-planned">Planned</span><p class="meta">Contract: <span class="pill status-planned">Planned</span></p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-architecture.html">Architecture</a></div>
-        <div><p class="title">Architecture</p><p class="desc">The planned component and connection shape, kept separate from requirements.</p></div>
+    </div></section>
+    <section><h2>Connections</h2><div class="deck">
+      <div class="row conn-row">
+        <div class="rid">CONN-001</div>
+        <div><p class="title">UI reads status, shelf, and logs from the API</p><p class="meta"><code>web</code> -> <code>api</code> / HTTP</p><div class="mini"><span>FEAT-001</span><span>FEAT-002</span><span>FEAT-003</span></div></div>
+        <div><span class="pill status-planned">Planned</span></div>
+      </div>
+      <div class="row conn-row">
+        <div class="rid">CONN-002</div>
+        <div><p class="title">API reads the managed root through a boundary check</p><p class="meta"><code>api</code> -> <code>managed-root</code> / local-filesystem-read</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">Planned</span></div>
+      </div>
+      <div class="row conn-row">
+        <div class="rid">CONN-003</div>
+        <div><p class="title">API writes operational JSONL events</p><p class="meta"><code>api</code> -> <code>jsonl-logs</code> / append-jsonl</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">Planned</span></div>
+      </div>
+    </div></section>
+    <section><h2>Structure drift indicators</h2><div class="deck">
+      <div class="row drift-row">
+        <div class="rid">AUTO-001</div>
+        <div><p class="title">Implementation directories listed in monitor source</p><p class="desc">No unlisted implementation directories.</p></div>
+        <div><span class="pill status-pass">Pass</span></div>
+      </div>
+      <div class="row drift-row">
+        <div class="rid">AUTO-002</div>
+        <div><p class="title">Implementation directories declared in component contract</p><p class="desc">No implementation directories lack a component contract.</p></div>
+        <div><span class="pill status-pass">Pass</span></div>
+      </div>
+      <div class="row drift-row">
+        <div class="rid">AUTO-003</div>
+        <div><p class="title">Requirements linked to features</p><p class="desc">All requirements are linked to features.</p></div>
+        <div><span class="pill status-pass">Pass</span></div>
+      </div>
+      <div class="row drift-row">
+        <div class="rid">AUTO-004</div>
+        <div><p class="title">Features linked to components</p><p class="desc">All features are linked to components.</p></div>
+        <div><span class="pill status-pass">Pass</span></div>
       </div>
     </div></section>
   </main>

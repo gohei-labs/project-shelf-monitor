@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Application Monitor</title>
+  <title>アプリケーション開発ルール</title>
   <style>
     :root {
       --bg:#F5F6F8;
@@ -77,38 +77,51 @@
 <body>
   <main>
     <nav class="topnav">
-      <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="reviews.html">Reviews</a>
-      <a class="here" aria-current="page">Application</a>
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="reviews.ja.html">レビュー</a>
+      <a class="here" aria-current="page">アプリケーション</a>
     </nav>
     <nav class="subnav">
-      <a class="here" aria-current="page">Application Monitor</a>
-      <a href="application-rules.html">Development rules</a>
-      <a href="application-requirements.html">Requirements</a>
-      <a href="application-architecture.html">Architecture</a>
+      <a href="application-monitor.ja.html">アプリケーションモニター</a>
+      <a class="here" aria-current="page">開発ルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a href="application-architecture.ja.html">アーキテクチャ</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
-      <h1 class="hero">Application Monitor</h1>
-      <p class="sub">A product-facing monitor split into development rules, requirements, and architecture pages.</p>
+      <h1 class="hero">アプリケーション開発ルール</h1>
+      <p class="sub">このアプリケーションをどう進化させてよいかを見るページ。</p>
     </header>
     <dl class="facts">
-      <div class="fact"><dt>Current slice</dt><dd>Phase 1 skeleton <span class="pill status-planned">Planned</span></dd></div>
-      <div class="fact"><dt>Managed root</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
-      <div class="fact"><dt>Source</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">Monitor source: <code>product/application-monitor.json</code></p></dd></div>
+      <div class="fact"><dt>現在のスライス</dt><dd>Phase 1 スケルトン <span class="pill status-planned">計画</span></dd></div>
+      <div class="fact"><dt>管理対象ルート</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
+      <div class="fact"><dt>情報源</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">モニター正本: <code>product/application-monitor.json</code></p></dd></div>
     </dl>
-    <section><h2>Pages</h2><div class="deck">
-      <div class="row page-row">
-        <div class="rid"><a href="application-rules.html">Development rules</a></div>
-        <div><p class="title">Development rules</p><p class="desc">The application-specific rules that should be reviewed before development work moves forward.</p></div>
+    <section><h2>開発ルール</h2><div class="deck">
+      <div class="row rule-row">
+        <div class="rid">APP-RULE-001</div>
+        <div><p class="title">アプリケーションモニター正本を先に更新</p><p class="desc">アプリケーションの要求、開発ルール、コンポーネント、接続を変える場合は、生成 HTML より先に product/application-monitor.json を更新する。</p><p class="meta">根拠: check-application-monitor.ps1 が生成済み monitor の鮮度を確認する。</p></div>
+        <div><span class="pill status-active">有効</span><p class="meta">統制: <span class="pill status-hard-gate">強制ゲート</span></p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-requirements.html">Requirements</a></div>
-        <div><p class="title">Requirements</p><p class="desc">The current requirement set, kept separate from development rules.</p></div>
+      <div class="row rule-row">
+        <div class="rid">APP-RULE-002</div>
+        <div><p class="title">実装ディレクトリは宣言必須</p><p class="desc">apps/、packages/、services/ 配下の実装ディレクトリは、application monitor の正本と project-components.json の両方に載せる。</p><p class="meta">根拠: guardrail が実ディレクトリ、monitor 正本、component contract を照合する。</p></div>
+        <div><span class="pill status-active">有効</span><p class="meta">統制: <span class="pill status-hard-gate">強制ゲート</span></p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-architecture.html">Architecture</a></div>
-        <div><p class="title">Architecture</p><p class="desc">The planned component and connection shape, kept separate from requirements.</p></div>
+      <div class="row rule-row">
+        <div class="rid">APP-RULE-003</div>
+        <div><p class="title">実装前に要求のつながりを明示</p><p class="desc">product behavior は、実装前に requirement、feature、responsible component のつながりを示す。</p><p class="meta">根拠: requirements page と architecture page が、requirement、feature、component のつながりを別々に表示する。</p></div>
+        <div><span class="pill status-active">有効</span><p class="meta">統制: <span class="pill status-working-agreement">運用合意</span></p></div>
+      </div>
+      <div class="row rule-row">
+        <div class="rid">APP-RULE-004</div>
+        <div><p class="title">Phase 1 は読み取り専用</p><p class="desc">Phase 1 では、オーナーファイルの移動、削除、コピー、インポート、書き換えを行う UI control や API behavior を追加しない。</p><p class="meta">根拠: 読み取り専用の挙動を application development rule と product requirement の両方で追跡する。</p></div>
+        <div><span class="pill status-active">有効</span><p class="meta">統制: <span class="pill status-working-agreement">運用合意</span></p></div>
+      </div>
+      <div class="row rule-row">
+        <div class="rid">APP-RULE-005</div>
+        <div><p class="title">アーキテクチャ変更は専用ページで見る</p><p class="desc">component、folder、stack、connection の判断は rules や requirements page に混ぜず、architecture page に置く。</p><p class="meta">根拠: generator が dedicated architecture page を生成する。</p></div>
+        <div><span class="pill status-active">有効</span><p class="meta">統制: <span class="pill status-working-agreement">運用合意</span></p></div>
       </div>
     </div></section>
   </main>

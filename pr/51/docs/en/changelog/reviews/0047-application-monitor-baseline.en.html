@@ -25,54 +25,55 @@
   <header>
     <span class="tag">Owner review artifact</span>
     <h1>Application Monitor Baseline</h1>
-    <p>This change adds a separate monitor for the product itself before application code is introduced.</p>
+    <p>This change adds a separate monitor for application development before application code is introduced.</p>
   </header>
 
   <section>
     <h2>Decision Summary</h2>
     <div class="panel">
-      <p>Create `product/application-map.json` as the source of truth for requirements, planned components, features, architecture connections, and structure-watch signals. Generate `monitor/application-monitor.html` and `monitor/application-monitor.ja.html` from that source.</p>
+      <p>Create `product/application-monitor.json` as the source of truth for application development rules, requirements, and architecture assumptions. Generate separate monitor pages for rules, requirements, and architecture.</p>
     </div>
   </section>
 
   <section>
     <h2>What The Owner Needs To Approve</h2>
     <ul>
-      <li>Use visible root `product/` for structured product source data, not a hidden folder.</li>
+      <li>Use visible root `product/` for structured application monitor source data, not a hidden folder.</li>
       <li>Treat the application monitor as separate from the guardrail and review monitors.</li>
-      <li>Track planned `apps/api` and `apps/web` components before creating their directories.</li>
-      <li>Fail future checks if implementation directories appear without application-map and component-contract coverage.</li>
+      <li>Make application-specific development rules the first dedicated application monitor page.</li>
+      <li>Keep requirements and architecture/component decisions on separate pages.</li>
+      <li>Fail future checks if implementation directories appear without monitor-source and component-contract coverage.</li>
       <li>Keep the monitor generated from source; do not hand-edit monitor HTML.</li>
     </ul>
   </section>
 
   <section>
     <h2>Recommendation</h2>
-    <p>Approve this baseline before creating the app skeleton. It makes structure visible early, while the cost of correcting drift is still low.</p>
+    <p>Approve this baseline before creating the app skeleton. It makes development rules, requirements, and architecture assumptions reviewable before code starts to grow.</p>
   </section>
 
   <section>
     <h2>Risks And Mitigations</h2>
     <table>
       <tr><th>Risk</th><th>Mitigation</th></tr>
-      <tr><td>The map can become stale.</td><td>`check-application-monitor.ps1` verifies the generated HTML and flags unmapped implementation directories.</td></tr>
+      <tr><td>The monitor source can become stale.</td><td>`check-application-monitor.ps1` verifies generated HTML and flags implementation directories missing from the architecture section.</td></tr>
       <tr><td>Planned components may be mistaken for implemented code.</td><td>The monitor shows component status and the guardrail requires component contracts only after directories exist.</td></tr>
-      <tr><td>The product monitor duplicates guardrails.</td><td>The source and question are different: application structure comes from `product/application-map.json`, while controls come from `monitor/registry.json`.</td></tr>
+      <tr><td>The application monitor duplicates guardrails.</td><td>The source and question are different: application development rules come from `product/application-monitor.json`, while general controls come from `monitor/registry.json`.</td></tr>
     </table>
   </section>
 
   <section data-guardrail="runtime-boundary">
     <h2>Runtime Boundary Check</h2>
-    <p>The application map records planned FastAPI / Python and React / Vite / TypeScript components, but this change does not create `apps/api`, `apps/web`, Docker images, dependency installs, or runtime commands.</p>
+    <p>The architecture page records planned FastAPI / Python and React / Vite / TypeScript components, but this change does not create `apps/api`, `apps/web`, Docker images, dependency installs, or runtime commands.</p>
   </section>
 
   <section data-guardrail="standard-terminology">
     <h2>Terminology Check</h2>
     <table>
       <tr><th>Term</th><th>Use here</th></tr>
-      <tr><td>Application monitor</td><td>The product monitor generated from `product/application-map.json`.</td></tr>
-      <tr><td>Product map</td><td>Structured source data for requirements, components, features, connections, and drift signals.</td></tr>
-      <tr><td>Structure-watch signal</td><td>A visible warning that code structure and product source data are drifting apart.</td></tr>
+      <tr><td>Application monitor</td><td>The application development monitor generated from `product/application-monitor.json`.</td></tr>
+      <tr><td>Application monitor source</td><td>Structured source data for application development rules, requirements, architecture, and structure drift indicators.</td></tr>
+      <tr><td>Structure drift indicator</td><td>A visible signal that code structure and monitor source data are drifting apart.</td></tr>
       <tr><td>Component contract</td><td>The stack and check declaration in `project-components.json` required once a component directory exists.</td></tr>
     </table>
   </section>
@@ -82,7 +83,7 @@
     <table>
       <tr><th>Source</th><th>Supports</th></tr>
       <tr><td>Issue #2</td><td>Initial application slice: read-only managed shelf, status, logs, and path boundary.</td></tr>
-      <tr><td>`docs/en/rules/observability/application-monitoring.md`</td><td>Application monitor source, scope, and enforcement rules.</td></tr>
+      <tr><td>`docs/en/rules/observability/application-monitoring.md`</td><td>Application monitor page split, source, scope, and enforcement rules.</td></tr>
       <tr><td>`docs/en/rules/observability/repository-layout.md`</td><td>Visible root folder roles, including `product/`.</td></tr>
       <tr><td>`docs/en/rules/guardrails/development.md`</td><td>Development guardrails and component-contract expectations.</td></tr>
       <tr><td>`docs/en/rules/observability/logging.md`</td><td>Structured operational logging expectations for the first slice.</td></tr>
@@ -91,7 +92,7 @@
 
   <section>
     <h2>Next Step</h2>
-    <p>After approval, create the development environment and the first component contract before adding implementation directories.</p>
+    <p>After approval, review the application development rules page first, then create the development environment and the first component contract before adding implementation directories.</p>
   </section>
 </main>
 </body>

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Application Monitor</title>
+  <title>アプリケーションアーキテクチャ</title>
   <style>
     :root {
       --bg:#F5F6F8;
@@ -77,38 +77,77 @@
 <body>
   <main>
     <nav class="topnav">
-      <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="reviews.html">Reviews</a>
-      <a class="here" aria-current="page">Application</a>
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="reviews.ja.html">レビュー</a>
+      <a class="here" aria-current="page">アプリケーション</a>
     </nav>
     <nav class="subnav">
-      <a class="here" aria-current="page">Application Monitor</a>
-      <a href="application-rules.html">Development rules</a>
-      <a href="application-requirements.html">Requirements</a>
-      <a href="application-architecture.html">Architecture</a>
+      <a href="application-monitor.ja.html">アプリケーションモニター</a>
+      <a href="application-rules.ja.html">開発ルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a class="here" aria-current="page">アーキテクチャ</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
-      <h1 class="hero">Application Monitor</h1>
-      <p class="sub">A product-facing monitor split into development rules, requirements, and architecture pages.</p>
+      <h1 class="hero">アプリケーションアーキテクチャ</h1>
+      <p class="sub">component、folder、stack、connection の判断を見るページ。</p>
     </header>
     <dl class="facts">
-      <div class="fact"><dt>Current slice</dt><dd>Phase 1 skeleton <span class="pill status-planned">Planned</span></dd></div>
-      <div class="fact"><dt>Managed root</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
-      <div class="fact"><dt>Source</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">Monitor source: <code>product/application-monitor.json</code></p></dd></div>
+      <div class="fact"><dt>現在のスライス</dt><dd>Phase 1 スケルトン <span class="pill status-planned">計画</span></dd></div>
+      <div class="fact"><dt>管理対象ルート</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
+      <div class="fact"><dt>情報源</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">モニター正本: <code>product/application-monitor.json</code></p></dd></div>
     </dl>
-    <section><h2>Pages</h2><div class="deck">
-      <div class="row page-row">
-        <div class="rid"><a href="application-rules.html">Development rules</a></div>
-        <div><p class="title">Development rules</p><p class="desc">The application-specific rules that should be reviewed before development work moves forward.</p></div>
+    <section><h2>コンポーネント</h2><div class="deck">
+      <div class="row comp-row">
+        <div class="rid">api</div>
+        <div><code>apps/api</code><p class="meta">未作成</p></div>
+        <div><p class="title">バックエンド API</p><p class="meta">種別: backend / スタック: FastAPI / Python</p><div class="mini"><span>REQ-001</span><span>REQ-002</span><span>REQ-003</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">契約: <span class="pill status-planned">計画</span></p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-requirements.html">Requirements</a></div>
-        <div><p class="title">Requirements</p><p class="desc">The current requirement set, kept separate from development rules.</p></div>
+      <div class="row comp-row">
+        <div class="rid">web</div>
+        <div><code>apps/web</code><p class="meta">未作成</p></div>
+        <div><p class="title">Web UI</p><p class="meta">種別: frontend / スタック: React / Vite / TypeScript</p><div class="mini"><span>REQ-001</span><span>REQ-003</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">契約: <span class="pill status-planned">計画</span></p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-architecture.html">Architecture</a></div>
-        <div><p class="title">Architecture</p><p class="desc">The planned component and connection shape, kept separate from requirements.</p></div>
+    </div></section>
+    <section><h2>接続</h2><div class="deck">
+      <div class="row conn-row">
+        <div class="rid">CONN-001</div>
+        <div><p class="title">UI が API から状態、本棚、ログを読む</p><p class="meta"><code>web</code> -> <code>api</code> / HTTP</p><div class="mini"><span>FEAT-001</span><span>FEAT-002</span><span>FEAT-003</span></div></div>
+        <div><span class="pill status-planned">計画</span></div>
+      </div>
+      <div class="row conn-row">
+        <div class="rid">CONN-002</div>
+        <div><p class="title">API が境界チェックを通して managed root を読む</p><p class="meta"><code>api</code> -> <code>managed-root</code> / local-filesystem-read</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span></div>
+      </div>
+      <div class="row conn-row">
+        <div class="rid">CONN-003</div>
+        <div><p class="title">API が運用 JSONL イベントを書く</p><p class="meta"><code>api</code> -> <code>jsonl-logs</code> / append-jsonl</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span></div>
+      </div>
+    </div></section>
+    <section><h2>構造ズレ指標</h2><div class="deck">
+      <div class="row drift-row">
+        <div class="rid">AUTO-001</div>
+        <div><p class="title">実装ディレクトリの monitor 掲載</p><p class="desc">未掲載の実装ディレクトリはありません。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
+      </div>
+      <div class="row drift-row">
+        <div class="rid">AUTO-002</div>
+        <div><p class="title">実装ディレクトリの component contract</p><p class="desc">契約なしの実装ディレクトリはありません。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
+      </div>
+      <div class="row drift-row">
+        <div class="rid">AUTO-003</div>
+        <div><p class="title">要求と feature の接続</p><p class="desc">すべての要求が feature に接続されています。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
+      </div>
+      <div class="row drift-row">
+        <div class="rid">AUTO-004</div>
+        <div><p class="title">feature と component の接続</p><p class="desc">すべての feature が component に接続されています。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
       </div>
     </div></section>
   </main>

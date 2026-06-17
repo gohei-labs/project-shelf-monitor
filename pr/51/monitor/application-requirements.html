@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Application Monitor</title>
+  <title>Application Requirements</title>
   <style>
     :root {
       --bg:#F5F6F8;
@@ -82,33 +82,63 @@
       <a class="here" aria-current="page">Application</a>
     </nav>
     <nav class="subnav">
-      <a class="here" aria-current="page">Application Monitor</a>
+      <a href="application-monitor.html">Application Monitor</a>
       <a href="application-rules.html">Development rules</a>
-      <a href="application-requirements.html">Requirements</a>
+      <a class="here" aria-current="page">Requirements</a>
       <a href="application-architecture.html">Architecture</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
-      <h1 class="hero">Application Monitor</h1>
-      <p class="sub">A product-facing monitor split into development rules, requirements, and architecture pages.</p>
+      <h1 class="hero">Application Requirements</h1>
+      <p class="sub">Product requirements and the features currently linked to them.</p>
     </header>
     <dl class="facts">
       <div class="fact"><dt>Current slice</dt><dd>Phase 1 skeleton <span class="pill status-planned">Planned</span></dd></div>
       <div class="fact"><dt>Managed root</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
       <div class="fact"><dt>Source</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">Monitor source: <code>product/application-monitor.json</code></p></dd></div>
     </dl>
-    <section><h2>Pages</h2><div class="deck">
-      <div class="row page-row">
-        <div class="rid"><a href="application-rules.html">Development rules</a></div>
-        <div><p class="title">Development rules</p><p class="desc">The application-specific rules that should be reviewed before development work moves forward.</p></div>
+    <section><h2>Requirements</h2><div class="deck">
+      <div class="row req-row">
+        <div class="rid">REQ-001</div>
+        <div><p class="title">Read-only shelf view</p><p class="desc">The first screen shows the managed shelf without moving, deleting, copying, importing, or rewriting files.</p><div class="mini"><span>FEAT-002</span></div></div>
+        <div><span class="pill status-planned">Planned</span><p class="meta">Priority: must</p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-requirements.html">Requirements</a></div>
-        <div><p class="title">Requirements</p><p class="desc">The current requirement set, kept separate from development rules.</p></div>
+      <div class="row req-row">
+        <div class="rid">REQ-002</div>
+        <div><p class="title">Explicit managed-root boundary</p><p class="desc">The backend uses MANAGED_ROOT and rejects all requested paths that resolve outside that root.</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">Planned</span><p class="meta">Priority: must</p></div>
       </div>
-      <div class="row page-row">
-        <div class="rid"><a href="application-architecture.html">Architecture</a></div>
-        <div><p class="title">Architecture</p><p class="desc">The planned component and connection shape, kept separate from requirements.</p></div>
+      <div class="row req-row">
+        <div class="rid">REQ-003</div>
+        <div><p class="title">Status and recent logs</p><p class="desc">The first screen shows application status, managed-root configuration, shelf-read results, and recent JSONL log events.</p><div class="mini"><span>FEAT-001</span><span>FEAT-003</span></div></div>
+        <div><span class="pill status-planned">Planned</span><p class="meta">Priority: must</p></div>
+      </div>
+      <div class="row req-row">
+        <div class="rid">REQ-004</div>
+        <div><p class="title">Structured operational logs</p><p class="desc">Startup, configuration, shelf reads, and blocked path attempts are recorded as JSONL without secrets or private file contents.</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">Planned</span><p class="meta">Priority: must</p></div>
+      </div>
+    </div></section>
+    <section><h2>Features</h2><div class="deck">
+      <div class="row feat-row">
+        <div class="rid">FEAT-001</div>
+        <div><p class="title">Health and status</p><p class="desc">Expose backend health, configured managed root, and application readiness to the UI.</p><div class="mini"><span>REQ-003</span></div></div>
+        <div><span class="pill status-planned">Planned</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat-row">
+        <div class="rid">FEAT-002</div>
+        <div><p class="title">Read-only shelf listing</p><p class="desc">List the managed shelf contents through the backend without file mutations.</p><div class="mini"><span>REQ-001</span><span>REQ-002</span></div></div>
+        <div><span class="pill status-planned">Planned</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat-row">
+        <div class="rid">FEAT-003</div>
+        <div><p class="title">Recent operational logs</p><p class="desc">Read recent structured log events so the owner can inspect what the app is doing.</p><div class="mini"><span>REQ-003</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">Planned</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat-row">
+        <div class="rid">FEAT-004</div>
+        <div><p class="title">Path-boundary enforcement</p><p class="desc">Normalize requested paths and block anything outside MANAGED_ROOT before touching the filesystem.</p><div class="mini"><span>REQ-002</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">Planned</span><div class="mini"><span>api</span></div></div>
       </div>
     </div></section>
   </main>
