@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "title": "Guardrail registry",
+  "description": "Authoritative list of the guardrails in effect. The guardrail monitor pages (monitor/guardrail-monitor.html and guardrail-monitor.ja.html) are generated from this file; do not edit monitor output by hand. scripts/guardrails/check-registry.ps1 verifies that every active guardrail names a real, wired gate, that each rule has both languages, and that the monitor output is up to date.",
+  "pillars": {
+    "guardrails": { "en": "Guardrails", "ja": "ガードレール" },
+    "visualization": { "en": "Visualization", "ja": "可視化" },
+    "human-orchestration": { "en": "Human orchestration", "ja": "人間オーケストレーション" }
+  },
+  "categories": {
+    "encoding-hygiene": { "en": "Encoding & hygiene", "ja": "エンコーディング・衛生" },
+    "secrets": { "en": "Secret management", "ja": "秘密情報管理" },
+    "build-environment": { "en": "Build & environment", "ja": "ビルド・環境" },
+    "governance-meta": { "en": "Governance & tooling", "ja": "統制・ツール" },
+    "bilingual-docs": { "en": "Bilingual docs", "ja": "二言語ドキュメント" },
+    "docs-portal": { "en": "Docs portal", "ja": "ドキュメントポータル" },
+    "review-artifacts": { "en": "Review artifacts", "ja": "レビュー成果物" },
+    "agent-context": { "en": "Agent context", "ja": "エージェント文脈" },
+    "decision-records": { "en": "Decision records", "ja": "決定記録" },
+    "working-agreements": { "en": "Working agreements", "ja": "作業の約束事" }
+  },
+  "guardrails": [
+    {
+      "id": "text-encoding",
+      "enabled": true,
+      "category": "encoding-hygiene",
+      "title": { "en": "Text encoding", "ja": "テキストエンコーディング" },
+      "rule": {
+        "en": "All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers.",
+        "ja": "追跡対象のテキストは全て UTF-8（BOM なし）で、妥当かつ文字化けマーカーが無い。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-text-encoding.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "doc-naming",
+      "enabled": true,
+      "category": "encoding-hygiene",
+      "title": { "en": "Document naming", "ja": "ドキュメント命名" },
+      "rule": {
+        "en": "A documentation file name must not repeat its parent folder name.",
+        "ja": "ドキュメントのファイル名は親フォルダ名を繰り返さない。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-doc-naming.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "repo-hygiene",
+      "enabled": true,
+      "category": "encoding-hygiene",
+      "title": { "en": "Repository hygiene", "ja": "リポジトリ衛生" },
+      "rule": {
+        "en": "The diff has no trailing whitespace or conflict markers.",
+        "ja": "差分に行末空白や衝突マーカーが無い。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "inline": "git diff --check", "marker": "git diff --check", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "root-hidden-paths",
+      "enabled": true,
+      "category": "governance-meta",
+      "title": { "en": "Root hidden path policy", "ja": "root hidden path 方針" },
+      "rule": {
+        "en": "Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files.",
+        "ja": "root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-root-hidden-paths.ps1", "wiredIn": ["scripts/check.ps1"] },
+      "note": {
+        "en": "Project-specific control files must use visible paths such as agent-context/.",
+        "ja": "project-specific control files は agent-context/ のような見える path を使う。"
+      }
+    },
+    {
+      "id": "agent-core-context",
+      "enabled": true,
+      "category": "agent-context",
+      "title": { "en": "Agent core-context manifest", "ja": "エージェント・コアコンテキスト manifest" },
+      "rule": {
+        "en": "Every required-reading path in the core-context manifest exists and is unique.",
+        "ja": "コアコンテキスト manifest の必読パスが全て実在し、重複が無い。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-agent-core-context.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "guardrail-registry",
+      "enabled": true,
+      "category": "governance-meta",
+      "title": { "en": "Guardrail registry integrity", "ja": "ガードレール・レジストリ整合" },
+      "rule": {
+        "en": "Every active guardrail names a real, wired gate, and the guardrail monitor is up to date with this registry.",
+        "ja": "全ての active ガードレールが実在・配線済みのゲートを指し、ガードレールモニターがレジストリと一致している。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-registry.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "bilingual-doc-pairs",
+      "enabled": true,
+      "category": "bilingual-docs",
+      "title": { "en": "Bilingual document pairs", "ja": "二言語ドキュメント対" },
+      "rule": {
+        "en": "docs/en and docs/ja hold the same set of relative Markdown paths.",
+        "ja": "docs/en と docs/ja が同じ相対 Markdown パス集合を持つ。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "bilingual",
+      "enforcedBy": { "script": "scripts/guardrails/check-bilingual-doc-pairs.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "doc-language-roots",
+      "enabled": true,
+      "category": "bilingual-docs",
+      "title": { "en": "Documentation language roots", "ja": "ドキュメント言語ルート" },
+      "rule": {
+        "en": "All Markdown lives under a configured language root.",
+        "ja": "全ての Markdown が設定された言語ルート配下にある。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "bilingual",
+      "enforcedBy": { "script": "scripts/guardrails/check-doc-language-roots.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "doc-language-content",
+      "enabled": true,
+      "category": "bilingual-docs",
+      "title": { "en": "Documentation language content", "ja": "ドキュメント言語内容" },
+      "rule": {
+        "en": "Each language tree actually contains that language; no untranslated copy is left behind.",
+        "ja": "各言語ツリーが実際にその言語で書かれている（未翻訳の写しが残っていない）。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "bilingual",
+      "enforcedBy": { "script": "scripts/guardrails/check-doc-language-content.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
+      "id": "review-artifact-runtime-boundary",
+      "enabled": true,
+      "category": "review-artifacts",
+      "title": { "en": "Review artifact runtime boundary", "ja": "レビュー成果物のランタイム境界" },
+      "rule": {
+        "en": "A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section.",
+        "ja": "ランタイムやツールに触れる変更済みレビュー成果物に、ランタイム境界チェックの節がある。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-runtime-boundary.ps1", "wiredIn": ["scripts/check.ps1", ".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
+    },
+    {
+      "id": "human-review-artifact",
+      "enabled": true,
+      "category": "review-artifacts",
+      "title": { "en": "Human review artifact link", "ja": "人間レビュー成果物のリンク" },
+      "rule": {
+        "en": "PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact.",
+        "ja": "承認を求める／高リスクな統制ファイルに触れる PR は、ブラウザで読めるレビュー成果物をリンクする。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-human-review-artifact.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
+    },
+    {
+      "id": "review-artifact-terminology",
+      "enabled": true,
+      "category": "review-artifacts",
+      "title": { "en": "Review artifact terminology", "ja": "レビュー成果物の用語チェック" },
+      "rule": {
+        "en": "Changed review artifacts carry a visible Terminology Check section.",
+        "ja": "変更済みレビュー成果物に、見える形の用語チェックの節がある。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-terminology.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
+    },
+    {
+      "id": "review-artifact-references",
+      "enabled": true,
+      "category": "review-artifacts",
+      "title": { "en": "Review artifact references", "ja": "レビュー成果物の参考情報" },
+      "rule": {
+        "en": "Changed review artifacts carry a References / primary-sources section that explains each source.",
+        "ja": "変更済みレビュー成果物に、各情報源を説明する参考情報／一次情報の節がある。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-references.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
+    },
+    {
+      "id": "devcontainer-build",
+      "enabled": true,
+      "category": "build-environment",
+      "title": { "en": "Dev Container build", "ja": "Dev Container のビルド" },
+      "rule": {
+        "en": "The reproducible Dev Container builds and passes the Bash check suite.",
+        "ja": "再現可能な Dev Container がビルドでき、Bash チェック一式が通る。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "runsAt": "ci",
+      "scope": "product",
+      "enforcedBy": { "ciJob": "devcontainer", "wiredIn": [".github/workflows/ci.yml"] }
+    },
+    {
+      "id": "backend-checks",
+      "enabled": true,
+      "category": "build-environment",
+      "title": { "en": "Backend project shape and tests", "ja": "バックエンド構成とテスト" },
+      "rule": {
+        "en": "If apps/api exists, it must contain pyproject.toml, and Ruff plus pytest must pass.",
+        "ja": "apps/api が存在する場合、pyproject.toml が必須であり、Ruff と pytest が通る。"
+      },
+      "pillar": "guardrails",
+      "status": "conditional",
+      "runsAt": "conditional",
+      "scope": "product",
+      "enforcedBy": { "inline": "apps/api pyproject.toml + uv ruff + pytest", "wiredIn": ["scripts/check.ps1"] },
+      "note": { "en": "Skipped only while apps/api is absent; apps/api without pyproject.toml fails.", "ja": "apps/api が無い間だけスキップ。apps/api があり pyproject.toml が無い場合は失敗。" }
+    },
+    {
+      "id": "frontend-build",
+      "enabled": true,
+      "category": "build-environment",
+      "title": { "en": "Frontend build", "ja": "フロントエンドのビルド" },
+      "rule": {
+        "en": "The frontend installs with a frozen lockfile and builds.",
+        "ja": "フロントエンドが lockfile 固定で install してビルドできる。"
+      },
+      "pillar": "guardrails",
+      "status": "conditional",
+      "runsAt": "conditional",
+      "scope": "product",
+      "enforcedBy": { "inline": "apps/web pnpm build", "wiredIn": ["scripts/check.ps1"] },
+      "note": { "en": "Runs only when apps/web exists; currently skipped.", "ja": "apps/web がある時だけ実行。現在はスキップ。" }
+    },
+    {
+      "id": "compose-config",
+      "enabled": true,
+      "category": "build-environment",
+      "title": { "en": "Compose config validation", "ja": "Compose 設定の検証" },
+      "rule": {
+        "en": "The Docker Compose configuration validates.",
+        "ja": "Docker Compose 設定が検証できる。"
+      },
+      "pillar": "guardrails",
+      "status": "conditional",
+      "runsAt": "conditional",
+      "scope": "product",
+      "enforcedBy": { "inline": "docker compose config --quiet", "marker": "docker compose config", "wiredIn": ["scripts/check.ps1"] },
+      "note": { "en": "Runs only when docker is available.", "ja": "docker がある時だけ実行。" }
+    },
+    {
+      "id": "core-context-reading",
+      "enabled": true,
+      "category": "agent-context",
+      "title": { "en": "Core-context actually read", "ja": "コアコンテキストを実際に読む" },
+      "rule": {
+        "en": "The agent has read the required-reading files before changing or reviewing.",
+        "ja": "変更やレビューの前に、必読ファイルを実際に読んでいる。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "runsAt": "honor",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": { "en": "PR-template checkbox only. Manifest integrity is gated, but reading itself is not.", "ja": "PR テンプレのチェックボックスのみ。manifest 整合は強制されるが、読了自体は強制されない。" }
+    },
+    {
+      "id": "ai-review-record",
+      "enabled": true,
+      "category": "decision-records",
+      "title": { "en": "AI review record", "ja": "AI レビュー記録" },
+      "rule": {
+        "en": "Every implementation PR posts an AI review record comment.",
+        "ja": "実装 PR ごとに AI レビュー記録コメントを投稿する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "runsAt": "honor",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": { "en": "PR-template checkbox only; no CI gate yet.", "ja": "PR テンプレのチェックボックスのみ。CI ゲートは未整備。" }
+    },
+    {
+      "id": "spec-before-implementation",
+      "enabled": true,
+      "category": "decision-records",
+      "title": { "en": "Decision before implementation", "ja": "実装前の決定" },
+      "rule": {
+        "en": "Implementation PRs link a prior decision or spec record.",
+        "ja": "実装 PR は事前の決定／仕様記録をリンクする。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-spec-before-impl.ps1", "wiredIn": ["scripts/check.ps1"] },
+      "note": { "en": "Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors.", "ja": "実装コード（apps/、src/、scripts/ 等。ガードレールツールは除外）の変更には番号付きの決定／変更記録が必要。git 失敗時は fail-closed。" }
+    },
+    {
+      "id": "secret-scan",
+      "enabled": true,
+      "category": "secrets",
+      "title": { "en": "Secret / token leak scan", "ja": "秘密情報／トークン漏れスキャン" },
+      "rule": {
+        "en": "No token-shaped secrets appear in diffs, PR bodies, or review artifacts.",
+        "ja": "差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-secret-leak.ps1", "wiredIn": ["scripts/check.ps1"] },
+      "note": { "en": "Scans changed-file content and the PR body for known token shapes; fails closed on git errors; values are redacted.", "ja": "変更ファイルの内容と PR 本文を既知のトークン形状で走査。git 失敗時は fail-closed。値は伏字化。" }
+    },
+    {
+      "id": "explicit-omissions",
+      "enabled": true,
+      "category": "working-agreements",
+      "title": { "en": "Explicit omissions", "ja": "明示的な省略" },
+      "rule": {
+        "en": "Partial content is labeled partial; uncertainty is surfaced, not hidden.",
+        "ja": "部分的な内容は部分的と明記し、不確実性を隠さない。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": { "en": "Policy (LLM-GR-002); honor-system.", "ja": "方針（LLM-GR-002）。名目のみ。" }
+    },
+    {
+      "id": "browser-control-surface",
+      "enabled": true,
+      "category": "docs-portal",
+      "title": { "en": "Browser-visible control surface", "ja": "ブラウザで見える統制面" },
+      "rule": {
+        "en": "Current work state is inspectable in a browser, not only by asking the LLM.",
+        "ja": "現在の作業状態を、LLM に尋ねるのではなくブラウザで確認できる。"
+      },
+      "pillar": "visualization",
+      "status": "advisory",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": { "en": "Policy (LLM-GR-004). The guardrail monitor is a first step toward it.", "ja": "方針（LLM-GR-004）。ガードレールモニターがその第一歩。" }
+    },
+    {
+      "id": "no-unilateral-issues",
+      "enabled": true,
+      "category": "working-agreements",
+      "title": { "en": "No unilateral issue creation", "ja": "Issue の独断作成の禁止" },
+      "rule": {
+        "en": "Do not open GitHub issues without owner confirmation.",
+        "ja": "オーナーの確認なしに GitHub Issue を作らない。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": { "en": "Policy (LLM-GR-005); honor-system.", "ja": "方針（LLM-GR-005）。名目のみ。" }
+    },
+    {
+      "id": "branch-protection",
+      "enabled": true,
+      "category": "governance-meta",
+      "title": { "en": "Branch protection", "ja": "ブランチ保護" },
+      "rule": {
+        "en": "Required status checks; no direct push or force-push to the default branch.",
+        "ja": "必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。"
+      },
+      "pillar": "guardrails",
+      "status": "external",
+      "runsAt": "external",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": { "en": "Configured in GitHub repository settings, not in the tree.", "ja": "GitHub のリポジトリ設定で構成（リポジトリ外）。" }
+    }
+  ]
+}

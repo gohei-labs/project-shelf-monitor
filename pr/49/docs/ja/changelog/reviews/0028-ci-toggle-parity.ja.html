@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0028: CI でのレジストリ・トグル整合</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>CI でのレジストリ・トグル整合</h1>
+      <p class="lead">この成果物は、レビュー 0024 で「現状の制限」として挙げた穴の修正の承認を求める。CI の <code>human-review-artifact</code> ジョブは 4 つのレビューゲートを直接実行していたため、レジストリの <code>enabled</code> トグルがそこへ届いていなかった。これらのガードレールを無効化しても CI では黙って無視され、記録された <code>disabledReason</code> が偽りの安心を与えていた。本修正で、すべての強制レーンが同じトグルを尊重する。</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>承認のお願い（Requested Approval）</h2>
+      <ol>
+        <li>CI が直接呼ぶ 4 ゲートがレジストリを読み、無効時はスキップするので、それらにとってもレジストリが唯一の on/off スイッチになる。</li>
+        <li><code>review-artifact-runtime-boundary</code> は 2 レーンで走り、無効化時に split-brain（分裂）していた。両レーンが一致するようになった。</li>
+        <li><code>check-registry.ps1</code> は、CI に配線されたスクリプトゲートがトグルを忘れると失敗するので、迂回が黙って再発しない。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>変更内容（What Changed）</h2>
+      <table>
+        <thead><tr><th>対象</th><th>変更後の役割</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrail-lib.ps1</code></td><td>新しい共有ヘルパー。レジストリを読む唯一の <code>Test-GuardrailEnabled</code>（fail-closed）。</td></tr>
+          <tr><td><code>scripts/check.ps1</code></td><td>自前の実装をやめてヘルパーを読み込む——トグル実装は 1 つ。</td></tr>
+          <tr><td>4 つのレビューゲート</td><td>ヘルパーを dot-source し、無効時は早期に exit。CI でもトグルを尊重。</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td>CI 配線のスクリプトゲートがトグルを参照しているか検証。</td></tr>
+          <tr><td><code>scripts/check-spec-before-impl.ps1</code></td><td><code>guardrail-lib.ps1</code> をガードレールツールとして除外。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>リスク（Risk）</h2>
+      <p>本変更はガードレール・ツールの変更であり、プロダクトではない。今日は全ガードレールが有効なので挙動は不変。残る制限は <code>devcontainer-build</code> ガードレールで、これはゲートスクリプトを持たない CI ジョブ（Dev Container をビルドする）であるため、ジョブ単位のトグルはまだ未配線で、スクリプトゲートのみを対象とする新 assertion はこれを検出しない。別の後続作業として記録する。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>用語チェック（Terminology Check / 標準用語チェック）</h2>
+      <table>
+        <thead><tr><th>用語</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>強制レーン（enforcement lane）</td><td>ガードレールが実際に走る経路：ローカル事前チェック、CI の <code>check</code> ジョブ、CI の <code>human-review-artifact</code> ジョブ、Dev Container の Bash レーン。</td></tr>
+          <tr><td>トグル迂回（toggle bypass）</td><td>レジストリの <code>enabled</code> を読まずにゲートを走らせる強制レーン。無効化したガードレールがそこではまだ走る。</td></tr>
+          <tr><td>split-brain（分裂）</td><td>ガードレールの on/off について 2 レーンが食い違うこと——ここでは <code>check</code> ジョブが無効ゲートをスキップする一方、CI が強制し続けていた。</td></tr>
+          <tr><td>fail-closed</td><td>エラー時（レジストリが読めない時）は、飛ばさず全ガードレールを有効扱いするのが安全側の既定。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>ランタイム境界チェック（Runtime Boundary Check）</h2>
+      <p>新たなランタイムは導入しない。本変更は PowerShell のヘルパーを 1 ファイル足し、既存のゲートスクリプトにレジストリを読ませるだけ。ローカル事前チェック（PowerShell）、CI の <code>check</code> ジョブ、Dev Container の Bash レーンは、いずれも同じ <code>scripts/check.ps1</code> を実行する。CI の <code>human-review-artifact</code> ジョブは 4 ゲートを Node 不要の PowerShell で直接実行する。本変更後はそれらすべてのレーンが同じレジストリのトグルを参照する。新しい依存（Node・npm・Docker・パッケージマネージャ）は追加しない。</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考情報（References）</h2>
+      <table>
+        <thead><tr><th>参照</th><th>裏付ける内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrail-lib.ps1</code></td><td>共有・fail-closed の <code>Test-GuardrailEnabled</code>（トグルの単一実装）。</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td>CI 配線スクリプトゲート向けの新しいトグル迂回検出。</td></tr>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td>直接ゲートを呼ぶ <code>human-review-artifact</code> ジョブ（これがトグルを尊重するようになった）。</td></tr>
+          <tr><td><code>docs/ja/changelog/reviews/0024-configurable-guardrails.ja.html</code></td><td>この穴を既知の制限として挙げた以前のレビュー。</td></tr>
+          <tr><td><code>docs/ja/changelog/0034-ci-toggle-parity.md</code></td><td>本修正の変更ノート。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

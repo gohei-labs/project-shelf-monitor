@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guardrail monitor</title>
+  <style>
+    :root {
+      --bg:#F5F6F8;
+      --panel:#FFFFFF;
+      --panel-soft:#F9FAFB;
+      --ink:#18181B;
+      --muted:#667085;
+      --line:#D9DEE7;
+      --line-strong:#AEB6C2;
+      --green:#2F7D32;
+      --blue:#1B73E8;
+      --amber:#9C6B00;
+      --red:#B3261E;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
+    .topnav { display:flex; gap:8px; align-items:center; margin:0 0 22px; }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-weight:680; font-size:1.72rem; line-height:1.16; letter-spacing:0; margin:6px 0 0; }
+    .registry { margin:18px 0 0; }
+    .pillsec { padding:22px 0 0; }
+    .pillsec + .pillsec { border-top:1px solid var(--line); margin-top:22px; }
+    .pillsec > h2 { font-weight:680; font-size:.96rem; margin:0; display:flex; align-items:baseline; gap:10px; letter-spacing:0; }
+    .pillsec > h2 .ix { color:var(--muted); font-size:.74rem; font-variant-numeric:tabular-nums; }
+    .catsec { margin:14px 0 0; }
+    .catlabel { font-size:.7rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); margin:0 0 7px; font-weight:700; }
+    .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(120px,170px) 1fr minmax(160px,230px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item:first-child { border-top:0; }
+    .monitor-item:hover { background:var(--panel-soft); }
+    .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
+    .ccat { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cmk { width:6px; height:6px; flex:0 0 auto; border-radius:50%; }
+    .cmk.enf { background:var(--green); }
+    .cmk.oth { border:1px solid var(--muted); }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .cstatus { flex:0 0 auto; border-radius:999px; border:1px solid transparent; padding:2px 7px; font-size:.7rem; font-weight:700; letter-spacing:0; }
+    .status-enforced { background:#EEF7EE; border-color:#CFE7D1; color:#1E6B26; }
+    .status-conditional { background:#FFF8E8; border-color:#F2D99B; color:#7A5200; }
+    .status-advisory { background:#F1F3F6; border-color:#D7DCE3; color:#46505A; }
+    .status-external { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
+    .monitor-item.disabled { opacity:.55; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.74); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:50; }
+    .backdrop.show { opacity:1; pointer-events:auto; }
+    .modal { position:fixed; top:50%; left:50%; width:min(560px,92vw); max-height:84vh; overflow:auto; transform:translate(-50%,-50%) scale(0.98); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; z-index:51; background:var(--panel); border:1px solid var(--line); border-radius:8px; color:var(--ink); box-shadow:0 18px 48px rgba(24,24,27,.22); }
+    .modal.show { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+    .mbar { display:block; height:4px; width:100%; }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; }
+    .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0; }
+    .mname { font-weight:680; font-size:1.18rem; letter-spacing:0; line-height:1.28; margin:8px 42px 0 0; }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.8rem; color:var(--ink); }
+    @media (prefers-reduced-motion: reduce) { .modal, .backdrop { transition:none; } }
+    @media (max-width:760px) {
+      main { padding:18px 12px 36px; }
+      .topnav { margin-bottom:18px; }
+      .hero { font-size:1.36rem; }
+      .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav">
+      <a class="here" aria-current="page">Guardrails</a>
+      <a href="reviews.html">Reviews</a>
+    </nav>
+    <header class="pagehead">
+      <p class="eyebrow">Guardrail monitor</p>
+      <h1 class="hero">Guardrail<br />Monitor</h1>
+    </header>
+    <div class="registry">
+      <section class="pillsec">
+        <h2><span class="ix">01</span>Guardrails</h2>
+        <div class="catsec">
+          <p class="catlabel">Encoding &amp; hygiene</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Text encoding" data-rule="All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers." data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
+              <span class="cnm">Text encoding</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Document naming" data-rule="A documentation file name must not repeat its parent folder name." data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
+              <span class="cnm">Document naming</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Repository hygiene" data-rule="The diff has no trailing whitespace or conflict markers." data-enf="git diff --check" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
+              <span class="cnm">Repository hygiene</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Secret management</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="enforced" data-note="Scans changed-file content and the PR body for known token shapes; fails closed on git errors; values are redacted.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Secret management</span>
+              <span class="cnm">Secret / token leak scan</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Build &amp; environment</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Dev Container build</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend project shape and tests" data-rule="If apps/api exists, it must contain pyproject.toml, and Ruff plus pytest must pass." data-enf="apps/api pyproject.toml + uv ruff + pytest" data-venue="Conditional" data-status="conditional" data-note="Skipped only while apps/api is absent; apps/api without pyproject.toml fails.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Backend project shape and tests</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="apps/web pnpm build" data-venue="Conditional" data-status="conditional" data-note="Runs only when apps/web exists; currently skipped.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Frontend build</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="conditional" data-note="Runs only when docker is available.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Compose config validation</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Governance &amp; tooling</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="enforced" data-note="Project-specific control files must use visible paths such as agent-context/.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
+              <span class="cnm">Root hidden path policy</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Guardrail registry integrity" data-rule="Every active guardrail names a real, wired gate, and the guardrail monitor is up to date with this registry." data-enf="scripts/guardrails/check-registry.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
+              <span class="cnm">Guardrail registry integrity</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="external" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="External" data-status="external" data-note="Configured in GitHub repository settings, not in the tree.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
+              <span class="cnm">Branch protection</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external">external</span></span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="pillsec">
+        <h2><span class="ix">02</span>Visualization</h2>
+        <div class="catsec">
+          <p class="catlabel">Bilingual docs</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Bilingual document pairs" data-rule="docs/en and docs/ja hold the same set of relative Markdown paths." data-enf="scripts/guardrails/check-bilingual-doc-pairs.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
+              <span class="cnm">Bilingual document pairs</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language roots" data-rule="All Markdown lives under a configured language root." data-enf="scripts/guardrails/check-doc-language-roots.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
+              <span class="cnm">Documentation language roots</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language content" data-rule="Each language tree actually contains that language; no untranslated copy is left behind." data-enf="scripts/guardrails/check-doc-language-content.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
+              <span class="cnm">Documentation language content</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Docs portal</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="advisory" data-pil="Visualization" data-cat="Docs portal" data-name="Browser-visible control surface" data-rule="Current work state is inspectable in a browser, not only by asking the LLM." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-004). The guardrail monitor is a first step toward it.">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Docs portal</span>
+              <span class="cnm">Browser-visible control surface</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Review artifacts</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact runtime boundary" data-rule="A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section." data-enf="scripts/guardrails/check-review-artifact-runtime-boundary.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Review artifact runtime boundary</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Human review artifact link" data-rule="PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact." data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Human review artifact link</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact terminology" data-rule="Changed review artifacts carry a visible Terminology Check section." data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Review artifact terminology</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact references" data-rule="Changed review artifacts carry a References / primary-sources section that explains each source." data-enf="scripts/guardrails/check-review-artifact-references.ps1" data-venue="CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Review artifact references</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="pillsec">
+        <h2><span class="ix">03</span>Human orchestration</h2>
+        <div class="catsec">
+          <p class="catlabel">Agent context</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="enforced" data-pil="Human orchestration" data-cat="Agent context" data-name="Agent core-context manifest" data-rule="Every required-reading path in the core-context manifest exists and is unique." data-enf="scripts/guardrails/check-agent-core-context.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Agent context</span>
+              <span class="cnm">Agent core-context manifest</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Agent context" data-name="Core-context actually read" data-rule="The agent has read the required-reading files before changing or reviewing." data-enf="" data-venue="Honor" data-status="advisory" data-note="PR-template checkbox only. Manifest integrity is gated, but reading itself is not.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Agent context</span>
+              <span class="cnm">Core-context actually read</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Decision records</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Decision records" data-name="AI review record" data-rule="Every implementation PR posts an AI review record comment." data-enf="" data-venue="Honor" data-status="advisory" data-note="PR-template checkbox only; no CI gate yet.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Decision records</span>
+              <span class="cnm">AI review record</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="enforced" data-pil="Human orchestration" data-cat="Decision records" data-name="Decision before implementation" data-rule="Implementation PRs link a prior decision or spec record." data-enf="scripts/guardrails/check-spec-before-impl.ps1" data-venue="Local + CI" data-status="enforced" data-note="Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Decision records</span>
+              <span class="cnm">Decision before implementation</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Working agreements</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Working agreements" data-name="Explicit omissions" data-rule="Partial content is labeled partial; uncertainty is surfaced, not hidden." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-002); honor-system.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Working agreements</span>
+              <span class="cnm">Explicit omissions</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Working agreements" data-name="No unilateral issue creation" data-rule="Do not open GitHub issues without owner confirmation." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-005); honor-system.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Working agreements</span>
+              <span class="cnm">No unilateral issue creation</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="backdrop" id="bd"></div>
+    <div class="modal" id="md" role="dialog" aria-modal="true" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Status" data-l-note="Note">
+      <span class="mbar" id="mbar"></span>
+      <div class="mbody">
+        <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
+        <p class="meb" id="meb"></p>
+        <h3 class="mname" id="mnm"></h3>
+        <p class="mrule" id="mrl"></p>
+        <div class="mdiv"></div>
+        <dl class="mmeta" id="mmeta"></dl>
+      </div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.monitor-item'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (md) {
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), note: md.getAttribute('data-l-note') };
+        function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
+        function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function openCard(c) {
+          var acc = c.getAttribute('data-acc');
+          mbar.style.background = acc; meb.style.color = acc;
+          meb.textContent = c.getAttribute('data-pil') + ' · ' + c.getAttribute('data-cat');
+          mnm.textContent = c.getAttribute('data-name');
+          mrl.textContent = c.getAttribute('data-rule') || '';
+          var h = '';
+          var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }
+          h += row(L.venue, esc(c.getAttribute('data-venue') || ''));
+          h += row(L.status, esc(c.getAttribute('data-status') || ''));
+          var note = c.getAttribute('data-note'); if (note) { h += row(L.note, esc(note)); }
+          mmeta.innerHTML = h;
+          bd.classList.add('show'); md.classList.add('show');
+        }
+        function closeModal() { bd.classList.remove('show'); md.classList.remove('show'); }
+        cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+        bd.addEventListener('click', closeModal);
+        document.getElementById('mx').addEventListener('click', closeModal);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      }
+    })();
+  </script>
+</body>
+</html>
