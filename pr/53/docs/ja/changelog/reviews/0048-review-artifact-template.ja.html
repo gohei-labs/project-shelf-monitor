@@ -71,7 +71,7 @@
     <header>
       <p class="topmeta"><span>オーナー承認レビュー</span><span class="dot"></span><span class="num">0048</span><span><b>Draft</b></span><span><b>2026-06-18</b></span></p>
       <h1>レビュー資料テンプレート</h1>
-      <p class="lead">この資料は、今後のオーナー向けレビュー資料を<b>単一の編集的テンプレートに統一</b>し、あわせて<b>ランタイム境界チェックを廃止</b>することの承認を求めます。</p>
+      <p class="lead">この資料は、今後のオーナー向けレビュー資料を<b>単一の編集的テンプレートに統一</b>し、<b>ランタイム境界チェックを廃止</b>し、<b>PR の preview リンクを自動生成・検証</b>することの承認を求めます。</p>
     </header>
 
     <section class="approval">
@@ -80,6 +80,7 @@
         <li>編集的レイアウト（ニアモノクロ＋ライム単一アクセント、Space Grotesk＋Inter）を、オーナー向けレビュー資料の正式テンプレートにする。メタ情報（番号・状態・日付）は最上部の帯に集約する。</li>
         <li>固定セクション順を定める：承認のお願い → 変更内容 → リスク → 決めないこと → 資料チェック（用語・一次情報）。「資料チェック」は、用語と一次情報を著者が確認したことを示すチェックリストとする。</li>
         <li>ランタイム境界チェックをテンプレートから外し、対応する CI ゲート（<code>review-artifact-runtime-boundary</code> / LLM-GR-006）を無効化する。必要になれば再び強制に戻す。</li>
+        <li>PR を出したとき、変更されたレビュー資料の preview リンクを workflow が自動生成し、HTTP 200 を検証してから PR にコメントする仕組みを追加する（手書きの死んだリンクを防ぐ）。</li>
       </ol>
     </section>
 
@@ -95,6 +96,8 @@
           <tr><td><code>monitor/registry.json</code></td><td><code>review-artifact-runtime-boundary</code> を <code>enabled:false</code> に設定。</td></tr>
           <tr><td><code>monitor/guardrail-monitor.html</code> / <code>.ja.html</code></td><td>レジストリから再生成（手編集なし）。</td></tr>
           <tr><td><code>docs/{ja,en}/rules/guardrails/registry.md</code></td><td>LLM-GR-006 の状態を Active から Paused に変更。</td></tr>
+          <tr><td><code>scripts/ci/build-pr-preview-links.ps1</code></td><td>変更されたレビュー資料の preview リンクを生成し、各リンクの HTTP 200 を検証する（新規）。</td></tr>
+          <tr><td><code>.github/workflows/monitor-preview.yml</code></td><td>上記スクリプトで検証済み preview リンクを PR コメントに自動追記。</td></tr>
           <tr><td><code>docs/{ja,en}/changelog/0054-review-artifact-template.md</code></td><td>本変更の変更ノート。</td></tr>
         </tbody>
       </table>
