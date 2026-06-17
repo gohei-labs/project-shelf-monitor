@@ -22,7 +22,7 @@
     html, body { margin:0; }
     body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
     main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
-    .topnav { display:flex; gap:8px; align-items:center; margin:0 0 22px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
     .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
     .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
     .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
@@ -90,7 +90,9 @@
     <nav class="topnav">
       <a class="here" aria-current="page">Guardrails</a>
       <a href="reviews.html">Reviews</a>
-      <a href="application-monitor.html">Application</a>
+      <a href="application-monitor.html">Development rules</a>
+      <a href="application-requirements.html">Requirements</a>
+      <a href="application-architecture.html">Architecture</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Guardrail monitor</p>

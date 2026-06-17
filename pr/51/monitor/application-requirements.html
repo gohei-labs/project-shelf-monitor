@@ -22,14 +22,11 @@
     html, body { margin:0; }
     body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
     main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
-    .topnav, .subnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .topnav { margin:0 0 16px; }
-    .subnav { margin:0 0 22px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
     a { color:inherit; }
-    .topnav a, .subnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
-    .subnav a { background:#ECEFF3; }
-    .topnav a:hover, .subnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
-    .topnav a.here, .subnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
     .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
     .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
     .hero { font-weight:680; font-size:1.72rem; line-height:1.16; letter-spacing:0; margin:6px 0 0; }
@@ -79,9 +76,6 @@
     <nav class="topnav">
       <a href="guardrail-monitor.html">Guardrails</a>
       <a href="reviews.html">Reviews</a>
-      <a class="here" aria-current="page">Application</a>
-    </nav>
-    <nav class="subnav">
       <a href="application-monitor.html">Development rules</a>
       <a class="here" aria-current="page">Requirements</a>
       <a href="application-architecture.html">Architecture</a>
