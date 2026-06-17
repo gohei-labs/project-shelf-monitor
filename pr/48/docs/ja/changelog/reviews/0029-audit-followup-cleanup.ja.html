@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0029: 監査の後続クリーンアップ</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>監査の後続クリーンアップ</h1>
+      <p class="lead">この成果物は、プロジェクト状態の監査から出た、安全で機械的な衛生修正の承認を求め、オーナー判断のため意図的に残した 2 件を明示する。ガードレールやプロダクトの挙動は変わらない。</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>承認のお願い（Requested Approval）</h2>
+      <ol>
+        <li>Docusaurus のビルドキャッシュ（<code>docs-portal/.docusaurus/</code>）を gitignore し、クローンを汚さないようにした。</li>
+        <li>非推奨の <code>onBrokenMarkdownLinks</code> を <code>markdown.hooks</code> 配下へ移し、Docusaurus v4 の警告を解消。</li>
+        <li>ガードレール地図のリード文がルール数をレジストリから導出するので、文言が実数からずれない。</li>
+        <li>引継ぎブリーフとレビュー索引が、削除済みブランチ・古いレビューパス・古いカバレッジ記述を指さなくなった。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>変更内容（What Changed）</h2>
+      <table>
+        <thead><tr><th>対象</th><th>変更</th></tr></thead>
+        <tbody>
+          <tr><td><code>.gitignore</code></td><td><code>docs-portal/.docusaurus/</code>（再生成ビルドキャッシュ）を無視。</td></tr>
+          <tr><td><code>docs-portal/docusaurus.config.js</code></td><td><code>onBrokenMarkdownLinks</code> を <code>markdown.hooks</code> 配下へ。引き続き <code>warn</code>。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>リード文がレジストリ総数からルール数を導出。両地図を再生成。</td></tr>
+          <tr><td>引継ぎブリーフ（md ＋ html、両言語）</td><td>PR #43 後の <code>main</code> を反映。HTML のレビューパスを修正。</td></tr>
+          <tr><td>レビュー <code>README.md</code>（両言語）</td><td>カバレッジ記述を 0013-0028 に。0022-0028 を追記。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>リスク（Risk）</h2>
+      <p>リスクは低い：変更はドキュメント・gitignore・生成器の文言で、挙動変更はない。2 件を意図的に先送りする：(1) ダッシュボード一式は追跡済みの計画ドキュメントから参照されるのに未追跡——コミットするか、当該節を未実装と明記するか。(2) <code>docs-portal</code> にコミット済み lockfile が無く、ビルドは設計上 <code>--no-package-lock</code> で install するため、lockfile ＋ <code>npm ci</code> の採用は別の判断。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>用語チェック（Terminology Check / 標準用語チェック）</h2>
+      <table>
+        <thead><tr><th>用語</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>ビルドキャッシュ</td><td>ツールがビルドごとに再生成するファイル（ここでは Docusaurus の <code>.docusaurus/</code>）。コミットしてはならない。</td></tr>
+          <tr><td>非推奨（deprecation）</td><td>今は動くが将来のメジャー（Docusaurus v4）で削除予定のオプション。</td></tr>
+          <tr><td>引継ぎブリーフ</td><td>次セッション向けの短い使い捨ての現在地。設計上古くなり、変更ごとに更新する。</td></tr>
+          <tr><td>lockfile</td><td>解決済み依存ツリーを固定し install を再現させるファイル。<code>npm ci</code> はこれを要する。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>ランタイム境界チェック（Runtime Boundary Check）</h2>
+      <p>新たなランタイムは導入しない。Docusaurus 設定の編集は既存オプションの再配置のみ（Node とポータルのビルドは不変）で、ガードレール地図生成器の変更は PowerShell に閉じる。ローカル事前チェック、CI の <code>check</code> ジョブ、Dev Container の Bash レーンは引き続き同じ <code>scripts/check.ps1</code> を実行する。新しい依存（Node・npm・Docker）は追加しない。</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考情報（References）</h2>
+      <table>
+        <thead><tr><th>参照</th><th>裏付ける内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>.gitignore</code></td><td>新しい <code>docs-portal/.docusaurus/</code> 無視ルール。</td></tr>
+          <tr><td><code>docs-portal/docusaurus.config.js</code></td><td><code>markdown.hooks.onBrokenMarkdownLinks</code> への移行。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>リード文のレジストリ由来ルール数。</td></tr>
+          <tr><td><code>docs/ja/changelog/0035-audit-followup-cleanup.md</code></td><td>本クリーンアップの変更ノート。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

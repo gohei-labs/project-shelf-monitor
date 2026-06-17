@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0019: Migrate Documentation System Spec</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Migrate Documentation System Spec</h1>
+      <p class="lead">This is the first migration slice for Issue #42. It moves the documentation system spec into the mirrored English and Japanese roots.</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>Requested Approval</h2>
+      <ol>
+        <li>Use <code>docs/en/specs/documentation-system.md</code> as the English spec location.</li>
+        <li>Use <code>docs/ja/specs/documentation-system.md</code> as the Japanese spec location.</li>
+        <li>Remove the old legacy paths after preserving their detailed content.</li>
+        <li>Reduce the legacy Markdown backlog from 66 to 64 files.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Impact Scope</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Impact</th></tr></thead>
+        <tbody>
+          <tr><td>Documentation structure</td><td>The documentation system spec now lives only under the language roots.</td></tr>
+          <tr><td>Links</td><td>References to old paths are updated to the new English or Japanese paths.</td></tr>
+          <tr><td>Agent core context</td><td>The documentation-system entry now points to the English spec path.</td></tr>
+          <tr><td>Runtime</td><td>No application runtime, data, storage, Docker, npm, or host-machine behavior changes.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>Risk</h2>
+      <p>Historical review HTML links were updated where they pointed to the removed paths. Other legacy docs remain intentionally unmigrated for later slices.</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>Terminology</h2>
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Migration slice</td><td>A small PR that moves one coherent set of legacy docs into the bilingual structure.</td></tr>
+          <tr><td>Legacy path</td><td>A Markdown path outside <code>docs/en/</code> and <code>docs/ja/</code>.</td></tr>
+          <tr><td>Backlog count</td><td>The number of legacy Markdown paths still listed in the allowlist.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>Runtime Boundary</h2>
+      <p>This is a documentation-only migration. It does not require local npm, Docker, or an application server.</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>References</h2>
+      <table>
+        <thead><tr><th>Reference</th><th>Supports</th></tr></thead>
+        <tbody>
+          <tr><td>Issue #42</td><td>Tracks migration of legacy docs into mirrored English and Japanese roots.</td></tr>
+          <tr><td><code>docs/legacy-language-root-allowlist.txt</code></td><td>Shows the legacy backlog count and the removed paths.</td></tr>
+          <tr><td><code>docs/en/specs/documentation-system.md</code></td><td>English migrated spec.</td></tr>
+          <tr><td><code>docs/ja/specs/documentation-system.md</code></td><td>Japanese migrated spec.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

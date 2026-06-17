@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guardrail monitor</title>
+  <style>
+    :root {
+      --bg:#F6F7F9;
+      --panel:#FFFFFF;
+      --ink:#202124;
+      --muted:#5F6368;
+      --line:#DADCE0;
+      --line-strong:#9AA0A6;
+      --green:#2F7D32;
+      --blue:#1B73E8;
+      --amber:#9C6B00;
+      --red:#B3261E;
+      --shadow:0 1px 2px rgba(60,64,67,.16);
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    main { max-width:1180px; margin:0 auto; padding:28px 24px 48px; }
+    .topnav { display:flex; gap:18px; align-items:center; font-size:.86rem; letter-spacing:0; margin:0 0 20px; }
+    .topnav a { color:var(--muted); text-decoration:none; padding:6px 0; border-bottom:2px solid transparent; }
+    .topnav a:hover { color:var(--ink); }
+    .topnav a.here { color:var(--ink); border-bottom-color:var(--blue); }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-weight:720; font-size:2.2rem; line-height:1.08; letter-spacing:0; margin:8px 0 0; }
+    .lead { font-size:.98rem; color:var(--muted); line-height:1.65; margin:10px 0 0; max-width:72ch; overflow-wrap:anywhere; }
+    .rule-h { height:1px; background:var(--line); border:0; margin:22px 0 0; }
+    .pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:18px 0 0; }
+    .pillar { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; box-shadow:var(--shadow); min-width:0; }
+    .pidx { font-size:.78rem; color:var(--muted); display:flex; align-items:center; gap:8px; letter-spacing:0; }
+    .tick { width:8px; height:8px; border-radius:50%; background:var(--blue); display:inline-block; }
+    .ptitle { font-weight:700; font-size:1rem; letter-spacing:0; margin:6px 0 0; line-height:1.25; overflow-wrap:anywhere; }
+    .pja { font-size:.8rem; color:var(--muted); margin:2px 0 0; }
+    .pdesc { font-size:.84rem; margin:8px 0 0; color:#3C4043; line-height:1.5; overflow-wrap:anywhere; }
+    .ledger { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin:20px 0 0; gap:12px; }
+    .stat { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; box-shadow:var(--shadow); }
+    .stat .n { font-weight:760; font-size:2.1rem; line-height:1; letter-spacing:0; font-variant-numeric:tabular-nums; }
+    .stat .l { font-size:.76rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); margin:6px 0 0; }
+    .green { color:var(--green); }
+    .statuswrap { margin:18px 0 0; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; box-shadow:var(--shadow); }
+    .bar { display:flex; height:8px; margin:0 0 12px; border-radius:999px; overflow:hidden; background:#EEF0F2; }
+    .bar span { height:100%; width:0; transition:width 1.1s cubic-bezier(.22,.61,.36,1); }
+    .statusrow { font-variant-numeric:tabular-nums; font-size:.9rem; display:flex; flex-wrap:wrap; gap:8px 20px; }
+    .statusrow .lbl { font-size:.78rem; color:var(--muted); letter-spacing:0; margin-left:6px; }
+    .registry { margin:30px 0 0; }
+    .reg-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--line-strong); padding-top:16px; }
+    .tools { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:10px; }
+    .filters { display:flex; flex-wrap:wrap; gap:6px; }
+    .filter { min-height:32px; border:1px solid var(--line); border-radius:999px; background:var(--panel); color:var(--muted); padding:5px 10px; font:inherit; font-size:.82rem; cursor:pointer; letter-spacing:0; }
+    .filter:hover { border-color:var(--line-strong); color:var(--ink); }
+    .filter.active { background:#E8F0FE; border-color:#AECBFA; color:#174EA6; font-weight:700; }
+    .search { width:260px; min-height:34px; border:1px solid var(--line); border-radius:8px; background:var(--panel); color:var(--ink); font:inherit; font-size:.9rem; padding:7px 10px; outline:none; }
+    .search:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(27,115,232,.12); }
+    .pillsec { margin:24px 0 0; }
+    .pillsec > h3 { font-weight:720; font-size:1rem; margin:0; display:flex; align-items:baseline; gap:8px; letter-spacing:0; }
+    .pillsec > h3 .ix { color:var(--muted); font-size:.78rem; }
+    .catsec { margin:12px 0 0; }
+    .catlabel { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); margin:0 0 6px; font-weight:700; }
+    .deck { display:grid; grid-template-columns:1fr; gap:7px; }
+    .card { position:relative; display:grid; grid-template-columns:minmax(120px,180px) 1fr minmax(150px,220px); align-items:center; gap:12px; width:100%; min-height:48px; text-align:left; padding:9px 12px 9px 18px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; cursor:pointer; color:var(--ink); font:inherit; box-shadow:var(--shadow); transition:border-color .16s ease, background .16s ease; }
+    .card:hover { border-color:var(--line-strong); background:#FBFCFD; }
+    .card:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:5px; }
+    .ccat { font-size:.76rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
+    .cnm { font-weight:650; font-size:.92rem; line-height:1.35; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cmk { width:8px; height:8px; flex:0 0 auto; }
+    .cmk.enf { background:var(--green); }
+    .cmk.oth { border:1px solid var(--muted); border-radius:50%; }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .cstatus { flex:0 0 auto; border-radius:999px; padding:3px 8px; font-size:.72rem; font-weight:700; letter-spacing:0; }
+    .status-enforced { background:#E6F4EA; color:#137333; }
+    .status-conditional { background:#FEF7E0; color:#8A5B00; }
+    .status-advisory { background:#F1F3F4; color:#3C4043; }
+    .status-external { background:#FCE8E6; color:#A50E0E; }
+    .card.disabled { opacity:.55; }
+    .empty { color:var(--muted); margin:22px 0; display:none; }
+    .foot { font-size:.76rem; color:var(--muted); margin:28px 0 0; letter-spacing:0; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.74); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:50; }
+    .backdrop.show { opacity:1; pointer-events:auto; }
+    .modal { position:fixed; top:50%; left:50%; width:min(560px,92vw); max-height:84vh; overflow:auto; transform:translate(-50%,-50%) scale(0.96); opacity:0; pointer-events:none; transition:opacity .26s cubic-bezier(.22,.61,.36,1), transform .26s cubic-bezier(.22,.61,.36,1); z-index:51; background:var(--panel); border:1px solid var(--line); border-radius:8px; color:var(--ink); box-shadow:0 18px 48px rgba(32,33,36,.28); }
+    .modal.show { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+    .mbar { display:block; height:5px; width:100%; }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; }
+    .mclose:hover { background:#F1F3F4; color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0; }
+    .mname { font-weight:720; font-size:1.22rem; letter-spacing:0; line-height:1.25; margin:8px 42px 0 0; }
+    .mrule { font-size:.94rem; color:#3C4043; line-height:1.6; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.8rem; color:var(--ink); }
+    .rise { opacity:1; transform:none; }
+    @media (prefers-reduced-motion: reduce) { .bar span, .card, .modal, .backdrop { transition:none; } }
+    @media (max-width:760px) {
+      main { padding:22px 14px 40px; }
+      .hero { font-size:1.8rem; }
+      .pillars, .ledger { grid-template-columns:1fr; }
+      .reg-head { align-items:stretch; }
+      .tools { width:100%; justify-content:flex-start; }
+      .search { width:100%; }
+      .card { grid-template-columns:1fr; gap:5px; align-items:start; padding:10px 12px 10px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .lead, .pdesc, .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav rise">
+      <a class="here" aria-current="page">Guardrails</a>
+      <a href="reviews.html">Reviews</a>
+    </nav>
+    <p class="eyebrow rise">Guardrail monitor</p>
+    <h1 class="hero rise">Guardrail<br />Monitor</h1>
+    <p class="lead rise">Operational view of 25 guardrails: what is enforced, where it runs, and what still depends on human or external control.</p>
+    <hr class="rule-h rise" />
+    <div class="pillars">
+      <div class="pillar rise">
+        <div class="pidx"><span class="tick"></span>01</div>
+        <div class="ptitle">Guardrails</div>
+        <div class="pdesc">Rules enforced by code, not by prompts.</div>
+      </div>
+      <div class="pillar rise">
+        <div class="pidx">02</div>
+        <div class="ptitle">Visualization</div>
+        <div class="pdesc">The state is legible in a browser, not only by asking.</div>
+      </div>
+      <div class="pillar rise">
+        <div class="pidx">03</div>
+        <div class="ptitle">Human orchestration</div>
+        <div class="pdesc">A person sets the goals and gives the final approval.</div>
+      </div>
+    </div>
+    <div class="ledger">
+      <div class="stat rise"><div class="n">25</div><div class="l">Rules</div></div>
+      <div class="stat rise"><div class="n">10</div><div class="l">Categories</div></div>
+      <div class="stat rise"><div class="n green">16</div><div class="l">Enforced</div></div>
+    </div>
+    <div class="statuswrap rise">
+      <div class="bar">
+        <span data-w="64%" style="width:64%; background:var(--green)"></span>
+        <span data-w="36%" style="width:36%; background:var(--line)"></span>
+      </div>
+      <div class="statusrow">
+        <span>16<span class="lbl">enforced</span></span>
+        <span>3<span class="lbl">conditional</span></span>
+        <span>5<span class="lbl">advisory</span></span>
+        <span>1<span class="lbl">external</span></span>
+      </div>
+    </div>
+    <div class="registry">
+      <div class="reg-head rise">
+        <p class="eyebrow">The registry &mdash; <span id="shown">25</span> / 25</p>
+        <div class="tools">
+          <div class="filters" role="group" aria-label="Status filter">
+            <button type="button" class="filter active" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="filter" data-filter="enforced" aria-pressed="false">Enforced</button>
+            <button type="button" class="filter" data-filter="conditional" aria-pressed="false">Conditional</button>
+            <button type="button" class="filter" data-filter="advisory" aria-pressed="false">Advisory</button>
+            <button type="button" class="filter" data-filter="external" aria-pressed="false">External</button>
+          </div>
+        <input class="search" id="q" type="search" placeholder="Search guardrails" aria-label="Search guardrails" />
+        </div>
+      </div>
+      <div class="pillsec rise">
+        <h3><span class="ix">01</span>Guardrails</h3>
+        <div class="catsec">
+          <p class="catlabel">Encoding &amp; hygiene</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Text encoding" data-rule="All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers." data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="text encoding all tracked text files are utf-8 without bom, valid, and free of mojibake markers. scripts/guardrails/check-text-encoding.ps1 guardrails encoding &amp; hygiene local + ci ">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
+              <span class="cnm">Text encoding</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Document naming" data-rule="A documentation file name must not repeat its parent folder name." data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="document naming a documentation file name must not repeat its parent folder name. scripts/guardrails/check-doc-naming.ps1 guardrails encoding &amp; hygiene local + ci ">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
+              <span class="cnm">Document naming</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Repository hygiene" data-rule="The diff has no trailing whitespace or conflict markers." data-enf="git diff --check" data-venue="Local + CI" data-status="enforced" data-note="" data-search="repository hygiene the diff has no trailing whitespace or conflict markers. git diff --check guardrails encoding &amp; hygiene local + ci ">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
+              <span class="cnm">Repository hygiene</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Secret management</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="enforced" data-note="Scans changed-file content and the PR body for known token shapes; fails closed on git errors; values are redacted." data-search="secret / token leak scan no token-shaped secrets appear in diffs, pr bodies, or review artifacts. scripts/guardrails/check-secret-leak.ps1 guardrails secret management local + ci scans changed-file content and the pr body for known token shapes; fails closed on git errors; values are redacted.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Secret management</span>
+              <span class="cnm">Secret / token leak scan</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Build &amp; environment</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="enforced" data-note="" data-search="dev container build the reproducible dev container builds and passes the bash check suite. ci job: devcontainer guardrails build &amp; environment ci ">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Dev Container build</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="apps/api ruff + pytest" data-venue="Conditional" data-status="conditional" data-note="Runs only when apps/api exists; currently skipped." data-search="backend lint and tests backend lint and tests pass. apps/api ruff + pytest guardrails build &amp; environment conditional runs only when apps/api exists; currently skipped.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Backend lint and tests</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="apps/web pnpm build" data-venue="Conditional" data-status="conditional" data-note="Runs only when apps/web exists; currently skipped." data-search="frontend build the frontend installs with a frozen lockfile and builds. apps/web pnpm build guardrails build &amp; environment conditional runs only when apps/web exists; currently skipped.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Frontend build</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="conditional" data-note="Runs only when docker is available." data-search="compose config validation the docker compose configuration validates. docker compose config --quiet guardrails build &amp; environment conditional runs only when docker is available.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Compose config validation</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Governance &amp; tooling</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="enforced" data-note="Project-specific control files must use visible paths such as agent-context/." data-search="root hidden path policy root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files. scripts/guardrails/check-root-hidden-paths.ps1 guardrails governance &amp; tooling local + ci project-specific control files must use visible paths such as agent-context/.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
+              <span class="cnm">Root hidden path policy</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Guardrail registry integrity" data-rule="Every active guardrail names a real, wired gate, and the guardrail monitor is up to date with this registry." data-enf="scripts/guardrails/check-registry.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="guardrail registry integrity every active guardrail names a real, wired gate, and the guardrail monitor is up to date with this registry. scripts/guardrails/check-registry.ps1 guardrails governance &amp; tooling local + ci ">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
+              <span class="cnm">Guardrail registry integrity</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#2F7D32" data-status-key="external" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="External" data-status="external" data-note="Configured in GitHub repository settings, not in the tree." data-search="branch protection required status checks; no direct push or force-push to the default branch.  guardrails governance &amp; tooling external configured in github repository settings, not in the tree.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
+              <span class="cnm">Branch protection</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external">external</span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="pillsec rise">
+        <h3><span class="ix">02</span>Visualization</h3>
+        <div class="catsec">
+          <p class="catlabel">Bilingual docs</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Bilingual document pairs" data-rule="docs/en and docs/ja hold the same set of relative Markdown paths." data-enf="scripts/guardrails/check-bilingual-doc-pairs.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="bilingual document pairs docs/en and docs/ja hold the same set of relative markdown paths. scripts/guardrails/check-bilingual-doc-pairs.ps1 visualization bilingual docs local + ci ">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
+              <span class="cnm">Bilingual document pairs</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language roots" data-rule="All Markdown lives under a configured language root." data-enf="scripts/guardrails/check-doc-language-roots.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="documentation language roots all markdown lives under a configured language root. scripts/guardrails/check-doc-language-roots.ps1 visualization bilingual docs local + ci ">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
+              <span class="cnm">Documentation language roots</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language content" data-rule="Each language tree actually contains that language; no untranslated copy is left behind." data-enf="scripts/guardrails/check-doc-language-content.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="documentation language content each language tree actually contains that language; no untranslated copy is left behind. scripts/guardrails/check-doc-language-content.ps1 visualization bilingual docs local + ci ">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
+              <span class="cnm">Documentation language content</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Docs portal</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="advisory" data-pil="Visualization" data-cat="Docs portal" data-name="Browser-visible control surface" data-rule="Current work state is inspectable in a browser, not only by asking the LLM." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-004). The guardrail monitor is a first step toward it." data-search="browser-visible control surface current work state is inspectable in a browser, not only by asking the llm.  visualization docs portal advisory policy (llm-gr-004). the guardrail monitor is a first step toward it.">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Docs portal</span>
+              <span class="cnm">Browser-visible control surface</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Review artifacts</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact runtime boundary" data-rule="A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section." data-enf="scripts/guardrails/check-review-artifact-runtime-boundary.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="review artifact runtime boundary a changed review artifact that mentions runtime or tooling carries a runtime boundary check section. scripts/guardrails/check-review-artifact-runtime-boundary.ps1 visualization review artifacts local + ci ">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Review artifact runtime boundary</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Human review artifact link" data-rule="PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact." data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="enforced" data-note="" data-search="human review artifact link prs that request approval or touch high-risk governance files link an existing browser-readable review artifact. scripts/guardrails/check-human-review-artifact.ps1 visualization review artifacts ci ">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Human review artifact link</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact terminology" data-rule="Changed review artifacts carry a visible Terminology Check section." data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="enforced" data-note="" data-search="review artifact terminology changed review artifacts carry a visible terminology check section. scripts/guardrails/check-review-artifact-terminology.ps1 visualization review artifacts ci ">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Review artifact terminology</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact references" data-rule="Changed review artifacts carry a References / primary-sources section that explains each source." data-enf="scripts/guardrails/check-review-artifact-references.ps1" data-venue="CI" data-status="enforced" data-note="" data-search="review artifact references changed review artifacts carry a references / primary-sources section that explains each source. scripts/guardrails/check-review-artifact-references.ps1 visualization review artifacts ci ">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Review artifacts</span>
+              <span class="cnm">Review artifact references</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="pillsec rise">
+        <h3><span class="ix">03</span>Human orchestration</h3>
+        <div class="catsec">
+          <p class="catlabel">Agent context</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#9C6B00" data-status-key="enforced" data-pil="Human orchestration" data-cat="Agent context" data-name="Agent core-context manifest" data-rule="Every required-reading path in the core-context manifest exists and is unique." data-enf="scripts/guardrails/check-agent-core-context.ps1" data-venue="Local + CI" data-status="enforced" data-note="" data-search="agent core-context manifest every required-reading path in the core-context manifest exists and is unique. scripts/guardrails/check-agent-core-context.ps1 human orchestration agent context local + ci ">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Agent context</span>
+              <span class="cnm">Agent core-context manifest</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Agent context" data-name="Core-context actually read" data-rule="The agent has read the required-reading files before changing or reviewing." data-enf="" data-venue="Honor" data-status="advisory" data-note="PR-template checkbox only. Manifest integrity is gated, but reading itself is not." data-search="core-context actually read the agent has read the required-reading files before changing or reviewing.  human orchestration agent context honor pr-template checkbox only. manifest integrity is gated, but reading itself is not.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Agent context</span>
+              <span class="cnm">Core-context actually read</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Decision records</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Decision records" data-name="AI review record" data-rule="Every implementation PR posts an AI review record comment." data-enf="" data-venue="Honor" data-status="advisory" data-note="PR-template checkbox only; no CI gate yet." data-search="ai review record every implementation pr posts an ai review record comment.  human orchestration decision records honor pr-template checkbox only; no ci gate yet.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Decision records</span>
+              <span class="cnm">AI review record</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#9C6B00" data-status-key="enforced" data-pil="Human orchestration" data-cat="Decision records" data-name="Decision before implementation" data-rule="Implementation PRs link a prior decision or spec record." data-enf="scripts/guardrails/check-spec-before-impl.ps1" data-venue="Local + CI" data-status="enforced" data-note="Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors." data-search="decision before implementation implementation prs link a prior decision or spec record. scripts/guardrails/check-spec-before-impl.ps1 human orchestration decision records local + ci implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. fails closed on git errors.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Decision records</span>
+              <span class="cnm">Decision before implementation</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Working agreements</p>
+          <div class="deck">
+            <button type="button" class="card" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Working agreements" data-name="Explicit omissions" data-rule="Partial content is labeled partial; uncertainty is surfaced, not hidden." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-002); honor-system." data-search="explicit omissions partial content is labeled partial; uncertainty is surfaced, not hidden.  human orchestration working agreements advisory policy (llm-gr-002); honor-system.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Working agreements</span>
+              <span class="cnm">Explicit omissions</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+            <button type="button" class="card" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Working agreements" data-name="No unilateral issue creation" data-rule="Do not open GitHub issues without owner confirmation." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-005); honor-system." data-search="no unilateral issue creation do not open github issues without owner confirmation.  human orchestration working agreements advisory policy (llm-gr-005); honor-system.">
+              <span class="cbar" style="background:#9C6B00"></span>
+              <span class="ccat" style="color:#9C6B00">Working agreements</span>
+              <span class="cnm">No unilateral issue creation</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p class="empty" id="empty">Nothing matches the current filter.</p>
+    </div>
+    <p class="foot rise">Generated from monitor/registry.json, the single source of truth for this monitor. Do not edit this file by hand.</p>
+    <div class="backdrop" id="bd"></div>
+    <div class="modal" id="md" role="dialog" aria-modal="true" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Status" data-l-note="Note">
+      <span class="mbar" id="mbar"></span>
+      <div class="mbody">
+        <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
+        <p class="meb" id="meb"></p>
+        <h3 class="mname" id="mnm"></h3>
+        <p class="mrule" id="mrl"></p>
+        <div class="mdiv"></div>
+        <dl class="mmeta" id="mmeta"></dl>
+      </div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var body = document.body;
+      var rises = Array.prototype.slice.call(document.querySelectorAll('.rise'));
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function grow() {
+        Array.prototype.forEach.call(document.querySelectorAll('.bar span'), function (s) {
+          s.style.width = s.getAttribute('data-w');
+        });
+      }
+      if (reduce) { body.classList.add('go'); grow(); }
+      else {
+        rises.forEach(function (el, i) { el.style.transitionDelay = Math.min(i * 55, 700) + 'ms'; });
+        requestAnimationFrame(function () { requestAnimationFrame(function () { body.classList.add('go'); }); });
+        setTimeout(grow, 520);
+      }
+
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (md) {
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), note: md.getAttribute('data-l-note') };
+        function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
+        function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function openCard(c) {
+          var acc = c.getAttribute('data-acc');
+          mbar.style.background = acc; meb.style.color = acc;
+          meb.textContent = c.getAttribute('data-pil') + ' · ' + c.getAttribute('data-cat');
+          mnm.textContent = c.getAttribute('data-name');
+          mrl.textContent = c.getAttribute('data-rule') || '';
+          var h = '';
+          var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }
+          h += row(L.venue, esc(c.getAttribute('data-venue') || ''));
+          h += row(L.status, esc(c.getAttribute('data-status') || ''));
+          var note = c.getAttribute('data-note'); if (note) { h += row(L.note, esc(note)); }
+          mmeta.innerHTML = h;
+          bd.classList.add('show'); md.classList.add('show');
+        }
+        function closeModal() { bd.classList.remove('show'); md.classList.remove('show'); }
+        cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+        bd.addEventListener('click', closeModal);
+        document.getElementById('mx').addEventListener('click', closeModal);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      }
+
+      var q = document.getElementById('q');
+      var shown = document.getElementById('shown');
+      var empty = document.getElementById('empty');
+      var activeStatus = 'all';
+      var filters = Array.prototype.slice.call(document.querySelectorAll('.filter'));
+      if (!q) { return; }
+      var cats = Array.prototype.slice.call(document.querySelectorAll('.catsec'));
+      var secs = Array.prototype.slice.call(document.querySelectorAll('.pillsec'));
+      function visible(scope) {
+        var n = 0;
+        Array.prototype.forEach.call(scope.querySelectorAll('.card'), function (c) {
+          if (c.style.display !== 'none') { n++; }
+        });
+        return n;
+      }
+      function applyFilters() {
+        var t = (q.value || '').trim().toLowerCase();
+        var total = 0;
+        cards.forEach(function (c) {
+          var textHit = !t || (c.getAttribute('data-search') || '').indexOf(t) !== -1 || (c.textContent || '').toLowerCase().indexOf(t) !== -1;
+          var statusHit = activeStatus === 'all' || c.getAttribute('data-status-key') === activeStatus;
+          var hit = textHit && statusHit;
+          c.style.display = hit ? '' : 'none';
+          if (hit) { total++; }
+        });
+        cats.forEach(function (c) { c.style.display = visible(c) ? '' : 'none'; });
+        secs.forEach(function (s) { s.style.display = visible(s) ? '' : 'none'; });
+        if (shown) { shown.textContent = total; }
+        if (empty) { empty.style.display = total ? 'none' : 'block'; }
+      }
+      filters.forEach(function (b) {
+        b.addEventListener('click', function () {
+          activeStatus = b.getAttribute('data-filter') || 'all';
+          filters.forEach(function (x) {
+            var on = x === b;
+            x.classList.toggle('active', on);
+            x.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+          applyFilters();
+        });
+      });
+      q.addEventListener('input', applyFilters);
+    })();
+  </script>
+</body>
+</html>
