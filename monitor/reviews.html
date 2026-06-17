@@ -3,274 +3,258 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Review artifacts</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" />
+  <title>Review monitor</title>
   <style>
-    :root { --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --accent:#57C7EA; }
-    @media (prefers-color-scheme: dark) { :root { --ink:#F4F2EC; --mute:#9A9AA2; --rule:#37373D; --paper:#161619; } }
+    :root {
+      --bg:#F5F6F8;
+      --panel:#FFFFFF;
+      --panel-soft:#F9FAFB;
+      --ink:#18181B;
+      --muted:#667085;
+      --line:#D9DEE7;
+      --line-strong:#AEB6C2;
+      --accent:#1B73E8;
+    }
     * { box-sizing:border-box; }
     html, body { margin:0; }
-    body { background:var(--paper); color:var(--ink); font-family:'Inter', -apple-system, "Segoe UI", "Noto Sans JP", sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
-    main { max-width:1080px; margin:0 auto; padding:clamp(2.4rem,7vw,6rem) clamp(1.2rem,5vw,3rem) 5rem; }
-    .topnav { display:flex; gap:1.6rem; align-items:baseline; font-family:'Space Grotesk', sans-serif; font-size:0.82rem; letter-spacing:0.02em; margin:0 0 2.4rem; }
-    .topnav a { color:var(--mute); text-decoration:none; padding-bottom:3px; border-bottom:1px solid transparent; }
-    .topnav a:hover { color:var(--ink); }
-    .topnav a.here { color:var(--ink); border-bottom-color:var(--accent); }
-    .eyebrow { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--mute); font-weight:500; margin:0; }
-    .hero { font-family:'Space Grotesk', "Helvetica Neue", Arial, sans-serif; font-weight:700; font-size:clamp(2.4rem,8vw,5rem); line-height:1.02; letter-spacing:-0.03em; margin:1.4rem 0 0; }
-    .lead { font-size:1.05rem; color:var(--mute); line-height:1.65; margin:1.4rem 0 0; max-width:54ch; }
-    .ledger { display:flex; gap:2.4rem; align-items:end; margin:clamp(2.4rem,5vw,3.6rem) 0 0; }
-    .stat .n { font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:clamp(3rem,10vw,5.4rem); line-height:0.9; letter-spacing:-0.04em; font-feature-settings:'tnum' 1; color:var(--accent); }
-    .stat .l { font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--mute); margin:0.6rem 0 0; }
-    .reg-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:1rem; border-top:1px solid var(--ink); padding-top:1.4rem; margin:clamp(3rem,6vw,5rem) 0 0; }
-    .search { border:0; border-bottom:1px solid var(--rule); background:transparent; color:var(--ink); font-family:'Inter', sans-serif; font-size:0.95rem; padding:6px 2px; min-width:200px; outline:none; }
-    .search:focus { border-bottom-color:var(--ink); }
-    .deck { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; margin:1.8rem 0 0; }
-    .card { position:relative; display:flex; flex-direction:column; gap:10px; min-height:150px; text-align:left; padding:16px 15px 13px; background:#21212a; border:1px solid #34343e; border-radius:12px; overflow:hidden; cursor:pointer; color:#F1EFE8; text-decoration:none; transition:transform .16s ease, border-color .2s ease; }
-    .card:hover { transform:translateY(-4px); border-color:#54545f; }
-    .card:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
-    .cbar { position:absolute; top:0; left:0; right:0; height:4px; background:var(--accent); }
-    .cnum { font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:1.5rem; letter-spacing:0.02em; font-feature-settings:'tnum' 1; color:var(--accent); }
-    .cnm { font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:0.96rem; line-height:1.32; letter-spacing:-0.005em; flex:1; color:#F1EFE8; }
-    .cfoot { display:flex; align-items:center; gap:7px; }
-    .cv { font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#9a9aa6; }
-    .empty { color:var(--mute); margin:2rem 0; display:none; }
-    .foot { font-size:0.74rem; color:var(--mute); margin:4rem 0 0; letter-spacing:0.02em; }
-    .rise { opacity:0; transform:translateY(12px); }
-    body.go .rise { opacity:1; transform:none; transition:opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1); }
-    @media (prefers-reduced-motion: reduce) { .rise { opacity:1; transform:none; } .card { transition:none; } }
+    body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
+    .topnav { display:flex; gap:8px; align-items:center; margin:0 0 22px; }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-weight:680; font-size:1.72rem; line-height:1.16; letter-spacing:0; margin:6px 0 0; }
+    .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin:18px 0 0; }
+    .review-item { position:relative; display:grid; grid-template-columns:92px 1fr 120px; align-items:center; gap:14px; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border-top:1px solid var(--line); cursor:pointer; color:var(--ink); text-decoration:none; }
+    .review-item:first-child { border-top:0; }
+    .review-item:hover { background:var(--panel-soft); }
+    .review-item:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; background:var(--accent); }
+    .cnum { font-weight:680; font-size:.88rem; letter-spacing:0; font-variant-numeric:tabular-nums; color:var(--accent); }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; justify-content:flex-end; min-width:0; }
+    .cv { border-radius:999px; border:1px solid #C9D8F2; padding:2px 7px; background:#F4F7FD; color:#174EA6; font-size:.7rem; font-weight:700; letter-spacing:0; text-transform:uppercase; white-space:nowrap; }
+    @media (max-width:760px) {
+      main { padding:18px 12px 36px; }
+      .topnav { margin-bottom:18px; }
+      .hero { font-size:1.36rem; }
+      .review-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; }
+    }
   </style>
 </head>
 <body>
   <main>
-    <nav class="topnav rise">
+    <nav class="topnav">
       <a href="guardrail-monitor.html">Guardrails</a>
       <a class="here" aria-current="page">Reviews</a>
     </nav>
-    <p class="eyebrow rise">Control surface</p>
-    <h1 class="hero rise">Review<br />artifacts.</h1>
-    <p class="lead rise">Owner-facing summaries of each change - direction, risk, and scope, at a glance.</p>
-    <div class="ledger rise">
-      <div class="stat"><div class="n">30</div><div class="l">Artifacts</div></div>
-    </div>
-    <div class="reg-head rise">
-      <p class="eyebrow">Reviews &mdash; <span id="shown">30</span> / 30</p>
-      <input class="search" id="q" type="search" placeholder="Filter reviews" aria-label="Filter reviews" />
-    </div>
+    <header class="pagehead">
+      <p class="eyebrow">Review monitor</p>
+      <h1 class="hero">Review<br />Monitor</h1>
+    </header>
     <div class="deck">
-      <a class="card rise" href="../docs/en/changelog/reviews/0042-public-monitor-mirror.en.html" data-search="0042 public monitor mirror">
+      <a class="review-item" href="../docs/en/changelog/reviews/0045-monitor-interface-simplification.en.html">
+        <span class="cbar"></span>
+        <span class="cnum">0045</span>
+        <span class="cnm">Monitor Interface Simplification</span>
+        <span class="cfoot"><span class="cv">Review &middot; en</span></span>
+      </a>
+      <a class="review-item" href="../docs/en/changelog/reviews/0044-pr-live-monitor-preview.en.html">
+        <span class="cbar"></span>
+        <span class="cnum">0044</span>
+        <span class="cnm">PR Live Monitor Preview</span>
+        <span class="cfoot"><span class="cv">Review &middot; en</span></span>
+      </a>
+      <a class="review-item" href="../docs/en/changelog/reviews/0043-monitor-design-refresh.en.html">
+        <span class="cbar"></span>
+        <span class="cnum">0043</span>
+        <span class="cnm">Monitor Design Refresh</span>
+        <span class="cfoot"><span class="cv">Review &middot; en</span></span>
+      </a>
+      <a class="review-item" href="../docs/en/changelog/reviews/0042-public-monitor-mirror.en.html">
         <span class="cbar"></span>
         <span class="cnum">0042</span>
         <span class="cnm">Public Monitor Mirror</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0041-pages-plan-fallback.en.html" data-search="0041 pages plan fallback">
+      <a class="review-item" href="../docs/en/changelog/reviews/0041-pages-plan-fallback.en.html">
         <span class="cbar"></span>
         <span class="cnum">0041</span>
         <span class="cnm">Pages Plan Fallback</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0040-pr-monitor-preview-artifact.en.html" data-search="0040 pr monitor preview artifact">
+      <a class="review-item" href="../docs/en/changelog/reviews/0040-pr-monitor-preview-artifact.en.html">
         <span class="cbar"></span>
         <span class="cnum">0040</span>
         <span class="cnm">PR Monitor Preview Artifact</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0039-tracked-github-token-wrappers.en.html" data-search="0039 tracked github token wrappers">
+      <a class="review-item" href="../docs/en/changelog/reviews/0039-tracked-github-token-wrappers.en.html">
         <span class="cbar"></span>
         <span class="cnum">0039</span>
         <span class="cnm">Tracked GitHub Token Wrappers</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0038-github-pages-monitor-publish.en.html" data-search="0038 github pages monitor publish">
+      <a class="review-item" href="../docs/en/changelog/reviews/0038-github-pages-monitor-publish.en.html">
         <span class="cbar"></span>
         <span class="cnum">0038</span>
         <span class="cnm">GitHub Pages Monitor Publish</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0037-guardrail-monitor-terminology.en.html" data-search="0037 guardrail monitor terminology">
+      <a class="review-item" href="../docs/en/changelog/reviews/0037-guardrail-monitor-terminology.en.html">
         <span class="cbar"></span>
         <span class="cnum">0037</span>
         <span class="cnm">Guardrail Monitor Terminology</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0036-visible-agent-context.en.html" data-search="0036 visible agent context">
+      <a class="review-item" href="../docs/en/changelog/reviews/0036-visible-agent-context.en.html">
         <span class="cbar"></span>
         <span class="cnum">0036</span>
         <span class="cnm">Visible Agent Context</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0035-script-role-layout.en.html" data-search="0035 script role layout">
+      <a class="review-item" href="../docs/en/changelog/reviews/0035-script-role-layout.en.html">
         <span class="cbar"></span>
         <span class="cnum">0035</span>
         <span class="cnm">Script Role Layout</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0034-rules-monitor-taxonomy.en.html" data-search="0034 rules and monitor taxonomy">
+      <a class="review-item" href="../docs/en/changelog/reviews/0034-rules-monitor-taxonomy.en.html">
         <span class="cbar"></span>
         <span class="cnum">0034</span>
         <span class="cnm">Rules And Monitor Taxonomy</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0033-repository-scope-cleanup.en.html" data-search="0033 repository scope cleanup">
+      <a class="review-item" href="../docs/en/changelog/reviews/0033-repository-scope-cleanup.en.html">
         <span class="cbar"></span>
         <span class="cnum">0033</span>
         <span class="cnm">Repository Scope Cleanup</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0032-remove-docusaurus.en.html" data-search="0032 remove docusaurus">
+      <a class="review-item" href="../docs/en/changelog/reviews/0032-remove-docusaurus.en.html">
         <span class="cbar"></span>
         <span class="cnum">0032</span>
         <span class="cnm">Remove Docusaurus</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0031-reviews-editorial-page.en.html" data-search="0031 reviews editorial page">
+      <a class="review-item" href="../docs/en/changelog/reviews/0031-reviews-editorial-page.en.html">
         <span class="cbar"></span>
         <span class="cnum">0031</span>
         <span class="cnm">Reviews Editorial Page</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0030-surface-review-artifacts.en.html" data-search="0030 surface review artifacts in the navbar">
+      <a class="review-item" href="../docs/en/changelog/reviews/0030-surface-review-artifacts.en.html">
         <span class="cbar"></span>
         <span class="cnum">0030</span>
         <span class="cnm">Surface Review Artifacts in the Navbar</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0029-audit-followup-cleanup.en.html" data-search="0029 audit follow-up cleanup">
+      <a class="review-item" href="../docs/en/changelog/reviews/0029-audit-followup-cleanup.en.html">
         <span class="cbar"></span>
         <span class="cnum">0029</span>
         <span class="cnm">Audit Follow-Up Cleanup</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0028-ci-toggle-parity.en.html" data-search="0028 registry toggle parity in ci">
+      <a class="review-item" href="../docs/en/changelog/reviews/0028-ci-toggle-parity.en.html">
         <span class="cbar"></span>
         <span class="cnum">0028</span>
         <span class="cnm">Registry Toggle Parity in CI</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0027-registry-card-deck.en.html" data-search="0027 registry card deck">
+      <a class="review-item" href="../docs/en/changelog/reviews/0027-registry-card-deck.en.html">
         <span class="cbar"></span>
         <span class="cnum">0027</span>
         <span class="cnm">Registry Card Deck</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0026-editorial-guardrail-map.en.html" data-search="0026 editorial guardrail map">
+      <a class="review-item" href="../docs/en/changelog/reviews/0026-editorial-guardrail-map.en.html">
         <span class="cbar"></span>
         <span class="cnum">0026</span>
         <span class="cnm">Editorial Guardrail Map</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0025-substantive-record-check.en.html" data-search="0025 substantive record check">
+      <a class="review-item" href="../docs/en/changelog/reviews/0025-substantive-record-check.en.html">
         <span class="cbar"></span>
         <span class="cnum">0025</span>
         <span class="cnm">Substantive Record Check</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0024-configurable-guardrails.en.html" data-search="0024 configurable guardrails">
+      <a class="review-item" href="../docs/en/changelog/reviews/0024-configurable-guardrails.en.html">
         <span class="cbar"></span>
         <span class="cnum">0024</span>
         <span class="cnm">Configurable Guardrails</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0023-guardrail-map-grouping.en.html" data-search="0023 guardrail map grouping">
+      <a class="review-item" href="../docs/en/changelog/reviews/0023-guardrail-map-grouping.en.html">
         <span class="cbar"></span>
         <span class="cnum">0023</span>
         <span class="cnm">Guardrail Map Grouping</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0022-bash-lane-guardrail-parity.en.html" data-search="0022 bash lane guardrail parity">
+      <a class="review-item" href="../docs/en/changelog/reviews/0022-bash-lane-guardrail-parity.en.html">
         <span class="cbar"></span>
         <span class="cnum">0022</span>
         <span class="cnm">Bash Lane Guardrail Parity</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0021-japanese-docs-translation.en.html" data-search="0021 japanese documentation translation">
+      <a class="review-item" href="../docs/en/changelog/reviews/0021-japanese-docs-translation.en.html">
         <span class="cbar"></span>
         <span class="cnum">0021</span>
         <span class="cnm">Japanese Documentation Translation</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0020-docs-root-language-structure.en.html" data-search="0020 docs root language structure">
+      <a class="review-item" href="../docs/en/changelog/reviews/0020-docs-root-language-structure.en.html">
         <span class="cbar"></span>
         <span class="cnum">0020</span>
         <span class="cnm">Docs Root Language Structure</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0019-migrate-documentation-system-spec.en.html" data-search="0019 migrate documentation system spec">
+      <a class="review-item" href="../docs/en/changelog/reviews/0019-migrate-documentation-system-spec.en.html">
         <span class="cbar"></span>
         <span class="cnum">0019</span>
         <span class="cnm">Migrate Documentation System Spec</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0018-documentation-language-root-guardrail.en.html" data-search="0018 documentation language root guardrail">
+      <a class="review-item" href="../docs/en/changelog/reviews/0018-documentation-language-root-guardrail.en.html">
         <span class="cbar"></span>
         <span class="cnum">0018</span>
         <span class="cnm">Documentation Language Root Guardrail</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0017-bilingual-doc-source-layout.en.html" data-search="0017 docs markdown viewer">
+      <a class="review-item" href="../docs/en/changelog/reviews/0017-bilingual-doc-source-layout.en.html">
         <span class="cbar"></span>
         <span class="cnum">0017</span>
         <span class="cnm">docs Markdown Viewer</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0016-docs-portal-source-driven.en.html" data-search="0016 source-driven docusaurus portal">
+      <a class="review-item" href="../docs/en/changelog/reviews/0016-docs-portal-source-driven.en.html">
         <span class="cbar"></span>
         <span class="cnum">0016</span>
         <span class="cnm">Source-Driven Docusaurus Portal</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0015-docs-portal-docusaurus.en.html" data-search="0015 docusaurus documentation portal">
+      <a class="review-item" href="../docs/en/changelog/reviews/0015-docs-portal-docusaurus.en.html">
         <span class="cbar"></span>
         <span class="cnum">0015</span>
         <span class="cnm">Docusaurus Documentation Portal</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0014-local-precheck-evidence.en.html" data-search="0014 local pre-check evidence">
+      <a class="review-item" href="../docs/en/changelog/reviews/0014-local-precheck-evidence.en.html">
         <span class="cbar"></span>
         <span class="cnum">0014</span>
         <span class="cnm">Local Pre-Check Evidence</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
-      <a class="card rise" href="../docs/en/changelog/reviews/0013-review-artifact-staged-detection.en.html" data-search="0013 review artifact staged detection">
+      <a class="review-item" href="../docs/en/changelog/reviews/0013-review-artifact-staged-detection.en.html">
         <span class="cbar"></span>
         <span class="cnum">0013</span>
         <span class="cnm">Review Artifact Staged Detection</span>
         <span class="cfoot"><span class="cv">Review &middot; en</span></span>
       </a>
     </div>
-    <p class="empty" id="empty">Nothing matches the current filter.</p>
-    <p class="foot rise">Generated from docs/en/changelog/reviews/. Do not edit this file by hand.</p>
   </main>
-  <script>
-    (function () {
-      var body = document.body;
-      var rises = Array.prototype.slice.call(document.querySelectorAll('.rise'));
-      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce) { body.classList.add('go'); }
-      else {
-        rises.forEach(function (el, i) { el.style.transitionDelay = Math.min(i * 35, 600) + 'ms'; });
-        requestAnimationFrame(function () { requestAnimationFrame(function () { body.classList.add('go'); }); });
-      }
-      var q = document.getElementById('q');
-      var shown = document.getElementById('shown');
-      var empty = document.getElementById('empty');
-      var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
-      if (!q) { return; }
-      q.addEventListener('input', function () {
-        var t = (q.value || '').trim().toLowerCase();
-        var total = 0;
-        cards.forEach(function (c) {
-          var hit = !t || (c.getAttribute('data-search') || '').indexOf(t) !== -1;
-          c.style.display = hit ? '' : 'none';
-          if (hit) { total++; }
-        });
-        if (shown) { shown.textContent = total; }
-        if (empty) { empty.style.display = total ? 'none' : 'block'; }
-      });
-    })();
-  </script>
 </body>
 </html>
