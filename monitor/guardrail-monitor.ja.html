@@ -22,7 +22,7 @@
     html, body { margin:0; }
     body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
     main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
-    .topnav { display:flex; gap:8px; align-items:center; margin:0 0 22px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
     .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
     .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
     .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
@@ -76,6 +76,8 @@
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
       .topnav { margin-bottom:18px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
       .hero { font-size:1.36rem; }
       .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
       .cfoot { justify-content:flex-start; flex-wrap:wrap; }
@@ -90,6 +92,10 @@
     <nav class="topnav">
       <a class="here" aria-current="page">ガードレール</a>
       <a href="reviews.ja.html">レビュー</a>
+      <a href="application-monitor.ja.html">開発ルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a href="application-features.ja.html">機能</a>
+      <a href="application-architecture.ja.html">アーキテクチャ</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Guardrail monitor</p>
@@ -224,6 +230,17 @@
               <span class="ccat" style="color:#1B73E8">ドキュメントポータル</span>
               <span class="cnm">ブラウザで見える統制面</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-working-agreement">作業合意</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">アプリケーション監視</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="アプリケーション監視" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">アプリケーション監視</span>
+              <span class="cnm">アプリケーションモニター鮮度</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
           </div>
         </div>

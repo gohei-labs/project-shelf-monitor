@@ -22,7 +22,7 @@
     html, body { margin:0; }
     body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
     main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
-    .topnav { display:flex; gap:8px; align-items:center; margin:0 0 22px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
     .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
     .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
     .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
@@ -76,6 +76,8 @@
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
       .topnav { margin-bottom:18px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
       .hero { font-size:1.36rem; }
       .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
       .cfoot { justify-content:flex-start; flex-wrap:wrap; }
@@ -90,6 +92,10 @@
     <nav class="topnav">
       <a class="here" aria-current="page">Guardrails</a>
       <a href="reviews.html">Reviews</a>
+      <a href="application-monitor.html">Development rules</a>
+      <a href="application-requirements.html">Requirements</a>
+      <a href="application-features.html">Features</a>
+      <a href="application-architecture.html">Architecture</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Guardrail monitor</p>
@@ -224,6 +230,17 @@
               <span class="ccat" style="color:#1B73E8">Docs portal</span>
               <span class="cnm">Browser-visible control surface</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
+            </button>
+          </div>
+        </div>
+        <div class="catsec">
+          <p class="catlabel">Application monitoring</p>
+          <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
+              <span class="cbar" style="background:#1B73E8"></span>
+              <span class="ccat" style="color:#1B73E8">Application monitoring</span>
+              <span class="cnm">Application monitor freshness</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
           </div>
         </div>
