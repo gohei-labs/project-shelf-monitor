@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>アプリケーションアーキテクチャ</title>
+  <style>
+    :root {
+      --bg:#F5F6F8;
+      --panel:#FFFFFF;
+      --panel-soft:#F9FAFB;
+      --ink:#18181B;
+      --muted:#667085;
+      --line:#D9DEE7;
+      --line-strong:#AEB6C2;
+      --blue:#1B73E8;
+      --green:#2F7D32;
+      --amber:#9C6B00;
+      --red:#B3261E;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
+    a { color:inherit; }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-weight:680; font-size:1.72rem; line-height:1.16; letter-spacing:0; margin:6px 0 0; }
+    .sub { color:#3F4650; max-width:760px; font-size:.94rem; margin:10px 0 0; }
+    section { margin:24px 0 0; }
+    h2 { font-size:.96rem; margin:0 0 10px; letter-spacing:0; }
+    .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .row { display:grid; gap:14px; align-items:start; padding:11px 14px; border-top:1px solid var(--line); }
+    .row:first-child { border-top:0; }
+    .page-row { grid-template-columns:180px 1fr; }
+    .rule-row { grid-template-columns:110px 1fr 170px; }
+    .req-row { grid-template-columns:90px 1fr 170px; }
+    .feat-row { grid-template-columns:90px 1fr 210px; }
+    .rid { color:var(--blue); font-weight:680; font-size:.84rem; font-variant-numeric:tabular-nums; }
+    .title { font-weight:620; font-size:.92rem; margin:0; }
+    .desc { color:#3F4650; font-size:.84rem; margin:4px 0 0; }
+    .meta { color:var(--muted); font-size:.78rem; margin:4px 0 0; overflow-wrap:anywhere; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.82em; }
+    .pill { display:inline-flex; align-items:center; min-height:22px; border-radius:999px; border:1px solid #D7DCE3; padding:2px 8px; font-size:.72rem; font-weight:700; color:#46505A; background:#F1F3F6; white-space:nowrap; }
+    .status-planned { background:#EEF4FF; border-color:#C9DAFF; color:#184EA8; }
+    .status-active, .status-implemented, .status-pass { background:#EEF7EE; border-color:#CFE7D1; color:#1E6B26; }
+    .status-attention { background:#FFF8E8; border-color:#F2D99B; color:#7A5200; }
+    .status-fail, .status-blocked, .status-missing { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
+    .status-deferred, .status-retired, .status-working-agreement, .status-future-control, .status-conditional-gate, .status-external-control { background:#F1F3F6; border-color:#D7DCE3; color:#46505A; }
+    .status-hard-gate { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
+    .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
+    .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#46505A; background:var(--panel-soft); }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(108px,150px) 1fr minmax(150px,220px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item:first-child { border-top:0; }
+    .monitor-item:hover { background:var(--panel-soft); }
+    .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
+    .cid { font-size:.78rem; letter-spacing:0; font-weight:700; color:var(--blue); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.74); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:50; }
+    .backdrop.show { opacity:1; pointer-events:auto; }
+    .modal { position:fixed; top:50%; left:50%; width:min(560px,92vw); max-height:84vh; overflow:auto; transform:translate(-50%,-50%) scale(0.98); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; z-index:51; background:var(--panel); border:1px solid var(--line); border-radius:8px; color:var(--ink); box-shadow:0 18px 48px rgba(24,24,27,.22); }
+    .modal.show { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+    .mbar { display:block; height:4px; width:100%; background:var(--blue); }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; }
+    .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; color:var(--blue); margin:0; }
+    .mname { font-weight:680; font-size:1.18rem; letter-spacing:0; line-height:1.28; margin:8px 42px 0 0; }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:130px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.8rem; color:var(--ink); }
+    .arch-diagram { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
+    .arch-svg { display:block; width:100%; min-width:820px; height:auto; }
+    .arch-edge { fill:none; stroke:#6B7280; stroke-width:2.2; }
+    .arch-edge-label { fill:#475467; font-size:13px; font-weight:650; paint-order:stroke; stroke:#FFFFFF; stroke-width:5px; stroke-linejoin:round; }
+    .arch-node { height:100%; border:1px solid #C8D1DE; border-radius:8px; background:#FFFFFF; padding:11px 12px; overflow:hidden; box-shadow:0 1px 0 rgba(24,24,27,.04); }
+    .arch-node-component { border-color:#BCD2F7; background:#F8FBFF; }
+    .arch-node-external { border-color:#D8D0BD; background:#FFFDF7; }
+    .arch-node-kicker { margin:0 0 5px; color:var(--blue); font-size:11px; font-weight:750; text-transform:uppercase; letter-spacing:0; }
+    .arch-node-title { margin:0; color:var(--ink); font-size:15px; line-height:1.2; font-weight:700; }
+    .arch-node-meta { margin:5px 0 0; color:#3F4650; font-size:12px; line-height:1.35; }
+    .arch-node-foot { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+    .arch-node-foot span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:11px; color:#46505A; background:var(--panel-soft); }
+    @media (max-width:760px) {
+      main { padding:18px 12px 36px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
+      .hero { font-size:1.36rem; }
+      .sub { width:100%; max-width:100%; overflow-wrap:anywhere; word-break:break-all; }
+      .row, .page-row, .rule-row, .req-row, .feat-row { grid-template-columns:1fr; gap:6px; }
+      .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav">
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="reviews.ja.html">レビュー</a>
+      <a href="application-monitor.ja.html">開発ルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a href="application-features.ja.html">機能</a>
+      <a class="here" aria-current="page">アーキテクチャ</a>
+    </nav>
+    <header class="pagehead">
+      <p class="eyebrow">Application monitor</p>
+      <h1 class="hero">アプリケーションアーキテクチャ</h1>
+    </header>
+    <section><h2>構成図</h2><div class="arch-diagram">
+      <svg class="arch-svg" viewBox="0 0 1000 438" role="img" aria-labelledby="architecture-diagram-title-ja architecture-diagram-desc-ja">
+        <title id="architecture-diagram-title-ja">構成図</title>
+        <desc id="architecture-diagram-desc-ja">web -&gt; api; api -&gt; managed-root; api -&gt; jsonl-logs</desc>
+        <defs><marker id="arch-arrow-ja" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6B7280" /></marker></defs>
+        <path class="arch-edge" d="M 290 219 C 333 219 342 219 385 219" marker-end="url(#arch-arrow-ja)" />
+        <text class="arch-edge-label" x="338" y="209" text-anchor="middle">HTTP</text>
+        <path class="arch-edge" d="M 615 219 C 658 219 667 135 710 135" marker-end="url(#arch-arrow-ja)" />
+        <text class="arch-edge-label" x="662" y="167" text-anchor="middle">FS read</text>
+        <path class="arch-edge" d="M 615 219 C 658 219 667 303 710 303" marker-end="url(#arch-arrow-ja)" />
+        <text class="arch-edge-label" x="662" y="251" text-anchor="middle">JSONL write</text>
+        <foreignObject x="60" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">web</p><p class="arch-node-title">Web UI</p><p class="arch-node-meta">frontend / React / Vite / TypeScript</p><div class="arch-node-foot"><span>apps/web</span></div></div></foreignObject>
+        <foreignObject x="385" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">api</p><p class="arch-node-title">バックエンド API</p><p class="arch-node-meta">backend / FastAPI / Python</p><div class="arch-node-foot"><span>apps/api</span></div></div></foreignObject>
+        <foreignObject x="710" y="72" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-external"><p class="arch-node-kicker">外部</p><p class="arch-node-title">管理対象ルート</p><p class="arch-node-meta">境界</p><div class="arch-node-foot"><span>managed-root</span></div></div></foreignObject>
+        <foreignObject x="710" y="240" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-external"><p class="arch-node-kicker">外部</p><p class="arch-node-title">JSONL ログ</p><p class="arch-node-meta">保存先</p><div class="arch-node-foot"><span>jsonl-logs</span></div></div></foreignObject>
+      </svg>
+    </div></section>
+  </main>
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.monitor-item'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (!bd || !md || cards.length === 0) return;
+      var mbar = document.getElementById('mbar');
+      var meb = document.getElementById('meb');
+      var mnm = document.getElementById('mnm');
+      var mrl = document.getElementById('mrl');
+      var mmeta = document.getElementById('mmeta');
+      function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+      function row(label, value) {
+        if (!value) return '';
+        return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
+      }
+      function openCard(c) {
+        var accent = c.getAttribute('data-accent') || '#1B73E8';
+        mbar.style.background = accent;
+        meb.style.color = accent;
+        meb.textContent = c.getAttribute('data-kind') || '';
+        mnm.textContent = c.getAttribute('data-name') || '';
+        mrl.textContent = c.getAttribute('data-body') || '';
+        var html = '';
+        for (var i = 1; i <= 6; i++) {
+          html += row(c.getAttribute('data-meta' + i + '-label'), c.getAttribute('data-meta' + i));
+        }
+        mmeta.innerHTML = html;
+        bd.classList.add('show');
+        md.classList.add('show');
+      }
+      function closeModal() {
+        bd.classList.remove('show');
+        md.classList.remove('show');
+      }
+      cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+      bd.addEventListener('click', closeModal);
+      document.getElementById('mx').addEventListener('click', closeModal);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    })();
+  </script>
+</body>
+</html>
