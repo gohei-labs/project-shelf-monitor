@@ -54,6 +54,31 @@
     .status-hard-gate { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
     .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
     .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#46505A; background:var(--panel-soft); }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(108px,150px) 1fr minmax(150px,220px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item:first-child { border-top:0; }
+    .monitor-item:hover { background:var(--panel-soft); }
+    .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
+    .cid { font-size:.78rem; letter-spacing:0; font-weight:700; color:var(--blue); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.74); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:50; }
+    .backdrop.show { opacity:1; pointer-events:auto; }
+    .modal { position:fixed; top:50%; left:50%; width:min(560px,92vw); max-height:84vh; overflow:auto; transform:translate(-50%,-50%) scale(0.98); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; z-index:51; background:var(--panel); border:1px solid var(--line); border-radius:8px; color:var(--ink); box-shadow:0 18px 48px rgba(24,24,27,.22); }
+    .modal.show { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+    .mbar { display:block; height:4px; width:100%; background:var(--blue); }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; }
+    .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; color:var(--blue); margin:0; }
+    .mname { font-weight:680; font-size:1.18rem; letter-spacing:0; line-height:1.28; margin:8px 42px 0 0; }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:130px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.8rem; color:var(--ink); }
     .arch-diagram { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
     .arch-svg { display:block; width:100%; min-width:820px; height:auto; }
     .arch-edge { fill:none; stroke:#6B7280; stroke-width:2.2; }
@@ -68,8 +93,16 @@
     .arch-node-foot span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:11px; color:#46505A; background:var(--panel-soft); }
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
       .hero { font-size:1.36rem; }
+      .sub { width:100%; max-width:100%; overflow-wrap:anywhere; word-break:break-all; }
       .row, .page-row, .rule-row, .req-row, .feat-row { grid-template-columns:1fr; gap:6px; }
+      .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
     }
   </style>
 </head>
@@ -80,12 +113,12 @@
       <a href="reviews.html">Reviews</a>
       <a href="application-monitor.html">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
+      <a href="application-features.html">Features</a>
       <a class="here" aria-current="page">Architecture</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
       <h1 class="hero">Application Architecture</h1>
-      <p class="sub">Generated diagram of components, boundaries, and connections.</p>
     </header>
     <section><h2>System diagram</h2><div class="arch-diagram">
       <svg class="arch-svg" viewBox="0 0 1000 438" role="img" aria-labelledby="architecture-diagram-title-en architecture-diagram-desc-en">
@@ -98,12 +131,53 @@
         <text class="arch-edge-label" x="662" y="167" text-anchor="middle">FS read</text>
         <path class="arch-edge" d="M 615 219 C 658 219 667 303 710 303" marker-end="url(#arch-arrow-en)" />
         <text class="arch-edge-label" x="662" y="251" text-anchor="middle">JSONL write</text>
-        <foreignObject x="60" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">web</p><p class="arch-node-title">Web UI</p><p class="arch-node-meta">frontend / React / Vite / TypeScript</p><div class="arch-node-foot"><span>apps/web</span><span>Planned</span><span>Contract: Planned</span></div></div></foreignObject>
-        <foreignObject x="385" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">api</p><p class="arch-node-title">Backend API</p><p class="arch-node-meta">backend / FastAPI / Python</p><div class="arch-node-foot"><span>apps/api</span><span>Planned</span><span>Contract: Planned</span></div></div></foreignObject>
+        <foreignObject x="60" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">web</p><p class="arch-node-title">Web UI</p><p class="arch-node-meta">frontend / React / Vite / TypeScript</p><div class="arch-node-foot"><span>apps/web</span></div></div></foreignObject>
+        <foreignObject x="385" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">api</p><p class="arch-node-title">Backend API</p><p class="arch-node-meta">backend / FastAPI / Python</p><div class="arch-node-foot"><span>apps/api</span></div></div></foreignObject>
         <foreignObject x="710" y="72" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-external"><p class="arch-node-kicker">External</p><p class="arch-node-title">Managed root</p><p class="arch-node-meta">Boundary</p><div class="arch-node-foot"><span>managed-root</span></div></div></foreignObject>
         <foreignObject x="710" y="240" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-external"><p class="arch-node-kicker">External</p><p class="arch-node-title">JSONL logs</p><p class="arch-node-meta">Store</p><div class="arch-node-foot"><span>jsonl-logs</span></div></div></foreignObject>
       </svg>
     </div></section>
   </main>
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.monitor-item'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (!bd || !md || cards.length === 0) return;
+      var mbar = document.getElementById('mbar');
+      var meb = document.getElementById('meb');
+      var mnm = document.getElementById('mnm');
+      var mrl = document.getElementById('mrl');
+      var mmeta = document.getElementById('mmeta');
+      function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+      function row(label, value) {
+        if (!value) return '';
+        return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
+      }
+      function openCard(c) {
+        var accent = c.getAttribute('data-accent') || '#1B73E8';
+        mbar.style.background = accent;
+        meb.style.color = accent;
+        meb.textContent = c.getAttribute('data-kind') || '';
+        mnm.textContent = c.getAttribute('data-name') || '';
+        mrl.textContent = c.getAttribute('data-body') || '';
+        var html = '';
+        for (var i = 1; i <= 6; i++) {
+          html += row(c.getAttribute('data-meta' + i + '-label'), c.getAttribute('data-meta' + i));
+        }
+        mmeta.innerHTML = html;
+        bd.classList.add('show');
+        md.classList.add('show');
+      }
+      function closeModal() {
+        bd.classList.remove('show');
+        md.classList.remove('show');
+      }
+      cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+      bd.addEventListener('click', closeModal);
+      document.getElementById('mx').addEventListener('click', closeModal);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    })();
+  </script>
 </body>
 </html>

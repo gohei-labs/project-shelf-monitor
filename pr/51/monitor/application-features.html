@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Application Development Rules</title>
+  <title>Application Features</title>
   <style>
     :root {
       --bg:#F5F6F8;
@@ -111,45 +111,39 @@
     <nav class="topnav">
       <a href="guardrail-monitor.html">Guardrails</a>
       <a href="reviews.html">Reviews</a>
-      <a class="here" aria-current="page">Development rules</a>
+      <a href="application-monitor.html">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
-      <a href="application-features.html">Features</a>
+      <a class="here" aria-current="page">Features</a>
       <a href="application-architecture.html">Architecture</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
-      <h1 class="hero">Application Development Rules</h1>
+      <h1 class="hero">Application Features</h1>
     </header>
-    <section><h2>Development rules</h2><div class="deck">
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Application monitor source first" data-body="Changes to application requirements, features, development rules, components, or connections must update product/application-monitor.json before generated monitor HTML." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Hard gate" data-meta3-label="Evidence" data-meta3="check-application-monitor.ps1 verifies generated monitor freshness.">
+    <section><h2>Features</h2><div class="deck">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Features" data-name="Health and status" data-body="Expose backend health, configured managed root, and application readiness to the UI." data-meta1-label="Status" data-meta1="Planned" data-meta2-label="Requirements" data-meta2="REQ-003" data-meta3-label="Components" data-meta3="api, web">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-001</span>
-        <span class="cnm">Application monitor source first</span>
-        <span class="cfoot"><span class="cv">Hard gate</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-001</span>
+        <span class="cnm">Health and status</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">Planned</span></span>
       </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Implementation directories must be declared" data-body="Every implementation directory under apps/, packages/, or services/ must be listed in the application monitor source and in project-components.json." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Hard gate" data-meta3-label="Evidence" data-meta3="The guardrail compares discovered implementation directories with the monitor source and the component contract.">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Features" data-name="Read-only shelf listing" data-body="List the managed shelf contents through the backend without file mutations." data-meta1-label="Status" data-meta1="Planned" data-meta2-label="Requirements" data-meta2="REQ-001, REQ-002" data-meta3-label="Components" data-meta3="api, web">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-002</span>
-        <span class="cnm">Implementation directories must be declared</span>
-        <span class="cfoot"><span class="cv">Hard gate</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-002</span>
+        <span class="cnm">Read-only shelf listing</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">Planned</span></span>
       </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Requirement traceability before implementation" data-body="Product behavior should trace from requirement to feature and responsible component before implementation work begins." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Working agreement" data-meta3-label="Evidence" data-meta3="The requirements, features, and architecture pages show requirement, feature, and component links separately.">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Features" data-name="Recent operational logs" data-body="Read recent structured log events so the owner can inspect what the app is doing." data-meta1-label="Status" data-meta1="Planned" data-meta2-label="Requirements" data-meta2="REQ-003, REQ-004" data-meta3-label="Components" data-meta3="api, web">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-003</span>
-        <span class="cnm">Requirement traceability before implementation</span>
-        <span class="cfoot"><span class="cv">Working agreement</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-003</span>
+        <span class="cnm">Recent operational logs</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">Planned</span></span>
       </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Phase 1 remains read-only" data-body="Phase 1 must not add controls or API behavior that moves, deletes, copies, imports, or rewrites owner files." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Working agreement" data-meta3-label="Evidence" data-meta3="Read-only behavior is tracked as an application development rule and a product requirement.">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Features" data-name="Path-boundary enforcement" data-body="Normalize requested paths and block anything outside MANAGED_ROOT before touching the filesystem." data-meta1-label="Status" data-meta1="Planned" data-meta2-label="Requirements" data-meta2="REQ-002, REQ-004" data-meta3-label="Components" data-meta3="api">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-004</span>
-        <span class="cnm">Phase 1 remains read-only</span>
-        <span class="cfoot"><span class="cv">Working agreement</span><span class="pill status-active">Active</span></span>
-      </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Architecture changes get their own monitor page" data-body="Component, folder, stack, and connection decisions belong on the architecture page, not mixed into the rules or requirements page." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Working agreement" data-meta3-label="Evidence" data-meta3="The generator emits a dedicated architecture page.">
-        <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-005</span>
-        <span class="cnm">Architecture changes get their own monitor page</span>
-        <span class="cfoot"><span class="cv">Working agreement</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-004</span>
+        <span class="cnm">Path-boundary enforcement</span>
+        <span class="cfoot"><span class="cv">api</span><span class="pill status-planned">Planned</span></span>
       </button>
     </div></section>
     <div class="backdrop" id="bd"></div>

@@ -54,6 +54,31 @@
     .status-hard-gate { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
     .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
     .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#46505A; background:var(--panel-soft); }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(108px,150px) 1fr minmax(150px,220px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item:first-child { border-top:0; }
+    .monitor-item:hover { background:var(--panel-soft); }
+    .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
+    .cid { font-size:.78rem; letter-spacing:0; font-weight:700; color:var(--blue); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.74); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:50; }
+    .backdrop.show { opacity:1; pointer-events:auto; }
+    .modal { position:fixed; top:50%; left:50%; width:min(560px,92vw); max-height:84vh; overflow:auto; transform:translate(-50%,-50%) scale(0.98); opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; z-index:51; background:var(--panel); border:1px solid var(--line); border-radius:8px; color:var(--ink); box-shadow:0 18px 48px rgba(24,24,27,.22); }
+    .modal.show { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+    .mbar { display:block; height:4px; width:100%; background:var(--blue); }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; }
+    .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; color:var(--blue); margin:0; }
+    .mname { font-weight:680; font-size:1.18rem; letter-spacing:0; line-height:1.28; margin:8px 42px 0 0; }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:130px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.8rem; color:var(--ink); }
     .arch-diagram { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
     .arch-svg { display:block; width:100%; min-width:820px; height:auto; }
     .arch-edge { fill:none; stroke:#6B7280; stroke-width:2.2; }
@@ -68,8 +93,16 @@
     .arch-node-foot span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:11px; color:#46505A; background:var(--panel-soft); }
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
       .hero { font-size:1.36rem; }
+      .sub { width:100%; max-width:100%; overflow-wrap:anywhere; word-break:break-all; }
       .row, .page-row, .rule-row, .req-row, .feat-row { grid-template-columns:1fr; gap:6px; }
+      .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
     }
   </style>
 </head>
@@ -80,57 +113,92 @@
       <a href="reviews.ja.html">レビュー</a>
       <a href="application-monitor.ja.html">開発ルール</a>
       <a class="here" aria-current="page">要求</a>
+      <a href="application-features.ja.html">機能</a>
       <a href="application-architecture.ja.html">アーキテクチャ</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
       <h1 class="hero">アプリケーション要求</h1>
-      <p class="sub">product requirements と、それに結びつく feature を確認するページ。</p>
     </header>
     <section><h2>要求</h2><div class="deck">
-      <div class="row req-row">
-        <div class="rid">REQ-001</div>
-        <div><p class="title">読み取り専用の本棚表示</p><p class="desc">最初の画面は、ファイルの移動、削除、コピー、インポート、書き換えを行わずに管理対象の本棚を表示する。</p><div class="mini"><span>FEAT-002</span></div></div>
-        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
-      </div>
-      <div class="row req-row">
-        <div class="rid">REQ-002</div>
-        <div><p class="title">明示的な managed-root 境界</p><p class="desc">バックエンドは MANAGED_ROOT を使い、そのルート外に解決されるリクエストパスを拒否する。</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
-        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
-      </div>
-      <div class="row req-row">
-        <div class="rid">REQ-003</div>
-        <div><p class="title">状態と最近のログ</p><p class="desc">最初の画面は、アプリケーション状態、managed-root 設定、本棚読み取り結果、最近の JSONL ログイベントを表示する。</p><div class="mini"><span>FEAT-001</span><span>FEAT-003</span></div></div>
-        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
-      </div>
-      <div class="row req-row">
-        <div class="rid">REQ-004</div>
-        <div><p class="title">構造化された運用ログ</p><p class="desc">起動、設定、本棚読み取り、ブロックされたパス試行を、秘密情報や私的ファイル内容を含めず JSONL として記録する。</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
-        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
-      </div>
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="要求" data-name="読み取り専用の本棚表示" data-body="最初の画面は、ファイルの移動、削除、コピー、インポート、書き換えを行わずに管理対象の本棚を表示する。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="優先度" data-meta2="must" data-meta3-label="出典" data-meta3="Issue #2" data-meta4-label="機能" data-meta4="FEAT-002">
+        <span class="cbar" style="background:#1B73E8"></span>
+        <span class="cid">REQ-001</span>
+        <span class="cnm">読み取り専用の本棚表示</span>
+        <span class="cfoot"><span class="cv">must</span><span class="pill status-planned">計画</span></span>
+      </button>
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="要求" data-name="明示的な managed-root 境界" data-body="バックエンドは MANAGED_ROOT を使い、そのルート外に解決されるリクエストパスを拒否する。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="優先度" data-meta2="must" data-meta3-label="出典" data-meta3="Issue #2" data-meta4-label="機能" data-meta4="FEAT-002, FEAT-004">
+        <span class="cbar" style="background:#1B73E8"></span>
+        <span class="cid">REQ-002</span>
+        <span class="cnm">明示的な managed-root 境界</span>
+        <span class="cfoot"><span class="cv">must</span><span class="pill status-planned">計画</span></span>
+      </button>
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="要求" data-name="状態と最近のログ" data-body="最初の画面は、アプリケーション状態、managed-root 設定、本棚読み取り結果、最近の JSONL ログイベントを表示する。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="優先度" data-meta2="must" data-meta3-label="出典" data-meta3="Issue #2" data-meta4-label="機能" data-meta4="FEAT-001, FEAT-003">
+        <span class="cbar" style="background:#1B73E8"></span>
+        <span class="cid">REQ-003</span>
+        <span class="cnm">状態と最近のログ</span>
+        <span class="cfoot"><span class="cv">must</span><span class="pill status-planned">計画</span></span>
+      </button>
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="要求" data-name="構造化された運用ログ" data-body="起動、設定、本棚読み取り、ブロックされたパス試行を、秘密情報や私的ファイル内容を含めず JSONL として記録する。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="優先度" data-meta2="must" data-meta3-label="出典" data-meta3="Issue #2" data-meta4-label="機能" data-meta4="FEAT-003, FEAT-004">
+        <span class="cbar" style="background:#1B73E8"></span>
+        <span class="cid">REQ-004</span>
+        <span class="cnm">構造化された運用ログ</span>
+        <span class="cfoot"><span class="cv">must</span><span class="pill status-planned">計画</span></span>
+      </button>
     </div></section>
-    <section><h2>機能</h2><div class="deck">
-      <div class="row feat-row">
-        <div class="rid">FEAT-001</div>
-        <div><p class="title">ヘルスと状態</p><p class="desc">バックエンドの health、設定済み managed root、アプリケーション準備状態を UI に渡す。</p><div class="mini"><span>REQ-003</span></div></div>
-        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
+    <div class="backdrop" id="bd"></div>
+    <div class="modal" id="md" role="dialog" aria-modal="true" aria-labelledby="mnm">
+      <span class="mbar" id="mbar"></span>
+      <div class="mbody">
+        <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
+        <p class="meb" id="meb"></p>
+        <h3 class="mname" id="mnm"></h3>
+        <p class="mrule" id="mrl"></p>
+        <div class="mdiv"></div>
+        <dl class="mmeta" id="mmeta"></dl>
       </div>
-      <div class="row feat-row">
-        <div class="rid">FEAT-002</div>
-        <div><p class="title">読み取り専用の本棚一覧</p><p class="desc">ファイルを変更せず、バックエンド経由で管理対象の本棚内容を一覧する。</p><div class="mini"><span>REQ-001</span><span>REQ-002</span></div></div>
-        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
-      </div>
-      <div class="row feat-row">
-        <div class="rid">FEAT-003</div>
-        <div><p class="title">最近の運用ログ</p><p class="desc">最近の構造化ログイベントを読み、アプリが何をしているかをオーナーが確認できるようにする。</p><div class="mini"><span>REQ-003</span><span>REQ-004</span></div></div>
-        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
-      </div>
-      <div class="row feat-row">
-        <div class="rid">FEAT-004</div>
-        <div><p class="title">パス境界の強制</p><p class="desc">ファイルシステムに触る前にリクエストパスを正規化し、MANAGED_ROOT 外をブロックする。</p><div class="mini"><span>REQ-002</span><span>REQ-004</span></div></div>
-        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span></div></div>
-      </div>
-    </div></section>
+    </div>
   </main>
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.monitor-item'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (!bd || !md || cards.length === 0) return;
+      var mbar = document.getElementById('mbar');
+      var meb = document.getElementById('meb');
+      var mnm = document.getElementById('mnm');
+      var mrl = document.getElementById('mrl');
+      var mmeta = document.getElementById('mmeta');
+      function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+      function row(label, value) {
+        if (!value) return '';
+        return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
+      }
+      function openCard(c) {
+        var accent = c.getAttribute('data-accent') || '#1B73E8';
+        mbar.style.background = accent;
+        meb.style.color = accent;
+        meb.textContent = c.getAttribute('data-kind') || '';
+        mnm.textContent = c.getAttribute('data-name') || '';
+        mrl.textContent = c.getAttribute('data-body') || '';
+        var html = '';
+        for (var i = 1; i <= 6; i++) {
+          html += row(c.getAttribute('data-meta' + i + '-label'), c.getAttribute('data-meta' + i));
+        }
+        mmeta.innerHTML = html;
+        bd.classList.add('show');
+        md.classList.add('show');
+      }
+      function closeModal() {
+        bd.classList.remove('show');
+        md.classList.remove('show');
+      }
+      cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+      bd.addEventListener('click', closeModal);
+      document.getElementById('mx').addEventListener('click', closeModal);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    })();
+  </script>
 </body>
 </html>

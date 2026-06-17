@@ -76,6 +76,8 @@
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
       .topnav { margin-bottom:18px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
       .hero { font-size:1.36rem; }
       .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
       .cfoot { justify-content:flex-start; flex-wrap:wrap; }
@@ -92,6 +94,7 @@
       <a href="reviews.ja.html">レビュー</a>
       <a href="application-monitor.ja.html">開発ルール</a>
       <a href="application-requirements.ja.html">要求</a>
+      <a href="application-features.ja.html">機能</a>
       <a href="application-architecture.ja.html">アーキテクチャ</a>
     </nav>
     <header class="pagehead">
@@ -233,7 +236,7 @@
         <div class="catsec">
           <p class="catlabel">アプリケーション監視</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="アプリケーション監視" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="application development monitor。アプリ固有の開発ルールを、要求や architecture assumptions と分けて追跡する。">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="アプリケーション監視" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">アプリケーション監視</span>
               <span class="cnm">アプリケーションモニター鮮度</span>

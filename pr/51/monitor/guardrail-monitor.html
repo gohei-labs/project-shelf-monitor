@@ -76,6 +76,8 @@
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
       .topnav { margin-bottom:18px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
       .hero { font-size:1.36rem; }
       .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
       .cfoot { justify-content:flex-start; flex-wrap:wrap; }
@@ -92,6 +94,7 @@
       <a href="reviews.html">Reviews</a>
       <a href="application-monitor.html">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
+      <a href="application-features.html">Features</a>
       <a href="application-architecture.html">Architecture</a>
     </nav>
     <header class="pagehead">
@@ -233,7 +236,7 @@
         <div class="catsec">
           <p class="catlabel">Application monitoring</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements and architecture assumptions.">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Application monitoring</span>
               <span class="cnm">Application monitor freshness</span>

@@ -31,7 +31,7 @@
   <section>
     <h2>Decision Summary</h2>
     <div class="panel">
-      <p>`product/application-monitor.json` を application development rules、requirements、architecture assumptions の source of truth にします。default の application monitor page を rules page にし、requirements と architecture は別の面で見ます。</p>
+      <p>`product/application-monitor.json` を application development rules、requirements、features、architecture assumptions の source of truth にします。default の application monitor page を rules page にし、requirements、features、architecture は別の面で見ます。</p>
     </div>
   </section>
 
@@ -40,11 +40,13 @@
     <ul>
       <li>structured application monitor source data は、隠しフォルダではなく見える root の `product/` に置く。</li>
       <li>application monitor を guardrail monitor / review monitor とは別の monitor として扱う。</li>
-      <li>guardrails、reviews、development rules、requirements、architecture を sibling top-navigation items として表示する。</li>
+      <li>guardrails、reviews、development rules、requirements、features、architecture を sibling top-navigation items として表示する。</li>
       <li>application-specific development rules を default の application monitor page にする。</li>
       <li>rules の前に、低情報量な目次だけのページを作らない。</li>
-      <li>requirements と architecture / component decisions は別ページに分ける。</li>
+      <li>requirements、features、architecture / component decisions は別ページに分ける。</li>
+      <li>development rules、requirements、features は compact cards と detail modals で表示する。</li>
       <li>architecture は component / connection の一覧ではなく、生成された図として表示する。</li>
+      <li>architecture diagram nodes には progress や component-contract status を混ぜない。</li>
       <li>progress metadata、source links、managed-root summary をこれらの monitor pages に混ぜない。</li>
       <li>将来、実装 directory が monitor source と component contract に載らずに増えた場合、check を fail させる。</li>
       <li>monitor HTML は source から生成し、手で編集しない。</li>
@@ -53,7 +55,7 @@
 
   <section>
     <h2>Recommendation</h2>
-    <p>app skeleton を作る前の baseline として承認することを推奨します。開発ルール、要求、architecture diagram を、code が増える前に review できます。</p>
+    <p>app skeleton を作る前の baseline として承認することを推奨します。開発ルール、要求、機能、architecture diagram を、code が増える前に review できます。</p>
   </section>
 
   <section>
@@ -76,7 +78,7 @@
     <table>
       <tr><th>Term</th><th>Use here</th></tr>
       <tr><td>Application monitor</td><td>`product/application-monitor.json` から生成される application development monitor。</td></tr>
-      <tr><td>Application monitor source</td><td>application development rules、requirements、architecture の構造化ソース。</td></tr>
+      <tr><td>Application monitor source</td><td>application development rules、requirements、features、architecture の構造化ソース。</td></tr>
       <tr><td>Component contract</td><td>component directory が存在した後に必要になる、`project-components.json` 内の stack / check 宣言。</td></tr>
     </table>
   </section>

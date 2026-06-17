@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Application Development Rules</title>
+  <title>アプリケーション機能</title>
   <style>
     :root {
       --bg:#F5F6F8;
@@ -109,47 +109,41 @@
 <body>
   <main>
     <nav class="topnav">
-      <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="reviews.html">Reviews</a>
-      <a class="here" aria-current="page">Development rules</a>
-      <a href="application-requirements.html">Requirements</a>
-      <a href="application-features.html">Features</a>
-      <a href="application-architecture.html">Architecture</a>
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="reviews.ja.html">レビュー</a>
+      <a href="application-monitor.ja.html">開発ルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a class="here" aria-current="page">機能</a>
+      <a href="application-architecture.ja.html">アーキテクチャ</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
-      <h1 class="hero">Application Development Rules</h1>
+      <h1 class="hero">アプリケーション機能</h1>
     </header>
-    <section><h2>Development rules</h2><div class="deck">
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Application monitor source first" data-body="Changes to application requirements, features, development rules, components, or connections must update product/application-monitor.json before generated monitor HTML." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Hard gate" data-meta3-label="Evidence" data-meta3="check-application-monitor.ps1 verifies generated monitor freshness.">
+    <section><h2>機能</h2><div class="deck">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="機能" data-name="ヘルスと状態" data-body="バックエンドの health、設定済み managed root、アプリケーション準備状態を UI に渡す。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-003" data-meta3-label="コンポーネント" data-meta3="api, web">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-001</span>
-        <span class="cnm">Application monitor source first</span>
-        <span class="cfoot"><span class="cv">Hard gate</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-001</span>
+        <span class="cnm">ヘルスと状態</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">計画</span></span>
       </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Implementation directories must be declared" data-body="Every implementation directory under apps/, packages/, or services/ must be listed in the application monitor source and in project-components.json." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Hard gate" data-meta3-label="Evidence" data-meta3="The guardrail compares discovered implementation directories with the monitor source and the component contract.">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="機能" data-name="読み取り専用の本棚一覧" data-body="ファイルを変更せず、バックエンド経由で管理対象の本棚内容を一覧する。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-001, REQ-002" data-meta3-label="コンポーネント" data-meta3="api, web">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-002</span>
-        <span class="cnm">Implementation directories must be declared</span>
-        <span class="cfoot"><span class="cv">Hard gate</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-002</span>
+        <span class="cnm">読み取り専用の本棚一覧</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">計画</span></span>
       </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Requirement traceability before implementation" data-body="Product behavior should trace from requirement to feature and responsible component before implementation work begins." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Working agreement" data-meta3-label="Evidence" data-meta3="The requirements, features, and architecture pages show requirement, feature, and component links separately.">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="機能" data-name="最近の運用ログ" data-body="最近の構造化ログイベントを読み、アプリが何をしているかをオーナーが確認できるようにする。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-003, REQ-004" data-meta3-label="コンポーネント" data-meta3="api, web">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-003</span>
-        <span class="cnm">Requirement traceability before implementation</span>
-        <span class="cfoot"><span class="cv">Working agreement</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-003</span>
+        <span class="cnm">最近の運用ログ</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">計画</span></span>
       </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Phase 1 remains read-only" data-body="Phase 1 must not add controls or API behavior that moves, deletes, copies, imports, or rewrites owner files." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Working agreement" data-meta3-label="Evidence" data-meta3="Read-only behavior is tracked as an application development rule and a product requirement.">
+      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="機能" data-name="パス境界の強制" data-body="ファイルシステムに触る前にリクエストパスを正規化し、MANAGED_ROOT 外をブロックする。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-002, REQ-004" data-meta3-label="コンポーネント" data-meta3="api">
         <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-004</span>
-        <span class="cnm">Phase 1 remains read-only</span>
-        <span class="cfoot"><span class="cv">Working agreement</span><span class="pill status-active">Active</span></span>
-      </button>
-      <button type="button" class="monitor-item" data-accent="#1B73E8" data-kind="Development rules" data-name="Architecture changes get their own monitor page" data-body="Component, folder, stack, and connection decisions belong on the architecture page, not mixed into the rules or requirements page." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Working agreement" data-meta3-label="Evidence" data-meta3="The generator emits a dedicated architecture page.">
-        <span class="cbar" style="background:#1B73E8"></span>
-        <span class="cid">APP-RULE-005</span>
-        <span class="cnm">Architecture changes get their own monitor page</span>
-        <span class="cfoot"><span class="cv">Working agreement</span><span class="pill status-active">Active</span></span>
+        <span class="cid">FEAT-004</span>
+        <span class="cnm">パス境界の強制</span>
+        <span class="cfoot"><span class="cv">api</span><span class="pill status-planned">計画</span></span>
       </button>
     </div></section>
     <div class="backdrop" id="bd"></div>

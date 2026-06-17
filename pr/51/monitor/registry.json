@@ -182,8 +182,8 @@
       "category": "application-monitoring",
       "title": { "en": "Application monitor freshness", "ja": "アプリケーションモニター鮮度" },
       "rule": {
-        "en": "The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, and architecture pages.",
-        "ja": "アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、アーキテクチャをページ分割する。"
+        "en": "The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages.",
+        "ja": "アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、機能、アーキテクチャをページ分割する。"
       },
       "pillar": "visualization",
       "status": "active",
@@ -192,8 +192,8 @@
       "scope": "product",
       "enforcedBy": { "script": "scripts/guardrails/check-application-monitor.ps1", "wiredIn": ["scripts/check.ps1"] },
       "note": {
-        "en": "This is the application development monitor. It tracks application-specific development rules separately from requirements and architecture assumptions.",
-        "ja": "application development monitor。アプリ固有の開発ルールを、要求や architecture assumptions と分けて追跡する。"
+        "en": "This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.",
+      "ja": "application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。"
       }
     },
     {
