@@ -31,11 +31,6 @@
     .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
     .hero { font-weight:680; font-size:1.72rem; line-height:1.16; letter-spacing:0; margin:6px 0 0; }
     .sub { color:#3F4650; max-width:760px; font-size:.94rem; margin:10px 0 0; }
-    .facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1px solid var(--line); border-radius:8px; background:var(--panel); overflow:hidden; margin:18px 0 0; }
-    .fact { padding:12px 14px; border-left:1px solid var(--line); min-width:0; }
-    .fact:first-child { border-left:0; }
-    .fact dt { color:var(--muted); font-size:.72rem; font-weight:700; text-transform:uppercase; margin:0 0 4px; }
-    .fact dd { margin:0; font-size:.9rem; overflow-wrap:anywhere; }
     section { margin:24px 0 0; }
     h2 { font-size:.96rem; margin:0 0 10px; letter-spacing:0; }
     .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
@@ -46,7 +41,7 @@
     .req-row { grid-template-columns:90px 1fr 170px; }
     .feat-row { grid-template-columns:90px 1fr 210px; }
     .comp-row { grid-template-columns:90px minmax(130px,190px) 1fr 190px; }
-    .conn-row, .drift-row { grid-template-columns:90px 1fr 170px; }
+    .conn-row { grid-template-columns:90px 1fr 170px; }
     .rid { color:var(--blue); font-weight:680; font-size:.84rem; font-variant-numeric:tabular-nums; }
     .title { font-weight:620; font-size:.92rem; margin:0; }
     .desc { color:#3F4650; font-size:.84rem; margin:4px 0 0; }
@@ -64,10 +59,7 @@
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
       .hero { font-size:1.36rem; }
-      .facts { grid-template-columns:1fr; }
-      .fact { border-left:0; border-top:1px solid var(--line); }
-      .fact:first-child { border-top:0; }
-      .row, .page-row, .rule-row, .req-row, .feat-row, .comp-row, .conn-row, .drift-row { grid-template-columns:1fr; gap:6px; }
+      .row, .page-row, .rule-row, .req-row, .feat-row, .comp-row, .conn-row { grid-template-columns:1fr; gap:6px; }
     }
   </style>
 </head>
@@ -85,11 +77,6 @@
       <h1 class="hero">Application Requirements</h1>
       <p class="sub">Product requirements and the features currently linked to them.</p>
     </header>
-    <dl class="facts">
-      <div class="fact"><dt>Current slice</dt><dd>Phase 1 skeleton <span class="pill status-planned">Planned</span></dd></div>
-      <div class="fact"><dt>Managed root</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
-      <div class="fact"><dt>Source</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">Monitor source: <code>product/application-monitor.json</code></p></dd></div>
-    </dl>
     <section><h2>Requirements</h2><div class="deck">
       <div class="row req-row">
         <div class="rid">REQ-001</div>

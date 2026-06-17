@@ -44,6 +44,7 @@
       <li>application-specific development rules を default の application monitor page にする。</li>
       <li>rules の前に、低情報量な目次だけのページを作らない。</li>
       <li>requirements と architecture / component decisions は別ページに分ける。</li>
+      <li>progress metadata、source links、managed-root summary をこれらの monitor pages に混ぜない。</li>
       <li>将来、実装 directory が monitor source と component contract に載らずに増えた場合、check を fail させる。</li>
       <li>monitor HTML は source から生成し、手で編集しない。</li>
     </ul>
@@ -74,8 +75,7 @@
     <table>
       <tr><th>Term</th><th>Use here</th></tr>
       <tr><td>Application monitor</td><td>`product/application-monitor.json` から生成される application development monitor。</td></tr>
-      <tr><td>Application monitor source</td><td>application development rules、requirements、architecture、structure drift indicators の構造化ソース。</td></tr>
-      <tr><td>Structure drift indicator</td><td>code structure と monitor source data のズレを示す見える signal。</td></tr>
+      <tr><td>Application monitor source</td><td>application development rules、requirements、architecture の構造化ソース。</td></tr>
       <tr><td>Component contract</td><td>component directory が存在した後に必要になる、`project-components.json` 内の stack / check 宣言。</td></tr>
     </table>
   </section>

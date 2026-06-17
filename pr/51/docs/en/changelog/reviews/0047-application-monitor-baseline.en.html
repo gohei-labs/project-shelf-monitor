@@ -44,6 +44,7 @@
       <li>Make application-specific development rules the default application monitor page.</li>
       <li>Do not add a low-information table-of-contents page before the rules.</li>
       <li>Keep requirements and architecture/component decisions on separate pages.</li>
+      <li>Keep progress metadata, source links, and managed-root summaries out of these monitor pages.</li>
       <li>Fail future checks if implementation directories appear without monitor-source and component-contract coverage.</li>
       <li>Keep the monitor generated from source; do not hand-edit monitor HTML.</li>
     </ul>
@@ -74,8 +75,7 @@
     <table>
       <tr><th>Term</th><th>Use here</th></tr>
       <tr><td>Application monitor</td><td>The application development monitor generated from `product/application-monitor.json`.</td></tr>
-      <tr><td>Application monitor source</td><td>Structured source data for application development rules, requirements, architecture, and structure drift indicators.</td></tr>
-      <tr><td>Structure drift indicator</td><td>A visible signal that code structure and monitor source data are drifting apart.</td></tr>
+      <tr><td>Application monitor source</td><td>Structured source data for application development rules, requirements, and architecture.</td></tr>
       <tr><td>Component contract</td><td>The stack and check declaration in `project-components.json` required once a component directory exists.</td></tr>
     </table>
   </section>
