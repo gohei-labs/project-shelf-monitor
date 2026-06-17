@@ -50,10 +50,11 @@
     .cmk.oth { border:1px solid var(--muted); }
     .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .cstatus { flex:0 0 auto; border-radius:999px; border:1px solid transparent; padding:2px 7px; font-size:.7rem; font-weight:700; letter-spacing:0; }
-    .status-enforced { background:#EEF7EE; border-color:#CFE7D1; color:#1E6B26; }
-    .status-conditional { background:#FFF8E8; border-color:#F2D99B; color:#7A5200; }
-    .status-advisory { background:#F1F3F6; border-color:#D7DCE3; color:#46505A; }
-    .status-external { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
+    .status-hard-gate { background:#EEF7EE; border-color:#CFE7D1; color:#1E6B26; }
+    .status-conditional-gate { background:#FFF8E8; border-color:#F2D99B; color:#7A5200; }
+    .status-external-control { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
+    .status-working-agreement { background:#F1F3F6; border-color:#D7DCE3; color:#46505A; }
+    .status-future-control { background:#EEF4FF; border-color:#C9DAFF; color:#184EA8; }
     .monitor-item.disabled { opacity:.55; }
     .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.74); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:50; }
     .backdrop.show { opacity:1; pointer-events:auto; }
@@ -100,86 +101,92 @@
         <div class="catsec">
           <p class="catlabel">Encoding &amp; hygiene</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Text encoding" data-rule="All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers." data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Text encoding" data-rule="All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers." data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
               <span class="cnm">Text encoding</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Document naming" data-rule="A documentation file name must not repeat its parent folder name." data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Document naming" data-rule="A documentation file name must not repeat its parent folder name." data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
               <span class="cnm">Document naming</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Repository hygiene" data-rule="The diff has no trailing whitespace or conflict markers." data-enf="git diff --check" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Repository hygiene" data-rule="The diff has no trailing whitespace or conflict markers." data-enf="git diff --check" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Encoding &amp; hygiene</span>
               <span class="cnm">Repository hygiene</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
           </div>
         </div>
         <div class="catsec">
           <p class="catlabel">Secret management</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="enforced" data-note="Scans changed-file content and the PR body for known token shapes; fails closed on git errors; values are redacted.">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Secret management</span>
               <span class="cnm">Secret / token leak scan</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
           </div>
         </div>
         <div class="catsec">
           <p class="catlabel">Build &amp; environment</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
               <span class="cnm">Dev Container build</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="apps/api ruff + pytest" data-venue="Conditional" data-status="conditional" data-note="Runs only when apps/api exists; currently skipped.">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Implementation component contract" data-rule="Implementation component directories must be declared with a stack and check command before product code is added." data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.">
+              <span class="cbar" style="background:#2F7D32"></span>
+              <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
+              <span class="cnm">Implementation component contract</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
               <span class="cnm">Backend lint and tests</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="apps/web pnpm build" data-venue="Conditional" data-status="conditional" data-note="Runs only when apps/web exists; currently skipped.">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
               <span class="cnm">Frontend build</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="conditional" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="conditional" data-note="Runs only when docker is available.">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="conditional-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="Conditional gate" data-note="Runs only when docker is available.">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Build &amp; environment</span>
               <span class="cnm">Compose config validation</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional">conditional</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
             </button>
           </div>
         </div>
         <div class="catsec">
           <p class="catlabel">Governance &amp; tooling</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="enforced" data-note="Project-specific control files must use visible paths such as agent-context/.">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Project-specific control files must use visible paths such as agent-context/.">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
               <span class="cnm">Root hidden path policy</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="enforced" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Guardrail registry integrity" data-rule="Every active guardrail names a real, wired gate, and the guardrail monitor is up to date with this registry." data-enf="scripts/guardrails/check-registry.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Guardrail registry integrity" data-rule="Every active guardrail names a real, wired gate, and the guardrail monitor is up to date with this registry." data-enf="scripts/guardrails/check-registry.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
               <span class="cnm">Guardrail registry integrity</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="external" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="External" data-status="external" data-note="Configured in GitHub repository settings, not in the tree.">
+            <button type="button" class="monitor-item" data-acc="#2F7D32" data-status-key="future-control" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="Advisory" data-status="Future control" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
               <span class="cbar" style="background:#2F7D32"></span>
               <span class="ccat" style="color:#2F7D32">Governance &amp; tooling</span>
               <span class="cnm">Branch protection</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external">external</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
           </div>
         </div>
@@ -189,63 +196,63 @@
         <div class="catsec">
           <p class="catlabel">Bilingual docs</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Bilingual document pairs" data-rule="docs/en and docs/ja hold the same set of relative Markdown paths." data-enf="scripts/guardrails/check-bilingual-doc-pairs.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Bilingual docs" data-name="Bilingual document pairs" data-rule="docs/en and docs/ja hold the same set of relative Markdown paths." data-enf="scripts/guardrails/check-bilingual-doc-pairs.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
               <span class="cnm">Bilingual document pairs</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language roots" data-rule="All Markdown lives under a configured language root." data-enf="scripts/guardrails/check-doc-language-roots.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language roots" data-rule="All Markdown lives under a configured language root." data-enf="scripts/guardrails/check-doc-language-roots.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
               <span class="cnm">Documentation language roots</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language content" data-rule="Each language tree actually contains that language; no untranslated copy is left behind." data-enf="scripts/guardrails/check-doc-language-content.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language content" data-rule="Each language tree actually contains that language; no untranslated copy is left behind." data-enf="scripts/guardrails/check-doc-language-content.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Bilingual docs</span>
               <span class="cnm">Documentation language content</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
           </div>
         </div>
         <div class="catsec">
           <p class="catlabel">Docs portal</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="advisory" data-pil="Visualization" data-cat="Docs portal" data-name="Browser-visible control surface" data-rule="Current work state is inspectable in a browser, not only by asking the LLM." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-004). The guardrail monitor is a first step toward it.">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="working-agreement" data-pil="Visualization" data-cat="Docs portal" data-name="Browser-visible control surface" data-rule="Current work state is inspectable in a browser, not only by asking the LLM." data-enf="" data-venue="Advisory" data-status="Working agreement" data-note="Policy (LLM-GR-004). The guardrail monitor is a first step toward it.">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Docs portal</span>
               <span class="cnm">Browser-visible control surface</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
           </div>
         </div>
         <div class="catsec">
           <p class="catlabel">Review artifacts</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact runtime boundary" data-rule="A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section." data-enf="scripts/guardrails/check-review-artifact-runtime-boundary.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact runtime boundary" data-rule="A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section." data-enf="scripts/guardrails/check-review-artifact-runtime-boundary.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Review artifacts</span>
               <span class="cnm">Review artifact runtime boundary</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Human review artifact link" data-rule="PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact." data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Human review artifact link" data-rule="PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact." data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Review artifacts</span>
               <span class="cnm">Human review artifact link</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact terminology" data-rule="Changed review artifacts carry a visible Terminology Check section." data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact terminology" data-rule="Changed review artifacts carry a visible Terminology Check section." data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Review artifacts</span>
               <span class="cnm">Review artifact terminology</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="enforced" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact references" data-rule="Changed review artifacts carry a References / primary-sources section that explains each source." data-enf="scripts/guardrails/check-review-artifact-references.ps1" data-venue="CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#1B73E8" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact references" data-rule="Changed review artifacts carry a References / primary-sources section that explains each source." data-enf="scripts/guardrails/check-review-artifact-references.ps1" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#1B73E8"></span>
               <span class="ccat" style="color:#1B73E8">Review artifacts</span>
               <span class="cnm">Review artifact references</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
           </div>
         </div>
@@ -255,58 +262,58 @@
         <div class="catsec">
           <p class="catlabel">Agent context</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="enforced" data-pil="Human orchestration" data-cat="Agent context" data-name="Agent core-context manifest" data-rule="Every required-reading path in the core-context manifest exists and is unique." data-enf="scripts/guardrails/check-agent-core-context.ps1" data-venue="Local + CI" data-status="enforced" data-note="">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="Agent context" data-name="Agent core-context manifest" data-rule="Every required-reading path in the core-context manifest exists and is unique." data-enf="scripts/guardrails/check-agent-core-context.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#9C6B00"></span>
               <span class="ccat" style="color:#9C6B00">Agent context</span>
               <span class="cnm">Agent core-context manifest</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Agent context" data-name="Core-context actually read" data-rule="The agent has read the required-reading files before changing or reviewing." data-enf="" data-venue="Honor" data-status="advisory" data-note="PR-template checkbox only. Manifest integrity is gated, but reading itself is not.">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Agent context" data-name="Core-context actually read" data-rule="The agent has read the required-reading files before changing or reviewing." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="PR-template checkbox only. Manifest integrity is gated, but reading itself is not.">
               <span class="cbar" style="background:#9C6B00"></span>
               <span class="ccat" style="color:#9C6B00">Agent context</span>
               <span class="cnm">Core-context actually read</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-advisory">advisory</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
           </div>
         </div>
         <div class="catsec">
           <p class="catlabel">Decision records</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Decision records" data-name="AI review record" data-rule="Every implementation PR posts an AI review record comment." data-enf="" data-venue="Honor" data-status="advisory" data-note="PR-template checkbox only; no CI gate yet.">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Decision records" data-name="AI review record" data-rule="Every implementation PR posts an AI review record comment." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="PR-template checkbox only; no CI gate yet.">
               <span class="cbar" style="background:#9C6B00"></span>
               <span class="ccat" style="color:#9C6B00">Decision records</span>
               <span class="cnm">AI review record</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-advisory">advisory</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="enforced" data-pil="Human orchestration" data-cat="Decision records" data-name="Decision before implementation" data-rule="Implementation PRs link a prior decision or spec record." data-enf="scripts/guardrails/check-spec-before-impl.ps1" data-venue="Local + CI" data-status="enforced" data-note="Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors.">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="Decision records" data-name="Decision before implementation" data-rule="Implementation PRs link a prior decision or spec record." data-enf="scripts/guardrails/check-spec-before-impl.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors.">
               <span class="cbar" style="background:#9C6B00"></span>
               <span class="ccat" style="color:#9C6B00">Decision records</span>
               <span class="cnm">Decision before implementation</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-enforced">enforced</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
           </div>
         </div>
         <div class="catsec">
           <p class="catlabel">Working agreements</p>
           <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Working agreements" data-name="Explicit omissions" data-rule="Partial content is labeled partial; uncertainty is surfaced, not hidden." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-002); honor-system.">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Working agreements" data-name="Explicit omissions" data-rule="Partial content is labeled partial; uncertainty is surfaced, not hidden." data-enf="" data-venue="Advisory" data-status="Working agreement" data-note="Policy (LLM-GR-002); honor-system.">
               <span class="cbar" style="background:#9C6B00"></span>
               <span class="ccat" style="color:#9C6B00">Working agreements</span>
               <span class="cnm">Explicit omissions</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="advisory" data-pil="Human orchestration" data-cat="Working agreements" data-name="No unilateral issue creation" data-rule="Do not open GitHub issues without owner confirmation." data-enf="" data-venue="Advisory" data-status="advisory" data-note="Policy (LLM-GR-005); honor-system.">
+            <button type="button" class="monitor-item" data-acc="#9C6B00" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Working agreements" data-name="No unilateral issue creation" data-rule="Do not open GitHub issues without owner confirmation." data-enf="" data-venue="Advisory" data-status="Working agreement" data-note="Policy (LLM-GR-005); honor-system.">
               <span class="cbar" style="background:#9C6B00"></span>
               <span class="ccat" style="color:#9C6B00">Working agreements</span>
               <span class="cnm">No unilateral issue creation</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-advisory">advisory</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
           </div>
         </div>
       </section>
     </div>
     <div class="backdrop" id="bd"></div>
-    <div class="modal" id="md" role="dialog" aria-modal="true" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Status" data-l-note="Note">
+    <div class="modal" id="md" role="dialog" aria-modal="true" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Control" data-l-note="Note">
       <span class="mbar" id="mbar"></span>
       <div class="mbody">
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>

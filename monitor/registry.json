@@ -19,6 +19,13 @@
     "decision-records": { "en": "Decision records", "ja": "決定記録" },
     "working-agreements": { "en": "Working agreements", "ja": "作業の約束事" }
   },
+  "controlTypes": {
+    "hard-gate": { "en": "Hard gate", "ja": "強制ゲート" },
+    "conditional-gate": { "en": "Conditional gate", "ja": "条件付きゲート" },
+    "external-control": { "en": "External control", "ja": "外部統制" },
+    "working-agreement": { "en": "Working agreement", "ja": "作業合意" },
+    "future-control": { "en": "Future control", "ja": "将来統制" }
+  },
   "guardrails": [
     {
       "id": "text-encoding",
@@ -31,6 +38,7 @@
       },
       "pillar": "guardrails",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-text-encoding.ps1", "wiredIn": ["scripts/check.ps1"] }
@@ -46,6 +54,7 @@
       },
       "pillar": "guardrails",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-doc-naming.ps1", "wiredIn": ["scripts/check.ps1"] }
@@ -61,6 +70,7 @@
       },
       "pillar": "guardrails",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "inline": "git diff --check", "marker": "git diff --check", "wiredIn": ["scripts/check.ps1"] }
@@ -76,6 +86,7 @@
       },
       "pillar": "guardrails",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-root-hidden-paths.ps1", "wiredIn": ["scripts/check.ps1"] },
@@ -95,6 +106,7 @@
       },
       "pillar": "human-orchestration",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-agent-core-context.ps1", "wiredIn": ["scripts/check.ps1"] }
@@ -110,6 +122,7 @@
       },
       "pillar": "guardrails",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-registry.ps1", "wiredIn": ["scripts/check.ps1"] }
@@ -125,6 +138,7 @@
       },
       "pillar": "visualization",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "bilingual",
       "enforcedBy": { "script": "scripts/guardrails/check-bilingual-doc-pairs.ps1", "wiredIn": ["scripts/check.ps1"] }
@@ -140,6 +154,7 @@
       },
       "pillar": "visualization",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "bilingual",
       "enforcedBy": { "script": "scripts/guardrails/check-doc-language-roots.ps1", "wiredIn": ["scripts/check.ps1"] }
@@ -155,6 +170,7 @@
       },
       "pillar": "visualization",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "bilingual",
       "enforcedBy": { "script": "scripts/guardrails/check-doc-language-content.ps1", "wiredIn": ["scripts/check.ps1"] }
@@ -170,6 +186,7 @@
       },
       "pillar": "visualization",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-runtime-boundary.ps1", "wiredIn": ["scripts/check.ps1", ".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
@@ -185,6 +202,7 @@
       },
       "pillar": "visualization",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "ci",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-human-review-artifact.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
@@ -200,6 +218,7 @@
       },
       "pillar": "visualization",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "ci",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-terminology.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
@@ -215,6 +234,7 @@
       },
       "pillar": "visualization",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "ci",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-references.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
@@ -230,9 +250,30 @@
       },
       "pillar": "guardrails",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "ci",
       "scope": "product",
       "enforcedBy": { "ciJob": "devcontainer", "wiredIn": [".github/workflows/ci.yml"] }
+    },
+    {
+      "id": "component-contract",
+      "enabled": true,
+      "category": "build-environment",
+      "title": { "en": "Implementation component contract", "ja": "実装コンポーネント契約" },
+      "rule": {
+        "en": "Implementation component directories must be declared with a stack and check command before product code is added.",
+        "ja": "実装コンポーネントのディレクトリを追加する前に、stack と check command を宣言する。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "product",
+      "enforcedBy": { "script": "scripts/guardrails/check-component-contract.ps1", "wiredIn": ["scripts/check.ps1"] },
+      "note": {
+        "en": "This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.",
+        "ja": "stack-neutral なゲート。apps/api が Python を意味する、apps/web が pnpm を意味する、という推測を避け、実装コンポーネントには明示的な test/build 契約を求める。"
+      }
     },
     {
       "id": "backend-checks",
@@ -244,11 +285,15 @@
         "ja": "バックエンドの lint とテストが通る。"
       },
       "pillar": "guardrails",
-      "status": "conditional",
-      "runsAt": "conditional",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "advisory",
       "scope": "product",
-      "enforcedBy": { "inline": "apps/api ruff + pytest", "wiredIn": ["scripts/check.ps1"] },
-      "note": { "en": "Runs only when apps/api exists; currently skipped.", "ja": "apps/api がある時だけ実行。現在はスキップ。" }
+      "enforcedBy": null,
+      "note": {
+        "en": "No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.",
+        "ja": "backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
+      }
     },
     {
       "id": "frontend-build",
@@ -260,11 +305,15 @@
         "ja": "フロントエンドが lockfile 固定で install してビルドできる。"
       },
       "pillar": "guardrails",
-      "status": "conditional",
-      "runsAt": "conditional",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "advisory",
       "scope": "product",
-      "enforcedBy": { "inline": "apps/web pnpm build", "wiredIn": ["scripts/check.ps1"] },
-      "note": { "en": "Runs only when apps/web exists; currently skipped.", "ja": "apps/web がある時だけ実行。現在はスキップ。" }
+      "enforcedBy": null,
+      "note": {
+        "en": "No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.",
+        "ja": "frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
+      }
     },
     {
       "id": "compose-config",
@@ -277,6 +326,7 @@
       },
       "pillar": "guardrails",
       "status": "conditional",
+      "controlType": "conditional-gate",
       "runsAt": "conditional",
       "scope": "product",
       "enforcedBy": { "inline": "docker compose config --quiet", "marker": "docker compose config", "wiredIn": ["scripts/check.ps1"] },
@@ -293,6 +343,7 @@
       },
       "pillar": "human-orchestration",
       "status": "advisory",
+      "controlType": "working-agreement",
       "runsAt": "honor",
       "scope": "generic",
       "enforcedBy": null,
@@ -309,6 +360,7 @@
       },
       "pillar": "human-orchestration",
       "status": "advisory",
+      "controlType": "working-agreement",
       "runsAt": "honor",
       "scope": "generic",
       "enforcedBy": null,
@@ -325,6 +377,7 @@
       },
       "pillar": "human-orchestration",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-spec-before-impl.ps1", "wiredIn": ["scripts/check.ps1"] },
@@ -341,10 +394,14 @@
       },
       "pillar": "guardrails",
       "status": "active",
+      "controlType": "hard-gate",
       "runsAt": "both",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-secret-leak.ps1", "wiredIn": ["scripts/check.ps1"] },
-      "note": { "en": "Scans changed-file content and the PR body for known token shapes; fails closed on git errors; values are redacted.", "ja": "変更ファイルの内容と PR 本文を既知のトークン形状で走査。git 失敗時は fail-closed。値は伏字化。" }
+      "note": {
+        "en": "Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.",
+        "ja": "変更ファイルの内容と PR 本文を既知のトークン形状で走査。CI は GUARDRAIL_PULL_REQUEST_BODY 経由で PR 本文を渡す。git 失敗時は fail-closed。値は伏字化。"
+      }
     },
     {
       "id": "explicit-omissions",
@@ -357,6 +414,7 @@
       },
       "pillar": "human-orchestration",
       "status": "advisory",
+      "controlType": "working-agreement",
       "runsAt": "advisory",
       "scope": "generic",
       "enforcedBy": null,
@@ -373,6 +431,7 @@
       },
       "pillar": "visualization",
       "status": "advisory",
+      "controlType": "working-agreement",
       "runsAt": "advisory",
       "scope": "generic",
       "enforcedBy": null,
@@ -389,6 +448,7 @@
       },
       "pillar": "human-orchestration",
       "status": "advisory",
+      "controlType": "working-agreement",
       "runsAt": "advisory",
       "scope": "generic",
       "enforcedBy": null,
@@ -404,11 +464,15 @@
         "ja": "必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。"
       },
       "pillar": "guardrails",
-      "status": "external",
-      "runsAt": "external",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "advisory",
       "scope": "generic",
       "enforcedBy": null,
-      "note": { "en": "Configured in GitHub repository settings, not in the tree.", "ja": "GitHub のリポジトリ設定で構成（リポジトリ外）。" }
+      "note": {
+        "en": "Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.",
+        "ja": "現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。"
+      }
     }
   ]
 }
