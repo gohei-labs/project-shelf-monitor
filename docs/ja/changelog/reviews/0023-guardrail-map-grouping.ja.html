@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0023: ガードレール地図のグループ化</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>ガードレール地図のグループ化</h1>
+      <p class="lead">この成果物は、ガードレール地図を<strong>柱→カテゴリ</strong>でグループ化してレジストリが 100〜200 件に育っても読めるようにすること、および <code>category</code> をレジストリで強制されるフィールドにすることの承認を求めます。</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>承認のお願い（Requested Approval）</h2>
+      <ol>
+        <li><code>playbook/registry.json</code> に <code>categories</code> マップと各ゲートの <code>category</code> フィールドを追加する（3 本柱にまたがる 10 カテゴリ）。</li>
+        <li>ガードレール地図を「柱→カテゴリ」の折りたたみグループ、グループごとの件数、各行の実行場所バッジ、検索ボックス＋実行場所フィルタで再生成する。</li>
+        <li><code>scripts/check-registry.ps1</code> がカテゴリ整合（存在・既知・二言語）を強制し、新フィールドが黙って乖離しないようにする。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>変更内容（What Changed）</h2>
+      <table>
+        <thead><tr><th>対象</th><th>変更後の役割</th></tr></thead>
+        <tbody>
+          <tr><td><code>playbook/registry.json</code></td><td>正本。<code>categories</code> マップと各ゲートの <code>category</code> を取得。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>レジストリからグループ化・折りたたみ・フィルタ可能な地図を生成。</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td>カテゴリ整合を検証し、地図の乖離を引き続きブロック。</td></tr>
+          <tr><td><code>playbook/guardrail-map.html</code> / <code>.ja.html</code></td><td>再生成された出力 — 手編集しない。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>リスク（Risk）</h2>
+      <p>カテゴリ名と割当は編集上の判断だが、レジストリのデータであり、生成器に触れずに改名・再分類できる。検索とフィルタはプログレッシブ・エンハンスメントで、JavaScript 無効でも地図は全グループを開いた状態で読める。ゲートの挙動は変わらない — 強制されるガードレールは同じで、変わるのは見せ方（グループ化）だけ。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>用語チェック（Terminology Check / 標準用語チェック）</h2>
+      <table>
+        <thead><tr><th>用語</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>柱（Pillar）</td><td>最上位の 3 グループのいずれか：ガードレール／可視化／人間オーケストレーション。</td></tr>
+          <tr><td>カテゴリ（Category）</td><td>柱の中のより細かい機能的グループ（例：review-artifacts、bilingual-docs）。</td></tr>
+          <tr><td>実行場所（Venue）</td><td>ガードレールがどこで走り、ブロックするか：ローカル＋CI／CI／条件付き／名目／方針／外部。</td></tr>
+          <tr><td>プログレッシブ・エンハンスメント</td><td>ページは JavaScript 無しでも機能し、スクリプトは検索とフィルタを足すだけ。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>ランタイム境界チェック（Runtime Boundary Check）</h2>
+      <p>本変更はドキュメント・レジストリ・生成器の変更である。ガードレールの「見せ方」を変えるだけで、どこで・どう走るかは変えない。実行場所ラベルは既存のランタイム（PowerShell によるローカル事前チェック、CI、Dev Container）を説明するもので、新たなランタイムは導入しない。</p>
+      <p>触れたツールは PowerShell の地図生成器のみ。Node は検証中に埋め込みフィルタスクリプトを構文チェック（<code>node --check</code>）するためだけに使い、新しいランタイム依存ではない。権威ある環境は引き続き Dev Container と Docker Compose。</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考情報（References）</h2>
+      <table>
+        <thead><tr><th>参照</th><th>裏付ける内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>playbook/registry.json</code></td><td>categories マップと各ゲートの category（正本）。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>グループ化・折りたたみ・フィルタ可能な地図を生成。</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td>カテゴリ整合と地図の鮮度を強制。</td></tr>
+          <tr><td><code>docs/ja/changelog/0029-guardrail-map-grouping.md</code></td><td>本作業の変更ノート。</td></tr>
+          <tr><td><code>playbook/guardrail-map.ja.html</code></td><td>再生成された日本語地図。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

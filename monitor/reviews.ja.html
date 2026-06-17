@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>レビュー成果物</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" />
+  <style>
+    :root { --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --accent:#57C7EA; }
+    @media (prefers-color-scheme: dark) { :root { --ink:#F4F2EC; --mute:#9A9AA2; --rule:#37373D; --paper:#161619; } }
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    body { background:var(--paper); color:var(--ink); font-family:'Inter', -apple-system, "Segoe UI", "Noto Sans JP", sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+    main { max-width:1080px; margin:0 auto; padding:clamp(2.4rem,7vw,6rem) clamp(1.2rem,5vw,3rem) 5rem; }
+    .topnav { display:flex; gap:1.6rem; align-items:baseline; font-family:'Space Grotesk', sans-serif; font-size:0.82rem; letter-spacing:0.02em; margin:0 0 2.4rem; }
+    .topnav a { color:var(--mute); text-decoration:none; padding-bottom:3px; border-bottom:1px solid transparent; }
+    .topnav a:hover { color:var(--ink); }
+    .topnav a.here { color:var(--ink); border-bottom-color:var(--accent); }
+    .eyebrow { font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--mute); font-weight:500; margin:0; }
+    .hero { font-family:'Space Grotesk', "Helvetica Neue", Arial, sans-serif; font-weight:700; font-size:clamp(2.4rem,8vw,5rem); line-height:1.02; letter-spacing:-0.03em; margin:1.4rem 0 0; }
+    .lead { font-size:1.05rem; color:var(--mute); line-height:1.65; margin:1.4rem 0 0; max-width:54ch; }
+    .ledger { display:flex; gap:2.4rem; align-items:end; margin:clamp(2.4rem,5vw,3.6rem) 0 0; }
+    .stat .n { font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:clamp(3rem,10vw,5.4rem); line-height:0.9; letter-spacing:-0.04em; font-feature-settings:'tnum' 1; color:var(--accent); }
+    .stat .l { font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--mute); margin:0.6rem 0 0; }
+    .reg-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:1rem; border-top:1px solid var(--ink); padding-top:1.4rem; margin:clamp(3rem,6vw,5rem) 0 0; }
+    .search { border:0; border-bottom:1px solid var(--rule); background:transparent; color:var(--ink); font-family:'Inter', sans-serif; font-size:0.95rem; padding:6px 2px; min-width:200px; outline:none; }
+    .search:focus { border-bottom-color:var(--ink); }
+    .deck { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; margin:1.8rem 0 0; }
+    .card { position:relative; display:flex; flex-direction:column; gap:10px; min-height:150px; text-align:left; padding:16px 15px 13px; background:#21212a; border:1px solid #34343e; border-radius:12px; overflow:hidden; cursor:pointer; color:#F1EFE8; text-decoration:none; transition:transform .16s ease, border-color .2s ease; }
+    .card:hover { transform:translateY(-4px); border-color:#54545f; }
+    .card:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    .cbar { position:absolute; top:0; left:0; right:0; height:4px; background:var(--accent); }
+    .cnum { font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:1.5rem; letter-spacing:0.02em; font-feature-settings:'tnum' 1; color:var(--accent); }
+    .cnm { font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:0.96rem; line-height:1.32; letter-spacing:-0.005em; flex:1; color:#F1EFE8; }
+    .cfoot { display:flex; align-items:center; gap:7px; }
+    .cv { font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#9a9aa6; }
+    .empty { color:var(--mute); margin:2rem 0; display:none; }
+    .foot { font-size:0.74rem; color:var(--mute); margin:4rem 0 0; letter-spacing:0.02em; }
+    .rise { opacity:0; transform:translateY(12px); }
+    body.go .rise { opacity:1; transform:none; transition:opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1); }
+    @media (prefers-reduced-motion: reduce) { .rise { opacity:1; transform:none; } .card { transition:none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav rise">
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a class="here" aria-current="page">レビュー</a>
+    </nav>
+    <p class="eyebrow rise">コントロール面</p>
+    <h1 class="hero rise">レビュー<br />成果物。</h1>
+    <p class="lead rise">各変更のオーナー向け要約——方針・リスク・スコープを、一目で。</p>
+    <div class="ledger rise">
+      <div class="stat"><div class="n">41</div><div class="l">成果物</div></div>
+    </div>
+    <div class="reg-head rise">
+      <p class="eyebrow">レビュー &mdash; <span id="shown">41</span> / 41</p>
+      <input class="search" id="q" type="search" placeholder="レビューを絞り込み" aria-label="レビューを絞り込み" />
+    </div>
+    <div class="deck">
+      <a class="card rise" href="../docs/ja/changelog/reviews/0042-public-monitor-mirror.ja.html" data-search="0042 public monitor mirror">
+        <span class="cbar"></span>
+        <span class="cnum">0042</span>
+        <span class="cnm">Public monitor mirror</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0041-pages-plan-fallback.ja.html" data-search="0041 pages plan fallback">
+        <span class="cbar"></span>
+        <span class="cnum">0041</span>
+        <span class="cnm">Pages plan fallback</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0040-pr-monitor-preview-artifact.ja.html" data-search="0040 pr モニター preview artifact">
+        <span class="cbar"></span>
+        <span class="cnum">0040</span>
+        <span class="cnm">PR モニター preview artifact</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0039-tracked-github-token-wrappers.ja.html" data-search="0039 github トークン wrapper の tracked 化">
+        <span class="cbar"></span>
+        <span class="cnum">0039</span>
+        <span class="cnm">GitHub トークン wrapper の tracked 化</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0038-github-pages-monitor-publish.ja.html" data-search="0038 github pages でのモニター公開">
+        <span class="cbar"></span>
+        <span class="cnum">0038</span>
+        <span class="cnm">GitHub Pages でのモニター公開</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0037-guardrail-monitor-terminology.ja.html" data-search="0037 ガードレールモニター用語">
+        <span class="cbar"></span>
+        <span class="cnum">0037</span>
+        <span class="cnm">ガードレールモニター用語</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0036-visible-agent-context.ja.html" data-search="0036 見えるエージェント文脈">
+        <span class="cbar"></span>
+        <span class="cnum">0036</span>
+        <span class="cnm">見えるエージェント文脈</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0035-script-role-layout.ja.html" data-search="0035 スクリプト役割別レイアウト">
+        <span class="cbar"></span>
+        <span class="cnum">0035</span>
+        <span class="cnm">スクリプト役割別レイアウト</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0034-rules-monitor-taxonomy.ja.html" data-search="0034 ルールとモニターの分類整理">
+        <span class="cbar"></span>
+        <span class="cnum">0034</span>
+        <span class="cnm">ルールとモニターの分類整理</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0033-repository-scope-cleanup.ja.html" data-search="0033 リポジトリスコープ整理">
+        <span class="cbar"></span>
+        <span class="cnum">0033</span>
+        <span class="cnm">リポジトリスコープ整理</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0032-remove-docusaurus.ja.html" data-search="0032 docusaurus の撤去">
+        <span class="cbar"></span>
+        <span class="cnum">0032</span>
+        <span class="cnm">Docusaurus の撤去</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0031-reviews-editorial-page.ja.html" data-search="0031 レビューの editorial ページ">
+        <span class="cbar"></span>
+        <span class="cnum">0031</span>
+        <span class="cnm">レビューの editorial ページ</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0030-surface-review-artifacts.ja.html" data-search="0030 レビュー成果物をナビバーに常時表示">
+        <span class="cbar"></span>
+        <span class="cnum">0030</span>
+        <span class="cnm">レビュー成果物をナビバーに常時表示</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0029-audit-followup-cleanup.ja.html" data-search="0029 監査の後続クリーンアップ">
+        <span class="cbar"></span>
+        <span class="cnum">0029</span>
+        <span class="cnm">監査の後続クリーンアップ</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0028-ci-toggle-parity.ja.html" data-search="0028 ci でのレジストリ・トグル整合">
+        <span class="cbar"></span>
+        <span class="cnum">0028</span>
+        <span class="cnm">CI でのレジストリ・トグル整合</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0027-registry-card-deck.ja.html" data-search="0027 レジストリ・カードデッキ">
+        <span class="cbar"></span>
+        <span class="cnum">0027</span>
+        <span class="cnm">レジストリ・カードデッキ</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0026-editorial-guardrail-map.ja.html" data-search="0026 編集的ガードレール地図">
+        <span class="cbar"></span>
+        <span class="cnum">0026</span>
+        <span class="cnm">編集的ガードレール地図</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0025-substantive-record-check.ja.html" data-search="0025 記録の実体チェック">
+        <span class="cbar"></span>
+        <span class="cnum">0025</span>
+        <span class="cnm">記録の実体チェック</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0024-configurable-guardrails.ja.html" data-search="0024 設定可能なガードレール">
+        <span class="cbar"></span>
+        <span class="cnum">0024</span>
+        <span class="cnm">設定可能なガードレール</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0023-guardrail-map-grouping.ja.html" data-search="0023 ガードレール地図のグループ化">
+        <span class="cbar"></span>
+        <span class="cnum">0023</span>
+        <span class="cnm">ガードレール地図のグループ化</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0022-bash-lane-guardrail-parity.ja.html" data-search="0022 bash レーンのガードレール同等化">
+        <span class="cbar"></span>
+        <span class="cnum">0022</span>
+        <span class="cnm">Bash レーンのガードレール同等化</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0021-japanese-docs-translation.ja.html" data-search="0021 日本語ドキュメント翻訳">
+        <span class="cbar"></span>
+        <span class="cnum">0021</span>
+        <span class="cnm">日本語ドキュメント翻訳</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0020-docs-root-language-structure.ja.html" data-search="0020 docs root の言語別構造化">
+        <span class="cbar"></span>
+        <span class="cnum">0020</span>
+        <span class="cnm">docs root の言語別構造化</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0019-migrate-documentation-system-spec.ja.html" data-search="0019 ドキュメントシステム仕様の移行">
+        <span class="cbar"></span>
+        <span class="cnum">0019</span>
+        <span class="cnm">ドキュメントシステム仕様の移行</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0018-documentation-language-root-guardrail.ja.html" data-search="0018 ドキュメント言語別ルートガードレール">
+        <span class="cbar"></span>
+        <span class="cnum">0018</span>
+        <span class="cnm">ドキュメント言語別ルートガードレール</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0017-bilingual-doc-source-layout.ja.html" data-search="0017 docs markdown 表示">
+        <span class="cbar"></span>
+        <span class="cnum">0017</span>
+        <span class="cnm">docs Markdown 表示</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0016-docs-portal-source-driven.ja.html" data-search="0016 docs 正本駆動の docusaurus ポータル">
+        <span class="cbar"></span>
+        <span class="cnum">0016</span>
+        <span class="cnm">docs 正本駆動の Docusaurus ポータル</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0015-docs-portal-docusaurus.ja.html" data-search="0015 docusaurus ドキュメントポータル">
+        <span class="cbar"></span>
+        <span class="cnum">0015</span>
+        <span class="cnm">Docusaurus ドキュメントポータル</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0014-local-precheck-evidence.ja.html" data-search="0014 ローカル事前チェック証跡">
+        <span class="cbar"></span>
+        <span class="cnum">0014</span>
+        <span class="cnm">ローカル事前チェック証跡</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0013-review-artifact-staged-detection.ja.html" data-search="0013 レビュー資料の staged 検出">
+        <span class="cbar"></span>
+        <span class="cnum">0013</span>
+        <span class="cnm">レビュー資料の staged 検出</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0012-owner-pc-docker-verification.ja.html" data-search="0012 owner pc docker verification">
+        <span class="cbar"></span>
+        <span class="cnum">0012</span>
+        <span class="cnm">Owner PC Docker Verification</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0011-primary-references-guardrail.ja.html" data-search="0011 primary references guardrail review">
+        <span class="cbar"></span>
+        <span class="cnum">0011</span>
+        <span class="cnm">Primary References Guardrail Review</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0010-text-encoding-guardrail.ja.html" data-search="0010 text encoding guardrail review">
+        <span class="cbar"></span>
+        <span class="cnum">0010</span>
+        <span class="cnm">Text Encoding Guardrail Review</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0009-github-token-management.ja.html" data-search="0009 github token運用を迷子にならない形で固定する">
+        <span class="cbar"></span>
+        <span class="cnum">0009</span>
+        <span class="cnm">GitHub token運用を迷子にならない形で固定する</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0008-standard-terminology-guardrail.ja.html" data-search="0008 内輪の言葉を標準用語へ寄せる仕組みを入れる">
+        <span class="cbar"></span>
+        <span class="cnum">0008</span>
+        <span class="cnm">内輪の言葉を標準用語へ寄せる仕組みを入れる</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0007-review-artifact-ci-guardrail.ja.html" data-search="0007 htmlレビュー資料の作成漏れをciで止める">
+        <span class="cbar"></span>
+        <span class="cnum">0007</span>
+        <span class="cnm">HTMLレビュー資料の作成漏れをCIで止める</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0006-local-devcontainer-workflow.ja.html" data-search="0006 ローカル開発環境の preflight と smoke test を作る">
+        <span class="cbar"></span>
+        <span class="cnum">0006</span>
+        <span class="cnm">ローカル開発環境の preflight と smoke test を作る</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0005-llm-work-guardrails-registry.ja.html" data-search="0005 llm作業全般のガードレール台帳を作る">
+        <span class="cbar"></span>
+        <span class="cnum">0005</span>
+        <span class="cnm">LLM作業全般のガードレール台帳を作る</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0003-guardrails-map.ja.html" data-search="0003 llm駆動開発を暴走させないためのガードレール地図">
+        <span class="cbar"></span>
+        <span class="cnum">0003</span>
+        <span class="cnm">LLM駆動開発を暴走させないためのガードレール地図</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0002-development-environment.ja.html" data-search="0002 開発環境を「エージェントが再現できる箱」にする">
+        <span class="cbar"></span>
+        <span class="cnum">0002</span>
+        <span class="cnm">開発環境を「エージェントが再現できる箱」にする</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+      <a class="card rise" href="../docs/ja/changelog/reviews/0001-first-app-skeleton.ja.html" data-search="0001 最初のプロトタイプは「安全な空の本棚」を作る">
+        <span class="cbar"></span>
+        <span class="cnum">0001</span>
+        <span class="cnm">最初のプロトタイプは「安全な空の本棚」を作る</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
+    </div>
+    <p class="empty" id="empty">現在の絞り込みに一致する項目がありません。</p>
+    <p class="foot rise">docs/ja/changelog/reviews/ から自動生成。手で編集しないこと。</p>
+  </main>
+  <script>
+    (function () {
+      var body = document.body;
+      var rises = Array.prototype.slice.call(document.querySelectorAll('.rise'));
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) { body.classList.add('go'); }
+      else {
+        rises.forEach(function (el, i) { el.style.transitionDelay = Math.min(i * 35, 600) + 'ms'; });
+        requestAnimationFrame(function () { requestAnimationFrame(function () { body.classList.add('go'); }); });
+      }
+      var q = document.getElementById('q');
+      var shown = document.getElementById('shown');
+      var empty = document.getElementById('empty');
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+      if (!q) { return; }
+      q.addEventListener('input', function () {
+        var t = (q.value || '').trim().toLowerCase();
+        var total = 0;
+        cards.forEach(function (c) {
+          var hit = !t || (c.getAttribute('data-search') || '').indexOf(t) !== -1;
+          c.style.display = hit ? '' : 'none';
+          if (hit) { total++; }
+        });
+        if (shown) { shown.textContent = total; }
+        if (empty) { empty.style.display = total ? 'none' : 'block'; }
+      });
+    })();
+  </script>
+</body>
+</html>

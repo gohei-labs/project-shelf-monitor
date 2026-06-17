@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0032: Remove Docusaurus</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Remove Docusaurus</h1>
+      <p class="lead">This review asks for approval to remove the Docusaurus portal and make the control surface a self-hosted set of editorial pages (guardrail map + reviews) in one design language. Detailed Markdown docs stay as Markdown; the editorial pages are the only browser-visible control surface.</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>Requested Approval</h2>
+      <ol>
+        <li>Deletes the <code>docs-portal/</code> Docusaurus tree and its gate, build step, CI Node steps, and ignore rules.</li>
+        <li>Cross-links the guardrail map and the reviews index via a shared top nav (completes "reach reviews from the guardrail page").</li>
+        <li>Adds `scripts/serve-site.ps1` - a localhost-only static server - to view the editorial site.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What Changed</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td><code>docs-portal/</code>, <code>scripts/check-docs-portal.ps1</code></td><td>Deleted.</td></tr>
+          <tr><td><code>playbook/registry.json</code></td><td>Removed <code>docs-portal-build</code> (24 guardrails now); maps regenerated.</td></tr>
+          <tr><td><code>scripts/check.ps1</code>, <code>check-spec-before-impl.ps1</code></td><td>Dropped the docs-portal build block and code-path.</td></tr>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td>Removed Node setup + docs-portal artifact upload from the check job.</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>Added the Guardrails / Reviews top nav.</td></tr>
+          <tr><td><code>scripts/serve-site.ps1</code></td><td>New localhost static server.</td></tr>
+          <tr><td>documentation-system, index, handoff brief (both langs)</td><td>Describe the editorial site instead of Docusaurus.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>Risk</h2>
+      <p>Build-then-remove sequencing kept the replacement (the reviews editorial page) in place before deleting the portal, so there is no gap. There is no public or CI-rendered docs site any more - detailed docs are read as Markdown on GitHub or in an editor; if a public site is wanted later it can be generated separately from the editorial sources. The `docs-portal` registry category remains (it groups the advisory browser-control-surface rule) and is harmless.</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>Terminology Check</h2>
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Docusaurus</td><td>The Node static-site framework previously used for the browser docs portal; now removed.</td></tr>
+          <tr><td>Editorial control site</td><td>The self-hosted, generated HTML pages (guardrail map + reviews) that are the browser-visible control surface.</td></tr>
+          <tr><td>Control surface</td><td>What an owner uses in a browser to see and steer the work.</td></tr>
+          <tr><td>Build-then-remove</td><td>Wire the replacement and prove it before deleting the thing it replaces, so no capability gap appears.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>Runtime Boundary Check</h2>
+      <p>This change removes a runtime rather than adding one: the Node-based Docusaurus build is gone from the local pre-check and from the CI <code>check</code> job (Node setup deleted). The guardrail suite is now PowerShell-only for the documentation surface. The Dev Container still carries Node as a general feature (unused by the suite now, left in place). The editorial pages are static HTML served locally over <code>http://127.0.0.1</code> by <code>scripts/serve-site.ps1</code> (Python's http.server, bound to localhost - never 0.0.0.0, to avoid exposing the repo/`.env` on the LAN). Google Fonts load over the network as before.</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>References</h2>
+      <table>
+        <thead><tr><th>Reference</th><th>Supports</th></tr></thead>
+        <tbody>
+          <tr><td><code>playbook/registry.json</code></td><td>The removed <code>docs-portal-build</code> guardrail (count 25 to 24).</td></tr>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td>The check job with Node + artifact steps removed.</td></tr>
+          <tr><td><code>scripts/serve-site.ps1</code></td><td>The localhost static server replacing the Docusaurus dev server.</td></tr>
+          <tr><td><code>docs/en/playbook/observability/documentation-system.md</code></td><td>The editorial control site rules.</td></tr>
+          <tr><td><code>docs/en/changelog/0038-remove-docusaurus.md</code></td><td>The change note for this removal.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

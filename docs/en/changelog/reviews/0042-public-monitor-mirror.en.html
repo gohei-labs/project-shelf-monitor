@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Review 0042 - Public Monitor Mirror</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.2; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">Review artifact 0042. Status: Draft for owner review. Date: 2026-06-17.</p>
+  <h1>Public Monitor Mirror</h1>
+  <p><span class="tag">Recommended</span><span class="tag">Monitor</span><span class="tag">Public output</span><span class="tag">Deploy key</span></p>
+
+  <section>
+    <h2>Decision Summary</h2>
+    <p>Keep the source repository private and publish only the generated monitor site to a separate public repository, <code>gohei-labs/project-shelf-monitor</code>.</p>
+  </section>
+
+  <section>
+    <h2>What The Owner Needs To Approve</h2>
+    <div class="box">Approve the public mirror pattern: the private repository remains the source of truth; the public repository contains generated monitor output only.</div>
+  </section>
+
+  <section>
+    <h2>Recommendation</h2>
+    <p>Proceed. This gives the owner a stable public monitor URL without exposing the private source repository, its git history, or non-monitor files.</p>
+  </section>
+
+  <section>
+    <h2>Risks And Mitigations</h2>
+    <table>
+      <tr><th>Risk</th><th>Mitigation</th></tr>
+      <tr><td>Private source history becomes public.</td><td>Do not make the source repository public; publish generated output to a separate repository.</td></tr>
+      <tr><td>The public mirror is mistaken for source of truth.</td><td>Docs and generated README label it as generated output only.</td></tr>
+      <tr><td>A broad token is exposed to CI.</td><td>Use a write deploy key scoped only to <code>gohei-labs/project-shelf-monitor</code>.</td></tr>
+      <tr><td>Publishing fails before secret setup is complete.</td><td>The workflow skips mirror publishing when <code>MONITOR_PUBLISH_SSH_KEY</code> is missing and keeps Actions artifacts available.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>What Is Not Decided Here</h2>
+    <p>This does not publish the private source repository, add authentication to the public monitor, or choose a paid GitHub plan. The public URL is intentionally public.</p>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>Term</th><th>Use here</th></tr>
+      <tr><td>Public mirror</td><td>A separate public repository that receives generated monitor output.</td></tr>
+      <tr><td>Source of truth</td><td>The private repository sources: docs, registry, scripts, and review records.</td></tr>
+      <tr><td>Deploy key</td><td>An SSH key attached to one repository; here it can write only to the public mirror.</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>The runtime remains GitHub Actions plus PowerShell. The new helper runs in CI, uses SSH git push, and does not add a package manager, server runtime, or external hosting provider beyond GitHub Pages on the public mirror repository.</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages">GitHub Pages availability docs</a></td><td>Public repositories can use GitHub Pages under GitHub Free.</td></tr>
+      <tr><td><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys">GitHub deploy keys docs</a></td><td>Deploy keys are repository-scoped SSH credentials and can be granted write access.</td></tr>
+      <tr><td><a href="https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#create-or-update-a-repository-secret">GitHub Actions secrets REST docs</a></td><td>Repository secret setup requires repository <code>Secrets</code> write permission.</td></tr>
+      <tr><td><code>scripts/ci/publish-monitor-mirror.ps1</code></td><td>Implements generated-site publishing to the public mirror.</td></tr>
+      <tr><td><code>.github/workflows/pages.yml</code></td><td>Calls the mirror publisher after building the monitor site.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Next Step</h2>
+    <p>Add repository <code>Secrets: write</code> to the local token, recreate the deploy key pair, store <code>MONITOR_PUBLISH_SSH_KEY</code>, then let the next <code>main</code> run publish the public monitor.</p>
+  </section>
+</main>
+</body>
+</html>
