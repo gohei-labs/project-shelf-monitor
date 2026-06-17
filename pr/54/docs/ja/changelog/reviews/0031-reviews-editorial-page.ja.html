@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0031: レビューの editorial ページ</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>レビューの editorial ページ</h1>
+      <p class="lead">この成果物は、コントロール面を editorial なガードレール地図のデザインに寄せ、Docusaurus から離れる第一歩——同じデザインの自前ホスト「レビュー」索引（各人間レビュー成果物にリンクする番号付きカードデッキ）——の承認を求める。</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>承認のお願い（Requested Approval）</h2>
+      <ol>
+        <li>生成器 <code>scripts/build-reviews-page.ps1</code>。ディスク上の成果物から <code>playbook/reviews.html</code> と <code>playbook/reviews.ja.html</code> を生成。</li>
+        <li>番号付きカードデッキ（新しい順）+ 検索ボックス + ガードレールページとの相互ナビ。Docusaurus 不要で到達できる。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>変更内容（What Changed）</h2>
+      <table>
+        <thead><tr><th>対象</th><th>変更</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/build-reviews-page.ps1</code></td><td>新しい生成器。ガードレール地図のトークンを流用、cyan アクセント、<code>-Verify</code> 対応。</td></tr>
+          <tr><td><code>playbook/reviews.html</code> / <code>reviews.ja.html</code></td><td>全レビュー成果物の editorial カードデッキ（生成物）。</td></tr>
+          <tr><td><code>scripts/check-spec-before-impl.ps1</code></td><td>新生成器を可視化ツールとして除外。</td></tr>
+          <tr><td>レビュー <code>README.md</code>（両言語）</td><td>0031 を掲載。カバレッジ 0013-0031。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>リスク（Risk）</h2>
+      <p>本ステップのリスクは低い——生成器と生成ページを足すだけで、既存挙動は変えない。大きな転換は意図的に段階化する：ガードレール→レビューの相互リンクと、Docusaurus（<code>docs-portal/</code> ツリー、<code>docs-portal-build</code> ガードレール、CI の Node 手順）の完全撤去は、置換が整う前に動いているドキュメントサイトを壊さないよう、後続の集中変更とする。詳細 Markdown はオーナー判断で Markdown のまま。editorial サイトはコントロール面のみ。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>用語チェック（Terminology Check / 標準用語チェック）</h2>
+      <table>
+        <thead><tr><th>用語</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>コントロール面</td><td>オーナーが作業を見て舵を取るためのブラウザ可視ページ——ここではガードレール地図とレビュー索引。</td></tr>
+          <tr><td>カードデッキ</td><td>一定幅カードのグリッド。ここでは 1 レビュー 1 カードで、番号を大きく表示。</td></tr>
+          <tr><td>生成器</td><td>ディスク上の元から HTML を生成するスクリプト。ページが成果物からずれない。</td></tr>
+          <tr><td>自前ホスト</td><td>素の静的ファイルとして配信（または直接開く）。Docusaurus 依存なし。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>ランタイム境界チェック（Runtime Boundary Check）</h2>
+      <p>新たなランタイムは導入しない。生成器は既存のガードレール地図ビルダーと同じ PowerShell で、静的 HTML を書き出す。ページは（ガードレール地図と同様）Google Fonts をネットワークから読むほかは自己完結。本ステップではまだ Docusaurus を撤去せず、Node の利用も変えない（後続変更）。ローカル事前チェック、CI の <code>check</code> ジョブ、Dev Container の Bash レーンは引き続き同じ <code>scripts/check.ps1</code> を実行する。</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考情報（References）</h2>
+      <table>
+        <thead><tr><th>参照</th><th>裏付ける内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/build-reviews-page.ps1</code></td><td>editorial レビュー索引の生成器。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>流用したデザイン言語・トークン集合。</td></tr>
+          <tr><td><code>docs/ja/changelog/0037-reviews-editorial-page.md</code></td><td>本ステップの変更ノート。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

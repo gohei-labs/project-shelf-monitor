@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>レビュー 0040 - PR モニター preview artifact</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.2; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">レビュー資料 0040。状態: オーナーレビュー用ドラフト。日付: 2026-06-17。</p>
+  <h1>PR モニター preview artifact</h1>
+  <p><span class="tag">推奨</span><span class="tag">CI</span><span class="tag">Monitor</span></p>
+
+  <section>
+    <h2>判断サマリー</h2>
+    <p>pull requests で monitor を build し、download 可能な Actions artifact として upload する。一方、GitHub Pages deployment は <code>main</code> のみに限定する。</p>
+  </section>
+
+  <section>
+    <h2>オーナーに承認してほしいこと</h2>
+    <div class="box">preview/deploy split を承認する。PR では download 可能な monitor preview artifact を使い、<code>main</code> では stable な GitHub Pages deployment を使う。</div>
+  </section>
+
+  <section>
+    <h2>推奨</h2>
+    <p>進めてよい。merge 前の review visibility を確保しつつ、unmerged branches が production monitor URL を上書きしない。</p>
+  </section>
+
+  <section>
+    <h2>リスクと軽減策</h2>
+    <table>
+      <tr><th>リスク</th><th>軽減策</th></tr>
+      <tr><td>owner が merge 後まで monitor を確認できない。</td><td>PR workflow が <code>guardrail-monitor-preview-pr-&lt;number&gt;</code> を upload する。</td></tr>
+      <tr><td>unmerged branch が stable Pages monitor を上書きする。</td><td>Pages artifact upload と deployment は <code>main</code> に限定する。</td></tr>
+      <tr><td>preview が live hosted site と誤解される。</td><td>workflow summary で artifact を download し、local HTML files を開くよう案内する。</td></tr>
+      <tr><td>artifact が空または欠落する。</td><td><code>actions/upload-artifact</code> で <code>if-no-files-found: error</code> を使う。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>ここで決めないこと</h2>
+    <p>PR ごとの hosted preview URL は追加しない。download 可能な Actions artifacts だけを使う。</p>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>用語</th><th>ここでの使い方</th></tr>
+      <tr><td>Actions artifact</td><td>GitHub Actions run に紐づく download 可能な file bundle。</td></tr>
+      <tr><td>GitHub Pages deployment</td><td><code>main</code> からだけ生成される stable hosted monitor。</td></tr>
+      <tr><td>Preview artifact</td><td>merge 前 review に使う pull-request monitor bundle。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>runtime は GitHub Actions と PowerShell のまま。workflow は artifact upload step を追加するだけで、新しい package manager、service、build dependency は導入しない。</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><a href="https://github.com/actions/upload-artifact">actions/upload-artifact</a></td><td>directory を Actions artifact として upload し、artifact URL output を提供する。</td></tr>
+      <tr><td><code>.github/workflows/pages.yml</code></td><td>PR artifact upload と <code>main</code> 限定の Pages deployment を実装する。</td></tr>
+      <tr><td><code>scripts/generate/build-pages-site.ps1</code></td><td>repository sources から monitor site artifact を build する。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>次のステップ</h2>
+    <p>workflow 変更を push し、PR を作成または更新した後、Pages workflow run から preview artifact を download する。</p>
+  </section>
+</main>
+</body>
+</html>
