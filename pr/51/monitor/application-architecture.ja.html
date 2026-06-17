@@ -40,8 +40,6 @@
     .rule-row { grid-template-columns:110px 1fr 170px; }
     .req-row { grid-template-columns:90px 1fr 170px; }
     .feat-row { grid-template-columns:90px 1fr 210px; }
-    .comp-row { grid-template-columns:90px minmax(130px,190px) 1fr 190px; }
-    .conn-row { grid-template-columns:90px 1fr 170px; }
     .rid { color:var(--blue); font-weight:680; font-size:.84rem; font-variant-numeric:tabular-nums; }
     .title { font-weight:620; font-size:.92rem; margin:0; }
     .desc { color:#3F4650; font-size:.84rem; margin:4px 0 0; }
@@ -56,10 +54,22 @@
     .status-hard-gate { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
     .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
     .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#46505A; background:var(--panel-soft); }
+    .arch-diagram { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
+    .arch-svg { display:block; width:100%; min-width:820px; height:auto; }
+    .arch-edge { fill:none; stroke:#6B7280; stroke-width:2.2; }
+    .arch-edge-label { fill:#475467; font-size:13px; font-weight:650; paint-order:stroke; stroke:#FFFFFF; stroke-width:5px; stroke-linejoin:round; }
+    .arch-node { height:100%; border:1px solid #C8D1DE; border-radius:8px; background:#FFFFFF; padding:11px 12px; overflow:hidden; box-shadow:0 1px 0 rgba(24,24,27,.04); }
+    .arch-node-component { border-color:#BCD2F7; background:#F8FBFF; }
+    .arch-node-external { border-color:#D8D0BD; background:#FFFDF7; }
+    .arch-node-kicker { margin:0 0 5px; color:var(--blue); font-size:11px; font-weight:750; text-transform:uppercase; letter-spacing:0; }
+    .arch-node-title { margin:0; color:var(--ink); font-size:15px; line-height:1.2; font-weight:700; }
+    .arch-node-meta { margin:5px 0 0; color:#3F4650; font-size:12px; line-height:1.35; }
+    .arch-node-foot { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+    .arch-node-foot span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:11px; color:#46505A; background:var(--panel-soft); }
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
       .hero { font-size:1.36rem; }
-      .row, .page-row, .rule-row, .req-row, .feat-row, .comp-row, .conn-row { grid-template-columns:1fr; gap:6px; }
+      .row, .page-row, .rule-row, .req-row, .feat-row { grid-template-columns:1fr; gap:6px; }
     }
   </style>
 </head>
@@ -75,38 +85,24 @@
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
       <h1 class="hero">アプリケーションアーキテクチャ</h1>
-      <p class="sub">component、folder、stack、connection の判断を見るページ。</p>
+      <p class="sub">コンポーネント、境界、接続を図で見るページ。</p>
     </header>
-    <section><h2>コンポーネント</h2><div class="deck">
-      <div class="row comp-row">
-        <div class="rid">api</div>
-        <div><code>apps/api</code><p class="meta">未作成</p></div>
-        <div><p class="title">バックエンド API</p><p class="meta">種別: backend / スタック: FastAPI / Python</p><div class="mini"><span>REQ-001</span><span>REQ-002</span><span>REQ-003</span><span>REQ-004</span></div></div>
-        <div><span class="pill status-planned">計画</span><p class="meta">契約: <span class="pill status-planned">計画</span></p></div>
-      </div>
-      <div class="row comp-row">
-        <div class="rid">web</div>
-        <div><code>apps/web</code><p class="meta">未作成</p></div>
-        <div><p class="title">Web UI</p><p class="meta">種別: frontend / スタック: React / Vite / TypeScript</p><div class="mini"><span>REQ-001</span><span>REQ-003</span></div></div>
-        <div><span class="pill status-planned">計画</span><p class="meta">契約: <span class="pill status-planned">計画</span></p></div>
-      </div>
-    </div></section>
-    <section><h2>接続</h2><div class="deck">
-      <div class="row conn-row">
-        <div class="rid">CONN-001</div>
-        <div><p class="title">UI が API から状態、本棚、ログを読む</p><p class="meta"><code>web</code> -> <code>api</code> / HTTP</p><div class="mini"><span>FEAT-001</span><span>FEAT-002</span><span>FEAT-003</span></div></div>
-        <div><span class="pill status-planned">計画</span></div>
-      </div>
-      <div class="row conn-row">
-        <div class="rid">CONN-002</div>
-        <div><p class="title">API が境界チェックを通して managed root を読む</p><p class="meta"><code>api</code> -> <code>managed-root</code> / local-filesystem-read</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
-        <div><span class="pill status-planned">計画</span></div>
-      </div>
-      <div class="row conn-row">
-        <div class="rid">CONN-003</div>
-        <div><p class="title">API が運用 JSONL イベントを書く</p><p class="meta"><code>api</code> -> <code>jsonl-logs</code> / append-jsonl</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
-        <div><span class="pill status-planned">計画</span></div>
-      </div>
+    <section><h2>構成図</h2><div class="arch-diagram">
+      <svg class="arch-svg" viewBox="0 0 1000 438" role="img" aria-labelledby="architecture-diagram-title-ja architecture-diagram-desc-ja">
+        <title id="architecture-diagram-title-ja">構成図</title>
+        <desc id="architecture-diagram-desc-ja">web -&gt; api; api -&gt; managed-root; api -&gt; jsonl-logs</desc>
+        <defs><marker id="arch-arrow-ja" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6B7280" /></marker></defs>
+        <path class="arch-edge" d="M 290 219 C 333 219 342 219 385 219" marker-end="url(#arch-arrow-ja)" />
+        <text class="arch-edge-label" x="338" y="209" text-anchor="middle">HTTP</text>
+        <path class="arch-edge" d="M 615 219 C 658 219 667 135 710 135" marker-end="url(#arch-arrow-ja)" />
+        <text class="arch-edge-label" x="662" y="167" text-anchor="middle">FS read</text>
+        <path class="arch-edge" d="M 615 219 C 658 219 667 303 710 303" marker-end="url(#arch-arrow-ja)" />
+        <text class="arch-edge-label" x="662" y="251" text-anchor="middle">JSONL write</text>
+        <foreignObject x="60" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">web</p><p class="arch-node-title">Web UI</p><p class="arch-node-meta">frontend / React / Vite / TypeScript</p><div class="arch-node-foot"><span>apps/web</span><span>計画</span><span>契約: 計画</span></div></div></foreignObject>
+        <foreignObject x="385" y="156" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-component"><p class="arch-node-kicker">api</p><p class="arch-node-title">バックエンド API</p><p class="arch-node-meta">backend / FastAPI / Python</p><div class="arch-node-foot"><span>apps/api</span><span>計画</span><span>契約: 計画</span></div></div></foreignObject>
+        <foreignObject x="710" y="72" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-external"><p class="arch-node-kicker">外部</p><p class="arch-node-title">管理対象ルート</p><p class="arch-node-meta">境界</p><div class="arch-node-foot"><span>managed-root</span></div></div></foreignObject>
+        <foreignObject x="710" y="240" width="230" height="126"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-node arch-node-external"><p class="arch-node-kicker">外部</p><p class="arch-node-title">JSONL ログ</p><p class="arch-node-meta">保存先</p><div class="arch-node-foot"><span>jsonl-logs</span></div></div></foreignObject>
+      </svg>
     </div></section>
   </main>
 </body>

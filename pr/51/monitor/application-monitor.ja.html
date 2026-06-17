@@ -40,8 +40,6 @@
     .rule-row { grid-template-columns:110px 1fr 170px; }
     .req-row { grid-template-columns:90px 1fr 170px; }
     .feat-row { grid-template-columns:90px 1fr 210px; }
-    .comp-row { grid-template-columns:90px minmax(130px,190px) 1fr 190px; }
-    .conn-row { grid-template-columns:90px 1fr 170px; }
     .rid { color:var(--blue); font-weight:680; font-size:.84rem; font-variant-numeric:tabular-nums; }
     .title { font-weight:620; font-size:.92rem; margin:0; }
     .desc { color:#3F4650; font-size:.84rem; margin:4px 0 0; }
@@ -56,10 +54,22 @@
     .status-hard-gate { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
     .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
     .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#46505A; background:var(--panel-soft); }
+    .arch-diagram { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
+    .arch-svg { display:block; width:100%; min-width:820px; height:auto; }
+    .arch-edge { fill:none; stroke:#6B7280; stroke-width:2.2; }
+    .arch-edge-label { fill:#475467; font-size:13px; font-weight:650; paint-order:stroke; stroke:#FFFFFF; stroke-width:5px; stroke-linejoin:round; }
+    .arch-node { height:100%; border:1px solid #C8D1DE; border-radius:8px; background:#FFFFFF; padding:11px 12px; overflow:hidden; box-shadow:0 1px 0 rgba(24,24,27,.04); }
+    .arch-node-component { border-color:#BCD2F7; background:#F8FBFF; }
+    .arch-node-external { border-color:#D8D0BD; background:#FFFDF7; }
+    .arch-node-kicker { margin:0 0 5px; color:var(--blue); font-size:11px; font-weight:750; text-transform:uppercase; letter-spacing:0; }
+    .arch-node-title { margin:0; color:var(--ink); font-size:15px; line-height:1.2; font-weight:700; }
+    .arch-node-meta { margin:5px 0 0; color:#3F4650; font-size:12px; line-height:1.35; }
+    .arch-node-foot { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+    .arch-node-foot span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:11px; color:#46505A; background:var(--panel-soft); }
     @media (max-width:760px) {
       main { padding:18px 12px 36px; }
       .hero { font-size:1.36rem; }
-      .row, .page-row, .rule-row, .req-row, .feat-row, .comp-row, .conn-row { grid-template-columns:1fr; gap:6px; }
+      .row, .page-row, .rule-row, .req-row, .feat-row { grid-template-columns:1fr; gap:6px; }
     }
   </style>
 </head>

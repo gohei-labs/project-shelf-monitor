@@ -31,7 +31,7 @@
   <section>
     <h2>Decision Summary</h2>
     <div class="panel">
-      <p>`product/application-monitor.json` を application development rules、requirements、architecture assumptions の source of truth にします。default の application monitor page を rules page にし、requirements と architecture は別ページにします。</p>
+      <p>`product/application-monitor.json` を application development rules、requirements、architecture assumptions の source of truth にします。default の application monitor page を rules page にし、requirements と architecture は別の面で見ます。</p>
     </div>
   </section>
 
@@ -44,6 +44,7 @@
       <li>application-specific development rules を default の application monitor page にする。</li>
       <li>rules の前に、低情報量な目次だけのページを作らない。</li>
       <li>requirements と architecture / component decisions は別ページに分ける。</li>
+      <li>architecture は component / connection の一覧ではなく、生成された図として表示する。</li>
       <li>progress metadata、source links、managed-root summary をこれらの monitor pages に混ぜない。</li>
       <li>将来、実装 directory が monitor source と component contract に載らずに増えた場合、check を fail させる。</li>
       <li>monitor HTML は source から生成し、手で編集しない。</li>
@@ -52,7 +53,7 @@
 
   <section>
     <h2>Recommendation</h2>
-    <p>app skeleton を作る前の baseline として承認することを推奨します。開発ルール、要求、architecture assumptions を、code が増える前に review できます。</p>
+    <p>app skeleton を作る前の baseline として承認することを推奨します。開発ルール、要求、architecture diagram を、code が増える前に review できます。</p>
   </section>
 
   <section>
@@ -67,7 +68,7 @@
 
   <section data-guardrail="runtime-boundary">
     <h2>Runtime Boundary Check</h2>
-    <p>architecture page には planned な FastAPI / Python と React / Vite / TypeScript components を記録するが、この変更では `apps/api`、`apps/web`、Docker images、dependency installs、runtime commands は作らない。</p>
+    <p>architecture diagram には planned な FastAPI / Python と React / Vite / TypeScript components を表示するが、この変更では `apps/api`、`apps/web`、Docker images、dependency installs、runtime commands は作らない。</p>
   </section>
 
   <section data-guardrail="standard-terminology">

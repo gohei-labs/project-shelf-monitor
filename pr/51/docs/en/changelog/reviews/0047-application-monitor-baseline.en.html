@@ -31,7 +31,7 @@
   <section>
     <h2>Decision Summary</h2>
     <div class="panel">
-      <p>Create `product/application-monitor.json` as the source of truth for application development rules, requirements, and architecture assumptions. Make the default application monitor page the rules page, with separate detail pages for requirements and architecture.</p>
+      <p>Create `product/application-monitor.json` as the source of truth for application development rules, requirements, and architecture assumptions. Make the default application monitor page the rules page, with separate requirement and architecture surfaces.</p>
     </div>
   </section>
 
@@ -44,6 +44,7 @@
       <li>Make application-specific development rules the default application monitor page.</li>
       <li>Do not add a low-information table-of-contents page before the rules.</li>
       <li>Keep requirements and architecture/component decisions on separate pages.</li>
+      <li>Render architecture as a generated diagram, not as component and connection lists.</li>
       <li>Keep progress metadata, source links, and managed-root summaries out of these monitor pages.</li>
       <li>Fail future checks if implementation directories appear without monitor-source and component-contract coverage.</li>
       <li>Keep the monitor generated from source; do not hand-edit monitor HTML.</li>
@@ -52,7 +53,7 @@
 
   <section>
     <h2>Recommendation</h2>
-    <p>Approve this baseline before creating the app skeleton. It makes development rules, requirements, and architecture assumptions reviewable before code starts to grow.</p>
+    <p>Approve this baseline before creating the app skeleton. It makes development rules, requirements, and the architecture diagram reviewable before code starts to grow.</p>
   </section>
 
   <section>
@@ -67,7 +68,7 @@
 
   <section data-guardrail="runtime-boundary">
     <h2>Runtime Boundary Check</h2>
-    <p>The architecture page records planned FastAPI / Python and React / Vite / TypeScript components, but this change does not create `apps/api`, `apps/web`, Docker images, dependency installs, or runtime commands.</p>
+    <p>The architecture diagram shows planned FastAPI / Python and React / Vite / TypeScript components, but this change does not create `apps/api`, `apps/web`, Docker images, dependency installs, or runtime commands.</p>
   </section>
 
   <section data-guardrail="standard-terminology">
