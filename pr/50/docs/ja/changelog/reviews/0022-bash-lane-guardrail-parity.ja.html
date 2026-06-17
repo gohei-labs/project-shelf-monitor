@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0022: Bash レーンのガードレール同等化</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Bash レーンのガードレール同等化</h1>
+      <p class="lead">この成果物は、<code>scripts/check.sh</code> を PowerShell へ委譲して Dev Container／CI の Bash レーンに<strong>全</strong>ガードレールを強制させること、および 2 つのゲートの重複した Bash 版を削除することの承認を求めます。</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>承認のお願い（Requested Approval）</h2>
+      <ol>
+        <li><code>scripts/check.sh</code> は、手作業で維持する一部ゲートの実行をやめ、Bash レーンの単一の正として <code>pwsh scripts/check.ps1</code> に委譲する。</li>
+        <li>Dev Container に <code>ghcr.io/devcontainers/features/powershell</code> で PowerShell 7 を追加し、コンテナ内および <code>devcontainer</code> CI ジョブで委譲が動作するようにする。</li>
+        <li>不要になった <code>scripts/check-agent-core-context.sh</code> と <code>scripts/check-docs-portal.sh</code> を削除する（PowerShell 版が <code>check.ps1</code> 内で既に実行される）。</li>
+        <li><code>pwsh</code> が無い場合、Bash レーンはチェック未実行で通過せず fail-closed で失敗する。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>変更内容（What Changed）</h2>
+      <table>
+        <thead><tr><th>対象</th><th>変更後の役割</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/check.sh</code></td><td>薄い Bash 入口。<code>--quick</code> を引き継ぎつつ <code>pwsh scripts/check.ps1</code> を exec する。</td></tr>
+          <tr><td><code>scripts/check.ps1</code></td><td>全レーン（Windows ホスト、PowerShell CI ジョブ、Dev Container、Bash）が実行する単一のガードレール一式。</td></tr>
+          <tr><td><code>.devcontainer/devcontainer.json</code></td><td>PowerShell フィーチャを追加し、コンテナ内に <code>pwsh</code> を用意する。</td></tr>
+          <tr><td>削除した <code>.sh</code> 補助スクリプト</td><td><code>check-agent-core-context.sh</code> と <code>check-docs-portal.sh</code> — <code>.ps1</code> 版に置き換え済み。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>リスク（Risk）</h2>
+      <p>本変更前、<code>devcontainer</code> CI ジョブはガードレールスクリプトを 2 つ（core-context と docs-portal）しか実行しておらず、他のゲートで落ちる変更でも通過し得た。本変更後は Bash レーンが <code>scripts/check.ps1</code> 一式（テキストエンコーディング、二言語対、言語ルートと内容、ドキュメント命名、レジストリ整合、秘密漏れ、実装前の決定、レビュー成果物のランタイム境界など、Windows ホストや CI の <code>check</code> ジョブと同じゲート）を実行する。PR 文脈に依存する 4 つのレビューゲートと <code>devcontainer-build</code> ジョブは、従来どおり別の CI ジョブのまま変更しない。主な残存コストは、<code>devcontainer</code> ジョブがドキュメントポータルを 2 回（quick→full）ビルドすることで、これは性能上のコストであり強制の穴ではない。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>用語チェック（Terminology Check / 標準用語チェック）</h2>
+      <table>
+        <thead><tr><th>用語</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>ガードレール（Guardrail）</td><td>プロンプトではなく、ビルドを失敗させるスクリプトで強制される規則。</td></tr>
+          <tr><td>チェックレーン（Check lane）</td><td>ガードレール一式が走る 1 つの環境：Windows ホスト、PowerShell CI ジョブ、または Dev Container の Bash。</td></tr>
+          <tr><td>単一の正（Single source of truth）</td><td>全レーンが呼び出す唯一の正本実装（<code>scripts/check.ps1</code>）。レーン間の乖離（drift）を防ぐ。</td></tr>
+          <tr><td>fail-closed</td><td>ツールが実行できない場合（ここでは <code>pwsh</code> 不在）、通過させずに失敗させること。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>ランタイム境界チェック（Runtime Boundary Check）</h2>
+      <p>本変更はランタイム境界そのものに関わる。権威ある環境は引き続き Dev Container と Docker Compose であり、ホストにたまたま入っているシェルではない。PowerShell 7（<code>pwsh</code>）は、ホストに前提として存在することを仮定するのではなく、公式の PowerShell フィーチャ経由で導入される、明示された Dev Container の依存になった。</p>
+      <p>Windows ホストでは既に <code>pwsh scripts/check.ps1</code> で一式が走る。Linux・macOS・CI では <code>bash scripts/check.sh</code> 経由で走り、これが同じ PowerShell 一式を exec する。Windows 専用ツールは導入しない。ドキュメントポータルのビルドには、Node フィーチャが既に提供する Node と npm が引き続き必要。</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考情報（References）</h2>
+      <table>
+        <thead><tr><th>参照</th><th>裏付ける内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/check.ps1</code></td><td>全レーンが実行するようになったガードレール一式。</td></tr>
+          <tr><td><code>scripts/check.sh</code></td><td>そこへ委譲する Bash 入口。</td></tr>
+          <tr><td><code>.devcontainer/devcontainer.json</code></td><td>コンテナに PowerShell フィーチャを追加。</td></tr>
+          <tr><td><code>ghcr.io/devcontainers/features/powershell</code></td><td>PowerShell 7 を導入する公式 Dev Container フィーチャ。</td></tr>
+          <tr><td><code>docs/ja/changelog/0028-bash-lane-guardrail-parity.md</code></td><td>本作業の変更ノート。</td></tr>
+          <tr><td><code>playbook/registry.json</code></td><td>Bash レーンが強制するゲートを定めるガードレール・レジストリ。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

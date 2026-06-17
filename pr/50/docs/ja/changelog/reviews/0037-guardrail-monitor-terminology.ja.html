@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>レビュー 0037 - ガードレールモニター用語</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.2; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">レビュー資料 0037。状態: オーナーレビュー用ドラフト。日付: 2026-06-17。</p>
+  <h1>ガードレールモニター用語</h1>
+  <p><span class="tag">推奨</span><span class="tag">統制</span><span class="tag">モニター</span></p>
+
+  <section>
+    <h2>判断サマリー</h2>
+    <p>現行用語としての「ガードレール地図」を廃止し、生成されるブラウザ可視ページを「ガードレールモニター」に統一する。</p>
+  </section>
+
+  <section>
+    <h2>オーナーに承認してほしいこと</h2>
+    <div class="box">monitor vocabulary を承認する。source files が真実を持ち、generated monitor pages がその真実を正確に反映し、人間が監視できるようにする。</div>
+  </section>
+
+  <section>
+    <h2>推奨</h2>
+    <p>進めてよい。「モニター」は、人間の仕事である project state の監視、drift の発見、注意すべき箇所の判断に合っている。</p>
+  </section>
+
+  <section>
+    <h2>リスクと軽減策</h2>
+    <table>
+      <tr><th>リスク</th><th>軽減策</th></tr>
+      <tr><td>生成 HTML が source からずれる。</td><td><code>check-registry.ps1</code> が <code>monitor/guardrail-monitor*.html</code> と <code>monitor/registry.json</code> の一致を検証する。</td></tr>
+      <tr><td>過去の記録に "map" が残る。</td><td>古い review title は履歴として残し、現行 docs、scripts、generated pages、navigation からは外す。</td></tr>
+      <tr><td>将来の monitor がばらばらに命名される。</td><td>one source of truth plus generated monitor output という pattern を使う。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>用語</th><th>ここでの使い方</th></tr>
+      <tr><td>Monitor</td><td>人間が監視するための、ブラウザで見える generated view。</td></tr>
+      <tr><td>Source of truth</td><td>monitor content を定義する編集対象の source。ここでは <code>monitor/registry.json</code>。</td></tr>
+      <tr><td>Generated output</td><td>再生成すべき <code>monitor/</code> 配下の HTML。手で編集しない。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>runtime は変わらない。PowerShell generator path と static HTML output を rename するだけで、local / CI check suite は同じ。</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><code>docs/ja/changelog/0043-guardrail-monitor-terminology.md</code></td><td>この terminology change の implementation record。</td></tr>
+      <tr><td><code>scripts/generate/build-guardrail-monitor.ps1</code></td><td>registry から guardrail monitor を生成する。</td></tr>
+      <tr><td><code>scripts/guardrails/check-registry.ps1</code></td><td>monitor output が最新であることを検証する。</td></tr>
+      <tr><td><code>monitor/registry.json</code></td><td>guardrail monitor の single source of truth。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>次のステップ</h2>
+    <p>monitor pages を再生成し、標準 guardrail suite を実行する。</p>
+  </section>
+</main>
+</body>
+</html>
