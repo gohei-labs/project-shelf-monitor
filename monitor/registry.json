@@ -198,7 +198,8 @@
     },
     {
       "id": "review-artifact-runtime-boundary",
-      "enabled": true,
+      "enabled": false,
+      "disabledReason": "Paused by review 0048: the owner found the Runtime Boundary Check unclear and removed it from the review template; re-enable if a runtime/tooling assumption mistake recurs.",
       "category": "review-artifacts",
       "title": { "en": "Review artifact runtime boundary", "ja": "レビュー成果物のランタイム境界" },
       "rule": {
