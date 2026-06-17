@@ -44,6 +44,7 @@
       <tr><td>public mirror が source of truth と誤解される。</td><td>docs と generated README で、generated output だけだと明示する。</td></tr>
       <tr><td>広い token が CI に置かれる。</td><td><code>gohei-labs/project-shelf-monitor</code> だけに scoped した write deploy key を使う。</td></tr>
       <tr><td>secret setup 完了前に publish が失敗する。</td><td><code>MONITOR_PUBLISH_SSH_KEY</code> がない場合、workflow は mirror publish を skip し、Actions artifacts は残す。</td></tr>
+      <tr><td>publish 中に SSH host-key discovery が失敗する。</td><td>publisher は GitHub の SSH fingerprint documentation に基づく固定 <code>known_hosts</code> entries に fallback する。</td></tr>
     </table>
   </section>
 
@@ -73,6 +74,7 @@
       <tr><th>Source</th><th>Supports</th></tr>
       <tr><td><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages">GitHub Pages availability docs</a></td><td>public repositories は GitHub Free で GitHub Pages を使えること。</td></tr>
       <tr><td><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys">GitHub deploy keys docs</a></td><td>deploy keys は repository-scoped SSH credentials であり、write access を付与できること。</td></tr>
+      <tr><td><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints">GitHub SSH key fingerprints</a></td><td>strict host-key checking に使う GitHub public SSH host keys を提供する。</td></tr>
       <tr><td><a href="https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#create-or-update-a-repository-secret">GitHub Actions secrets REST docs</a></td><td>repository secret setup には repository <code>Secrets</code> write permission が必要なこと。</td></tr>
       <tr><td><code>scripts/ci/publish-monitor-mirror.ps1</code></td><td>generated-site publishing to public mirror を実装する。</td></tr>
       <tr><td><code>.github/workflows/pages.yml</code></td><td>monitor site build 後に mirror publisher を呼び出す。</td></tr>
@@ -81,7 +83,7 @@
 
   <section>
     <h2>次のステップ</h2>
-    <p>local token に repository <code>Secrets: write</code> を追加し、deploy key pair を再作成して <code>MONITOR_PUBLISH_SSH_KEY</code> を保存する。その後、次の <code>main</code> run で public monitor を publish する。</p>
+    <p>PR を merge し、merge 後最初の <code>main</code> Pages run で、設定済み deploy key 経由の monitor 再 publish を確認する。</p>
   </section>
 </main>
 </body>
