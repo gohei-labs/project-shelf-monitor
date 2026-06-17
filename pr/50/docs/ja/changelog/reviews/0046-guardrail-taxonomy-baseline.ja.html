@@ -42,6 +42,7 @@
       <li>component stack が宣言されるまで、backend/frontend product checks は future controls として扱う。</li>
       <li>現在の private repository plan では、branch protection を future control として扱う。</li>
       <li>implementation directories を追加する前に、stack-neutral な component contract gate を追加する。</li>
+      <li>PR preview では、review monitor と review artifact HTML を owner が直接開ける live URL として表示する。</li>
     </ul>
   </section>
 
@@ -57,6 +58,7 @@
       <tr><td>monitor の分類が少し増える。</td><td>labels は5つの stable control types に限定する。</td></tr>
       <tr><td>product checks はまだ実行されない。</td><td>新しい component contract が、未宣言の product component directory を止める。stack-specific execution は stack が存在してから追加する。</td></tr>
       <tr><td>branch protection はまだ機械的に強制されない。</td><td>monitor では active と表示せず、future control として記録する。</td></tr>
+      <tr><td>PR comment の権限不足で preview link が表示されない。</td><td>workflow summary と PR body に live URL を置く。preview publish 後の comment failure は非致命扱いにする。</td></tr>
     </table>
   </section>
 

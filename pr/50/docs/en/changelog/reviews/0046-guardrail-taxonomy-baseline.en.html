@@ -42,6 +42,7 @@
       <li>Treat backend/frontend product checks as future controls until a component stack is declared.</li>
       <li>Treat branch protection as a future control for the current private repository plan.</li>
       <li>Add a stack-neutral component contract gate before implementation directories are introduced.</li>
+      <li>Expose PR preview review-monitor and review-artifact HTML as live URLs the owner can open directly.</li>
     </ul>
   </section>
 
@@ -57,6 +58,7 @@
       <tr><td>The monitor becomes more complex.</td><td>The labels are limited to five stable control types.</td></tr>
       <tr><td>Product checks are not executed yet.</td><td>The new component contract blocks undeclared product component directories; stack-specific execution is added when a stack exists.</td></tr>
       <tr><td>Branch protection is still not mechanically enforced.</td><td>The monitor stops claiming it is active and records it as a future control.</td></tr>
+      <tr><td>PR comment permissions may hide the preview links.</td><td>Put live URLs in the workflow summary and PR body. Treat comment failure as non-fatal after preview publish.</td></tr>
     </table>
   </section>
 
