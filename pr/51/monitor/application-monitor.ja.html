@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>アプリケーションモニター</title>
+  <style>
+    :root {
+      --bg:#F5F6F8;
+      --panel:#FFFFFF;
+      --panel-soft:#F9FAFB;
+      --ink:#18181B;
+      --muted:#667085;
+      --line:#D9DEE7;
+      --line-strong:#AEB6C2;
+      --blue:#1B73E8;
+      --green:#2F7D32;
+      --amber:#9C6B00;
+      --red:#B3261E;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", Meiryo, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    main { max-width:1120px; margin:0 auto; padding:24px 18px 44px; }
+    .topnav { display:flex; gap:8px; align-items:center; margin:0 0 22px; }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-weight:680; font-size:1.72rem; line-height:1.16; letter-spacing:0; margin:6px 0 0; }
+    .sub { color:#3F4650; max-width:760px; font-size:.94rem; margin:10px 0 0; }
+    .facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1px solid var(--line); border-radius:8px; background:var(--panel); overflow:hidden; margin:18px 0 0; }
+    .fact { padding:12px 14px; border-left:1px solid var(--line); min-width:0; }
+    .fact:first-child { border-left:0; }
+    .fact dt { color:var(--muted); font-size:.72rem; font-weight:700; text-transform:uppercase; margin:0 0 4px; }
+    .fact dd { margin:0; font-size:.9rem; overflow-wrap:anywhere; }
+    section { margin:24px 0 0; }
+    h2 { font-size:.96rem; margin:0 0 10px; letter-spacing:0; }
+    .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .row { display:grid; gap:14px; align-items:start; padding:11px 14px; border-top:1px solid var(--line); }
+    .row:first-child { border-top:0; }
+    .req { grid-template-columns:90px 1fr 150px; }
+    .comp { grid-template-columns:90px minmax(120px,170px) 1fr 190px; }
+    .feat { grid-template-columns:90px 1fr 210px; }
+    .conn { grid-template-columns:90px 1fr 190px; }
+    .sig { grid-template-columns:90px 1fr 160px; }
+    .rid { color:var(--blue); font-weight:680; font-size:.84rem; font-variant-numeric:tabular-nums; }
+    .title { font-weight:620; font-size:.92rem; margin:0; }
+    .desc { color:#3F4650; font-size:.84rem; margin:4px 0 0; }
+    .meta { color:var(--muted); font-size:.78rem; margin:4px 0 0; overflow-wrap:anywhere; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.82em; }
+    .pill { display:inline-flex; align-items:center; min-height:22px; border-radius:999px; border:1px solid #D7DCE3; padding:2px 8px; font-size:.72rem; font-weight:700; color:#46505A; background:#F1F3F6; white-space:nowrap; }
+    .status-planned { background:#EEF4FF; border-color:#C9DAFF; color:#184EA8; }
+    .status-active, .status-implemented, .status-pass { background:#EEF7EE; border-color:#CFE7D1; color:#1E6B26; }
+    .status-watch { background:#FFF8E8; border-color:#F2D99B; color:#7A5200; }
+    .status-fail, .status-blocked, .status-missing { background:#FFF0EE; border-color:#F3C9C5; color:#9F1B16; }
+    .status-deferred, .status-retired { background:#F1F3F6; border-color:#D7DCE3; color:#46505A; }
+    .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
+    .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#46505A; background:var(--panel-soft); }
+    @media (max-width:760px) {
+      main { padding:18px 12px 36px; }
+      .topnav { margin-bottom:18px; flex-wrap:wrap; }
+      .hero { font-size:1.36rem; }
+      .facts { grid-template-columns:1fr; }
+      .fact { border-left:0; border-top:1px solid var(--line); }
+      .fact:first-child { border-top:0; }
+      .row, .req, .comp, .feat, .conn, .sig { grid-template-columns:1fr; gap:6px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav">
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="reviews.ja.html">レビュー</a>
+      <a class="here" aria-current="page">アプリケーション</a>
+    </nav>
+    <header class="pagehead">
+      <p class="eyebrow">Application monitor</p>
+      <h1 class="hero">アプリケーション<br />モニター</h1>
+      <p class="sub">管理対象の本棚、状態、最近の運用ログを読み取り専用で確認する最初のスライス。</p>
+    </header>
+    <dl class="facts">
+      <div class="fact"><dt>現在のスライス</dt><dd>Phase 1 スケルトン <span class="pill status-planned">計画</span></dd></div>
+      <div class="fact"><dt>管理対象ルート</dt><dd><code>MANAGED_ROOT</code> = <code>H:\ProjectShelf</code></dd></div>
+      <div class="fact"><dt>情報源</dt><dd><a href="https://github.com/gohei-labs/project-shelf/issues/2">Issue #2</a><p class="meta">マップ正本: <code>product/application-map.json</code></p></dd></div>
+    </dl>
+    <section><h2>要求</h2><div class="deck">
+      <div class="row req">
+        <div class="rid">REQ-001</div>
+        <div><p class="title">読み取り専用の本棚表示</p><p class="desc">最初の画面は、ファイルの移動、削除、コピー、インポート、書き換えを行わずに管理対象の本棚を表示する。</p><div class="mini"><span>FEAT-002</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
+      </div>
+      <div class="row req">
+        <div class="rid">REQ-002</div>
+        <div><p class="title">明示的な managed-root 境界</p><p class="desc">バックエンドは MANAGED_ROOT を使い、そのルート外に解決されるリクエストパスを拒否する。</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
+      </div>
+      <div class="row req">
+        <div class="rid">REQ-003</div>
+        <div><p class="title">状態と最近のログ</p><p class="desc">最初の画面は、アプリケーション状態、managed-root 設定、本棚読み取り結果、最近の JSONL ログイベントを表示する。</p><div class="mini"><span>FEAT-001</span><span>FEAT-003</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
+      </div>
+      <div class="row req">
+        <div class="rid">REQ-004</div>
+        <div><p class="title">構造化された運用ログ</p><p class="desc">起動、設定、本棚読み取り、ブロックされたパス試行を、秘密情報や私的ファイル内容を含めず JSONL として記録する。</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">優先度: must</p></div>
+      </div>
+    </div></section>
+    <section><h2>コンポーネント</h2><div class="deck">
+      <div class="row comp">
+        <div class="rid">api</div>
+        <div><code>apps/api</code><p class="meta">未作成</p></div>
+        <div><p class="title">バックエンド API</p><p class="meta">種別: backend / スタック: FastAPI / Python</p><div class="mini"><span>REQ-001</span><span>REQ-002</span><span>REQ-003</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">契約: <span class="pill status-planned">計画</span></p></div>
+      </div>
+      <div class="row comp">
+        <div class="rid">web</div>
+        <div><code>apps/web</code><p class="meta">未作成</p></div>
+        <div><p class="title">Web UI</p><p class="meta">種別: frontend / スタック: React / Vite / TypeScript</p><div class="mini"><span>REQ-001</span><span>REQ-003</span></div></div>
+        <div><span class="pill status-planned">計画</span><p class="meta">契約: <span class="pill status-planned">計画</span></p></div>
+      </div>
+    </div></section>
+    <section><h2>機能</h2><div class="deck">
+      <div class="row feat">
+        <div class="rid">FEAT-001</div>
+        <div><p class="title">ヘルスと状態</p><p class="desc">バックエンドの health、設定済み managed root、アプリケーション準備状態を UI に渡す。</p><div class="mini"><span>REQ-003</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat">
+        <div class="rid">FEAT-002</div>
+        <div><p class="title">読み取り専用の本棚一覧</p><p class="desc">ファイルを変更せず、バックエンド経由で管理対象の本棚内容を一覧する。</p><div class="mini"><span>REQ-001</span><span>REQ-002</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat">
+        <div class="rid">FEAT-003</div>
+        <div><p class="title">最近の運用ログ</p><p class="desc">最近の構造化ログイベントを読み、アプリが何をしているかをオーナーが確認できるようにする。</p><div class="mini"><span>REQ-003</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span><span>web</span></div></div>
+      </div>
+      <div class="row feat">
+        <div class="rid">FEAT-004</div>
+        <div><p class="title">パス境界の強制</p><p class="desc">ファイルシステムに触る前にリクエストパスを正規化し、MANAGED_ROOT 外をブロックする。</p><div class="mini"><span>REQ-002</span><span>REQ-004</span></div></div>
+        <div><span class="pill status-planned">計画</span><div class="mini"><span>api</span></div></div>
+      </div>
+    </div></section>
+    <section><h2>接続</h2><div class="deck">
+      <div class="row conn">
+        <div class="rid">CONN-001</div>
+        <div><p class="title">UI が API から状態、本棚、ログを読む</p><p class="meta"><code>web</code> -> <code>api</code> / HTTP</p><div class="mini"><span>FEAT-001</span><span>FEAT-002</span><span>FEAT-003</span></div></div>
+        <div><span class="pill status-planned">計画</span></div>
+      </div>
+      <div class="row conn">
+        <div class="rid">CONN-002</div>
+        <div><p class="title">API が境界チェックを通して managed root を読む</p><p class="meta"><code>api</code> -> <code>managed-root</code> / local-filesystem-read</p><div class="mini"><span>FEAT-002</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span></div>
+      </div>
+      <div class="row conn">
+        <div class="rid">CONN-003</div>
+        <div><p class="title">API が運用 JSONL イベントを書く</p><p class="meta"><code>api</code> -> <code>jsonl-logs</code> / append-jsonl</p><div class="mini"><span>FEAT-003</span><span>FEAT-004</span></div></div>
+        <div><span class="pill status-planned">計画</span></div>
+      </div>
+    </div></section>
+    <section><h2>構造ウォッチ</h2><div class="deck">
+      <div class="row sig">
+        <div class="rid">AUTO-001</div>
+        <div><p class="title">実装ディレクトリの map 掲載</p><p class="desc">未掲載の実装ディレクトリはありません。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
+      </div>
+      <div class="row sig">
+        <div class="rid">AUTO-002</div>
+        <div><p class="title">実装ディレクトリの component contract</p><p class="desc">契約なしの実装ディレクトリはありません。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
+      </div>
+      <div class="row sig">
+        <div class="rid">AUTO-003</div>
+        <div><p class="title">要求と feature の接続</p><p class="desc">すべての要求が feature に接続されています。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
+      </div>
+      <div class="row sig">
+        <div class="rid">AUTO-004</div>
+        <div><p class="title">feature と component の接続</p><p class="desc">すべての feature が component に接続されています。</p></div>
+        <div><span class="pill status-pass">正常</span></div>
+      </div>
+    </div></section>
+  </main>
+</body>
+</html>

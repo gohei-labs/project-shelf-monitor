@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>レビュー 0033 - リポジトリスコープ整理</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.25; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">レビュー成果物 0033。Status: owner review draft。Date: 2026-06-17.</p>
+  <h1>リポジトリスコープ整理</h1>
+  <p><span class="tag">推奨</span><span class="tag">Cleanup</span><span class="tag">Governance</span></p>
+
+  <section>
+    <h2>Decision Summary</h2>
+    <p>この repository は、guardrails、operating rules、review records、generated control pages、CI、check scripts に集中させる。旧 app prototype、local shelf samples、Docusaurus leftovers、caches、generated local artifacts、単発 report files は削除する。</p>
+  </section>
+
+  <section>
+    <h2>What The Owner Needs To Approve</h2>
+    <div class="box">この tree を application prototype ではなく、control system として狭く保つ方針を承認する。</div>
+  </section>
+
+  <section>
+    <h2>Recommendation</h2>
+    <p>cleanup を進める。将来の app work は、この control system を guardrail base として使い、別の意図的な app structure または repository から始める。</p>
+  </section>
+
+  <section>
+    <h2>Risks And Mitigations</h2>
+    <table>
+      <tr><th>Risk</th><th>Mitigation</th></tr>
+      <tr><td>古い prototype code が削除される。</td><td>owner が prototype 不要と明示。tracked files は Git history に残る。</td></tr>
+      <tr><td>historical records に古い paths が残る。</td><td>履歴として changelog/review artifacts は残し、live rules docs と indexes を更新する。</td></tr>
+      <tr><td>CI や local checks が古い shelf mount を前提にする。</td><td>Compose、Dev Container、CI、bootstrap、local dev scripts を generic workspace 前提に更新した。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>What Is Not Decided Here</h2>
+    <p>将来の application stack や app code の置き場は決めない。この変更は repository を control-system role に絞るだけ。</p>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>Term</th><th>Use here</th></tr>
+      <tr><td>Guardrail control system</td><td>AI-agent work を統制する reusable rules、gates、docs、review records。</td></tr>
+      <tr><td>Review artifact</td><td>`docs/{en,ja}/changelog/reviews/` に置く browser-readable owner approval record。</td></tr>
+      <tr><td>Historical record</td><td>古い paths に触れていても audit history として保持する past changelog/review content。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>現在の development boundary は repository workspace と、`pwsh scripts/check.ps1` を実行する Dev Container/CI environment。今回の cleanup では host shelf path、`/shelf` mount、Node app server、Docusaurus runtime は不要。</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td>`docs/ja/changelog/0039-repository-scope-cleanup.md`</td><td>cleanup scope、changed areas、verification、risks の実装記録。</td></tr>
+      <tr><td>`README.md`</td><td>repository の新しい役割を guardrail control system として定義。</td></tr>
+      <tr><td>`.agents/agent-core-context.json`</td><td>product-specific docs 削除後の required-reading manifest。</td></tr>
+      <tr><td>`compose.yaml`, `.devcontainer/devcontainer.json`, `.github/workflows/ci.yml`</td><td>旧 shelf mount 削除後の runtime と CI boundary。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Next Step</h2>
+    <p>reviews index を再生成し、`pwsh scripts/check.ps1` を実行する。</p>
+  </section>
+</main>
+</body>
+</html>
