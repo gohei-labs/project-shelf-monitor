@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>アプリケーション機能</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#FBFBF8;
+      --panel:#FFFFFF;
+      --panel-soft:#F1F1EC;
+      --ink:#0C0C0D;
+      --muted:#6E6E70;
+      --line:#E4E4DD;
+      --line-strong:#C7C7BF;
+      --blue:#5B7DB5;
+      --green:#457B5B;
+      --amber:#A67D3D;
+      --red:#B84C42;
+      --accent:#BCE000;
+      --accent-ink:#49590A;
+    }
+    * { box-sizing:border-box; }
+    html { scrollbar-gutter:stable; }
+    html, body { margin:0; }
+    body { background:var(--bg); color:var(--ink); font-family:"Inter", system-ui, sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; font-feature-settings:"tnum" 1; }
+    main { max-width:1440px; margin:0 auto; padding:24px 18px 44px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
+    a { color:inherit; }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:700; font-size:1.84rem; line-height:1.12; letter-spacing:-.01em; margin:6px 0 0; }
+    .sub { color:#3F4650; max-width:760px; font-size:.94rem; margin:10px 0 0; }
+    section { margin:24px 0 0; }
+    h2 { font-size:.96rem; margin:0 0 10px; letter-spacing:0; }
+    .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .row { display:grid; gap:14px; align-items:start; padding:11px 14px; border-top:1px solid var(--line); }
+    .row:first-child { border-top:0; }
+    .page-row { grid-template-columns:180px 1fr; }
+    .rule-row { grid-template-columns:110px 1fr 170px; }
+    .req-row { grid-template-columns:90px 1fr 170px; }
+    .feat-row { grid-template-columns:90px 1fr 210px; }
+    .rid { color:var(--ink); font-weight:680; font-size:.84rem; font-variant-numeric:tabular-nums; }
+    .title { font-weight:620; font-size:.92rem; margin:0; }
+    .desc { color:#3F4650; font-size:.84rem; margin:4px 0 0; }
+    .meta { color:var(--muted); font-size:.78rem; margin:4px 0 0; overflow-wrap:anywhere; }
+    code { font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.82em; }
+    .pill { display:inline-flex; align-items:center; min-height:22px; border-radius:999px; border:1px solid var(--line); padding:2px 8px; font-size:.72rem; font-weight:700; color:#5A4F44; background:var(--panel-soft); white-space:nowrap; }
+    .status-planned { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
+    .status-active, .status-implemented, .status-pass { background:#EDF4EF; border-color:#C5D9CC; color:#2E5C3E; }
+    .status-attention { background:#FBF4E8; border-color:#E8D4A6; color:#7D5E25; }
+    .status-fail, .status-blocked, .status-missing { background:#FAEEED; border-color:#E8C1BD; color:#8B3730; }
+    .status-deferred, .status-retired, .status-working-agreement, .status-future-control, .status-conditional-gate, .status-external-control { background:#F0ECE8; border-color:#D5CEC6; color:#5A4F44; }
+    .status-hard-gate { background:#FAEEED; border-color:#E8C1BD; color:#8B3730; }
+    .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
+    .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#5A4F44; background:var(--panel-soft); }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(108px,150px) 1fr minmax(150px,220px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item:first-child { border-top:0; }
+    .monitor-item:hover { background:var(--panel-soft); }
+    .monitor-item:focus-visible { outline:2px solid var(--ink); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
+    .cid { font-size:.78rem; letter-spacing:0; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .monitor-item.active { background:var(--panel-soft); }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 384px; gap:22px; align-items:start; margin:24px 0 0; }
+    .layout > section { margin:0; min-width:0; }
+    .detail { position:sticky; top:24px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; overflow-y:auto; max-height:calc(100vh - 48px); }
+    .mempty { color:var(--muted); font-size:.88rem; line-height:1.6; margin:0; padding:22px; }
+    .detail .mbar, .detail .mbody { display:none; }
+    .detail.has-item .mbar { display:block; }
+    .detail.has-item .mbody { display:block; }
+    .detail.has-item .mempty { display:none; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.5); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:50; }
+    .mbar { display:block; height:4px; width:100%; background:var(--accent); }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; display:none; }
+    .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; color:var(--ink); margin:0 36px 0 0; }
+    .mname { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:1.18rem; letter-spacing:0; line-height:1.28; margin:8px 0 0; }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:130px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.8rem; color:var(--ink); }
+    .arch-diagram { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
+    .arch-svg { display:block; width:100%; min-width:820px; height:auto; }
+    .arch-edge { fill:none; stroke:#6B7280; stroke-width:2.2; }
+    .arch-edge-label { fill:#475467; font-size:13px; font-weight:650; paint-order:stroke; stroke:#FFFFFF; stroke-width:5px; stroke-linejoin:round; }
+    .arch-node { height:100%; border:1px solid var(--line-strong); border-radius:8px; background:var(--panel); padding:11px 12px; overflow:hidden; box-shadow:0 1px 0 rgba(26,22,18,.04); }
+    .arch-node-component { border-color:#D6E88A; background:#F7FADF; }
+    .arch-node-external { border-color:var(--line-strong); background:var(--panel-soft); }
+    .arch-node-kicker { margin:0 0 5px; color:var(--ink); font-size:11px; font-weight:750; text-transform:uppercase; letter-spacing:0; }
+    .arch-node-title { margin:0; color:var(--ink); font-size:15px; line-height:1.2; font-weight:700; }
+    .arch-node-meta { margin:5px 0 0; color:#3F4650; font-size:12px; line-height:1.35; }
+    .arch-node-foot { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+    .arch-node-foot span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:11px; color:#46505A; background:var(--panel-soft); }
+    @media (prefers-reduced-motion: reduce) { .detail, .backdrop { transition:none; } }
+    @media (max-width:1000px) {
+      .layout { grid-template-columns:1fr; }
+      .detail { position:fixed; top:0; right:0; bottom:0; left:auto; width:min(440px,92vw); max-height:none; border-radius:0; border:0; border-left:1px solid var(--line); transform:translateX(100%); transition:transform .22s ease; z-index:51; }
+      .detail.show { transform:translateX(0); box-shadow:-18px 0 48px rgba(24,24,27,.22); }
+      .mclose { display:block; }
+      .backdrop.show { opacity:1; pointer-events:auto; }
+    }
+    @media (max-width:760px) {
+      main { padding:18px 12px 36px; }
+      .topnav { gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
+      .hero { font-size:1.36rem; }
+      .sub { width:100%; max-width:100%; overflow-wrap:anywhere; word-break:break-all; }
+      .row, .page-row, .rule-row, .req-row, .feat-row { grid-template-columns:1fr; gap:6px; }
+      .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav">
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="project-rules.ja.html">プロジェクトルール</a>
+      <a href="application-monitor.ja.html">開発ルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a class="here" aria-current="page">機能</a>
+      <a href="application-architecture.ja.html">アーキテクチャ</a>
+      <a href="reviews.ja.html">レビュー</a>
+    </nav>
+    <header class="pagehead">
+      <p class="eyebrow">Application monitor</p>
+      <h1 class="hero">アプリケーション機能</h1>
+    </header>
+    <div class="layout">
+    <section><div class="deck">
+      <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="機能" data-name="ヘルスと状態" data-body="バックエンドの health、設定済み managed root、アプリケーション準備状態を UI に渡す。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-003" data-meta3-label="コンポーネント" data-meta3="api, web">
+        <span class="cbar" style="background:#BCE000"></span>
+        <span class="cid">FEAT-001</span>
+        <span class="cnm">ヘルスと状態</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">計画</span></span>
+      </button>
+      <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="機能" data-name="読み取り専用の本棚一覧" data-body="ファイルを変更せず、バックエンド経由で管理対象の本棚内容を一覧する。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-001, REQ-002" data-meta3-label="コンポーネント" data-meta3="api, web">
+        <span class="cbar" style="background:#BCE000"></span>
+        <span class="cid">FEAT-002</span>
+        <span class="cnm">読み取り専用の本棚一覧</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">計画</span></span>
+      </button>
+      <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="機能" data-name="最近の運用ログ" data-body="最近の構造化ログイベントを読み、アプリが何をしているかをオーナーが確認できるようにする。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-003, REQ-004" data-meta3-label="コンポーネント" data-meta3="api, web">
+        <span class="cbar" style="background:#BCE000"></span>
+        <span class="cid">FEAT-003</span>
+        <span class="cnm">最近の運用ログ</span>
+        <span class="cfoot"><span class="cv">api, web</span><span class="pill status-planned">計画</span></span>
+      </button>
+      <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="機能" data-name="パス境界の強制" data-body="ファイルシステムに触る前にリクエストパスを正規化し、MANAGED_ROOT 外をブロックする。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-002, REQ-004" data-meta3-label="コンポーネント" data-meta3="api">
+        <span class="cbar" style="background:#BCE000"></span>
+        <span class="cid">FEAT-004</span>
+        <span class="cnm">パス境界の強制</span>
+        <span class="cfoot"><span class="cv">api</span><span class="pill status-planned">計画</span></span>
+      </button>
+    </div></section>
+    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm">
+      <p class="mempty" id="mempty">項目を選ぶと、詳細が右側に表示されます。</p>
+      <span class="mbar" id="mbar"></span>
+      <div class="mbody">
+        <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
+        <p class="meb" id="meb"></p>
+        <h3 class="mname" id="mnm"></h3>
+        <p class="mrule" id="mrl"></p>
+        <div class="mdiv"></div>
+        <dl class="mmeta" id="mmeta"></dl>
+      </div>
+    </aside>
+    </div>
+    <div class="backdrop" id="bd"></div>
+  </main>
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.monitor-item'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (!bd || !md || cards.length === 0) return;
+      var mbar = document.getElementById('mbar');
+      var meb = document.getElementById('meb');
+      var mnm = document.getElementById('mnm');
+      var mrl = document.getElementById('mrl');
+      var mmeta = document.getElementById('mmeta');
+      function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+      function row(label, value) {
+        if (!value) return '';
+        return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
+      }
+      function openCard(c) {
+        var accent = c.getAttribute('data-accent') || '#BCE000';
+        mbar.style.background = accent;
+        meb.textContent = c.getAttribute('data-kind') || '';
+        mnm.textContent = c.getAttribute('data-name') || '';
+        mrl.textContent = c.getAttribute('data-body') || '';
+        var html = '';
+        for (var i = 1; i <= 6; i++) {
+          html += row(c.getAttribute('data-meta' + i + '-label'), c.getAttribute('data-meta' + i));
+        }
+        mmeta.innerHTML = html;
+        cards.forEach(function (x) { x.classList.remove('active'); });
+        c.classList.add('active');
+        md.classList.add('has-item');
+        md.classList.add('show');
+        bd.classList.add('show');
+      }
+      function closeModal() {
+        bd.classList.remove('show');
+        md.classList.remove('show');
+      }
+      cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+      bd.addEventListener('click', closeModal);
+      document.getElementById('mx').addEventListener('click', closeModal);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
+    })();
+  </script>
+</body>
+</html>

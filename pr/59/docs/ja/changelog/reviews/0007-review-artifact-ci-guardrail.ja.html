@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Review 0007: Review Artifact CI Guardrail</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5f6b7d;
+      --line: #d9e0ea;
+      --blue: #235fbd;
+      --green: #24764a;
+      --amber: #9a6400;
+      --red: #b42318;
+      --violet: #6352bf;
+      --soft-blue: #e8f1ff;
+      --soft-green: #e8f6ec;
+      --soft-amber: #fff3d8;
+      --soft-red: #fdecea;
+      --soft-violet: #efedff;
+      --shadow: 0 16px 34px rgba(23, 32, 51, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", Meiryo, sans-serif;
+      line-height: 1.68;
+    }
+    a { color: var(--blue); text-underline-offset: 3px; }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: .92em;
+      background: #f3f5f9;
+      border: 1px solid #e4e8f0;
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.12; letter-spacing: 0; }
+    h2 { font-size: clamp(1.28rem, 2vw, 1.9rem); line-height: 1.22; letter-spacing: 0; }
+    h3 { font-size: 1.02rem; line-height: 1.25; letter-spacing: 0; }
+    p, li, td { color: var(--muted); }
+    ul, ol { margin: 0; padding-left: 1.2rem; }
+    li { margin: 5px 0; }
+    .page { max-width: 1160px; margin: 0 auto; padding: 28px 22px 64px; }
+    .hero {
+      min-height: 50vh;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+      padding: 34px 0 28px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .panel, .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-width: 0;
+    }
+    .panel { box-shadow: var(--shadow); }
+    .hero-copy { max-width: 840px; font-size: 1.05rem; margin-top: 12px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: .78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tag-blue { background: var(--soft-blue); color: var(--blue); }
+    .tag-green { background: var(--soft-green); color: var(--green); }
+    .tag-amber { background: var(--soft-amber); color: var(--amber); }
+    .tag-red { background: var(--soft-red); color: var(--red); }
+    .tag-violet { background: var(--soft-violet); color: var(--violet); }
+    .kicker { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .section { padding-top: 34px; }
+    .section-head { display: grid; gap: 8px; max-width: 920px; margin-bottom: 16px; }
+    .grid { display: grid; gap: 14px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { display: grid; gap: 10px; }
+    .approval { border-left: 5px solid var(--green); background: #fbfffc; }
+    .warning { border-left: 5px solid var(--amber); background: #fffdf8; }
+    .danger { border-left: 5px solid var(--red); background: #fffafa; }
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .matrix th, .matrix td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .matrix th { background: #f8fafc; color: var(--ink); font-size: .88rem; }
+    .matrix tr:last-child td { border-bottom: 0; }
+    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .step {
+      display: grid;
+      gap: 7px;
+      min-height: 122px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 14px;
+    }
+    @media (max-width: 900px) {
+      .hero-grid, .grid-2, .grid-3, .flow { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="kicker">
+        <span class="tag tag-blue">Human Review</span>
+        <span class="tag tag-green">Issue #21</span>
+        <span class="tag tag-violet">CI Guardrail</span>
+      </div>
+      <div class="hero-grid">
+        <div class="panel">
+          <h1>HTMLレビュー資料の作成漏れをCIで止める</h1>
+          <p class="hero-copy">
+            PRがオーナー承認や人間レビューを求めているのに、ブラウザで読めるHTML資料がない状態を、レビュアーの注意力ではなくCIで検出します。
+            これはレビュー品質の最低ラインをシステム側に寄せるためのガードレールです。
+          </p>
+        </div>
+        <aside class="panel approval">
+          <span class="tag tag-green">承認してほしいこと</span>
+          <ol>
+            <li>人間レビューが必要なPRでは、<code>docs/reviews/*.html</code> へのリンクを必須にする。</li>
+            <li>リンク先HTMLがPR branchに存在しなければCIで失敗させる。</li>
+            <li>specs / workflows / PR template / Dev Container などの高リスク変更は、人間レビュー対象として扱う。</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-red">Problem</span>
+        <h2>なぜ必要か</h2>
+        <p>PR #20 で、レビュー依頼は出ていたのにHTML review artifactが後から追加されました。この種類の漏れは、レビュー担当者が気づくかどうかに依存させるべきではありません。</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card danger">
+          <span class="tag tag-red">Failure</span>
+          <h3>承認対象が見えない</h3>
+          <p>PR本文だけでは、オーナーが何を判断すべきか見落としやすくなります。</p>
+        </div>
+        <div class="card warning">
+          <span class="tag tag-amber">Review Risk</span>
+          <h3>レビュアー依存になる</h3>
+          <p>「HTMLがない」と人が気づけなければ、そのまま進んでしまいます。</p>
+        </div>
+        <div class="card approval">
+          <span class="tag tag-green">Guardrail</span>
+          <h3>CIで止める</h3>
+          <p>必要なHTMLがなければ、PRのcheckが失敗するようにします。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-violet">Detection</span>
+        <h2>CIが見るもの</h2>
+        <p>完璧な意味理解ではなく、実用的な検出条件を組み合わせます。</p>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>検出対象</th>
+            <th>条件</th>
+            <th>結果</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PR本文</td>
+            <td><code>Requested Review Decision</code>、<code>承認してほしいこと</code>、<code>Owner Approval</code> などの語がある。</td>
+            <td><span class="tag tag-green">HTML必須</span></td>
+          </tr>
+          <tr>
+            <td>高リスク変更</td>
+            <td><code>docs/specs/</code>、<code>.github/workflows/</code>、<code>.github/pull_request_template.md</code>、<code>.devcontainer/</code>、ADRなどを変更する。</td>
+            <td><span class="tag tag-green">HTML必須</span></td>
+          </tr>
+          <tr>
+            <td>HTMLリンク</td>
+            <td>PR本文に <code>docs/reviews/*.html</code> が含まれる。</td>
+            <td><span class="tag tag-blue">存在確認</span></td>
+          </tr>
+          <tr>
+            <td>存在しないHTML</td>
+            <td>PR本文に書かれたHTMLがbranchに存在しない。</td>
+            <td><span class="tag tag-red">CI失敗</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-blue">Flow</span>
+        <h2>PR作成時の流れ</h2>
+      </div>
+      <div class="flow">
+        <div class="step">
+          <span class="tag tag-blue">1</span>
+          <h3>PRを開く</h3>
+          <p>PR本文と変更ファイルをCIが読みます。</p>
+        </div>
+        <div class="step">
+          <span class="tag tag-violet">2</span>
+          <h3>必要性を判定</h3>
+          <p>承認依頼または高リスク変更ならHTMLが必要です。</p>
+        </div>
+        <div class="step">
+          <span class="tag tag-amber">3</span>
+          <h3>HTMLを確認</h3>
+          <p>PR本文の <code>docs/reviews/*.html</code> が存在するか見ます。</p>
+        </div>
+        <div class="step">
+          <span class="tag tag-green">4</span>
+          <h3>通す / 止める</h3>
+          <p>足りなければCI失敗。足りていれば次のレビューに進みます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-amber">Limits</span>
+        <h2>このガードレールの限界</h2>
+        <p>これは必要条件を強制する仕組みであって、レビュー品質そのものを完全保証するものではありません。</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card warning">
+          <span class="tag tag-amber">できないこと</span>
+          <ul>
+            <li>HTMLの内容が分かりやすいかまでは判定しない。</li>
+            <li>人間の最終判断を置き換えない。</li>
+            <li>すべてのPRのリスクを完璧に分類しない。</li>
+          </ul>
+        </div>
+        <div class="card approval">
+          <span class="tag tag-green">できること</span>
+          <ul>
+            <li>HTMLの作成漏れをCIで止める。</li>
+            <li>存在しないHTMLリンクをCIで止める。</li>
+            <li>specsやCI変更などを、人間レビュー対象として扱う。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-green">Approval Checklist</span>
+        <h2>レビュー時に見るポイント</h2>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>確認</th>
+            <th>見ること</th>
+            <th>今回の提案</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>強制力</td>
+            <td>レビュー担当者の注意力ではなくCIで止めるか。</td>
+            <td><span class="tag tag-green">はい</span></td>
+          </tr>
+          <tr>
+            <td>範囲</td>
+            <td>すべてのPRではなく、承認依頼と高リスク変更に絞っているか。</td>
+            <td><span class="tag tag-green">はい</span></td>
+          </tr>
+          <tr>
+            <td>透明性</td>
+            <td>何が足りないかをCI outputで説明できるか。</td>
+            <td><span class="tag tag-green">はい</span></td>
+          </tr>
+          <tr>
+            <td>残るリスク</td>
+            <td>HTMLの品質まではCIでは保証できないことを認識しているか。</td>
+            <td><span class="tag tag-amber">人間レビューで補う</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  <section data-guardrail="standard-terminology">
+  <h2>Terminology Check</h2>
+  <p>This migrated review artifact keeps its original wording. Any future substantive edit should use standard documentation and engineering terminology.</p>
+</section>
+<section data-guardrail="runtime-boundary">
+  <h2>Runtime Boundary Check</h2>
+  <p>This review artifact migration only changes documentation location and guardrail coverage. It does not change runtime services, storage, credentials, host setup, or product data.</p>
+</section>
+<section data-guardrail="primary-references">
+  <h2>References</h2>
+  <p>References: Not applicable. This is a path migration of an existing review artifact.</p>
+</section>
+</main>
+</body>
+</html>
