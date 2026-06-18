@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Review 0008: Standard Terminology Guardrail</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5f6b7d;
+      --line: #d9e0ea;
+      --blue: #235fbd;
+      --green: #24764a;
+      --amber: #9a6400;
+      --red: #b42318;
+      --violet: #6352bf;
+      --soft-blue: #e8f1ff;
+      --soft-green: #e8f6ec;
+      --soft-amber: #fff3d8;
+      --soft-red: #fdecea;
+      --soft-violet: #efedff;
+      --shadow: 0 16px 34px rgba(23, 32, 51, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", Meiryo, sans-serif;
+      line-height: 1.68;
+    }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: .92em;
+      background: #f3f5f9;
+      border: 1px solid #e4e8f0;
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.12; letter-spacing: 0; }
+    h2 { font-size: clamp(1.28rem, 2vw, 1.9rem); line-height: 1.22; letter-spacing: 0; }
+    h3 { font-size: 1.02rem; line-height: 1.25; letter-spacing: 0; }
+    p, li, td { color: var(--muted); }
+    ul, ol { margin: 0; padding-left: 1.2rem; }
+    li { margin: 5px 0; }
+    .page { max-width: 1160px; margin: 0 auto; padding: 28px 22px 64px; }
+    .hero {
+      min-height: 48vh;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+      padding: 34px 0 28px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .panel, .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-width: 0;
+    }
+    .panel { box-shadow: var(--shadow); }
+    .hero-copy { max-width: 840px; font-size: 1.05rem; margin-top: 12px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: .78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tag-blue { background: var(--soft-blue); color: var(--blue); }
+    .tag-green { background: var(--soft-green); color: var(--green); }
+    .tag-amber { background: var(--soft-amber); color: var(--amber); }
+    .tag-red { background: var(--soft-red); color: var(--red); }
+    .tag-violet { background: var(--soft-violet); color: var(--violet); }
+    .kicker { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .section { padding-top: 34px; }
+    .section-head { display: grid; gap: 8px; max-width: 920px; margin-bottom: 16px; }
+    .grid { display: grid; gap: 14px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { display: grid; gap: 10px; }
+    .approval { border-left: 5px solid var(--green); background: #fbfffc; }
+    .warning { border-left: 5px solid var(--amber); background: #fffdf8; }
+    .danger { border-left: 5px solid var(--red); background: #fffafa; }
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .matrix th, .matrix td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .matrix th { background: #f8fafc; color: var(--ink); font-size: .88rem; }
+    .matrix tr:last-child td { border-bottom: 0; }
+    @media (max-width: 900px) {
+      .hero-grid, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="kicker">
+        <span class="tag tag-blue">Human Review</span>
+        <span class="tag tag-green">Issue #23</span>
+        <span class="tag tag-violet">Terminology Guardrail</span>
+      </div>
+      <div class="hero-grid">
+        <div class="panel">
+          <h1>内輪の言葉を標準用語へ寄せる仕組みを入れる</h1>
+          <p class="hero-copy">
+            レビュー資料が独自の言い回しに流れると、人間もAIエージェントも判断しにくくなります。
+            重要な概念を説明するHTMLレビュー資料には、標準用語を確認する欄を必須にします。
+          </p>
+        </div>
+        <aside class="panel approval">
+          <span class="tag tag-green">承認してほしいこと</span>
+          <ol>
+            <li>標準用語を優先するガードレールを <code>Active</code> にする。</li>
+            <li>変更された review HTML に <code>Terminology Check</code> 欄を必須にする。</li>
+            <li>PR template に標準用語確認のチェック項目を追加する。</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-red">Problem</span>
+        <h2>何が外れたか</h2>
+        <p>
+          PR #20 のレビュー資料では、実質的には <code>preflight check</code> や <code>smoke test</code> の話をしているのに、
+          説明が独自の言い回しに寄り、業界で広く使われる概念として整理されていませんでした。
+        </p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card danger">
+          <span class="tag tag-red">Internal Wording</span>
+          <h3>独自表現が混ざる</h3>
+          <p>その場の会話に引っ張られた言葉のまま資料化すると、あとから読んだ人が理解しにくくなります。</p>
+        </div>
+        <div class="card warning">
+          <span class="tag tag-amber">Review Miss</span>
+          <h3>レビューで見逃す</h3>
+          <p>内容の方向性だけを見ると、用語のずれを品質問題として拾えないことがあります。</p>
+        </div>
+        <div class="card approval">
+          <span class="tag tag-green">CI Guardrail</span>
+          <h3>確認欄を強制する</h3>
+          <p>CIで用語確認欄の存在を確認し、人間が見える形で標準用語への対応付けを求めます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-guardrail="standard-terminology">
+      <div class="section-head">
+        <span class="tag tag-blue">Terminology Check</span>
+        <h2>標準用語チェック</h2>
+        <p>この資料で使う標準用語と、避けたい曖昧な表現の対応です。</p>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>標準用語</th>
+            <th>意味</th>
+            <th>避けたい表現</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>standard terminology</code></td>
+            <td>業界や技術コミュニティで広く使われる用語。レビュー資料ではまずこちらを使います。</td>
+            <td>内輪の言葉、独自の言い回し</td>
+          </tr>
+          <tr>
+            <td><code>terminology check</code></td>
+            <td>重要概念が標準用語で説明されているかを確認する欄。</td>
+            <td>なんとなく分かる説明、雰囲気で通じる説明</td>
+          </tr>
+          <tr>
+            <td><code>review artifact</code></td>
+            <td>オーナーが判断しやすいように作る、人間向けのレビュー資料。</td>
+            <td>資料、HTML、説明ページだけで済ませる表現</td>
+          </tr>
+          <tr>
+            <td><code>guardrail</code></td>
+            <td>同じミスを防ぐため、作業手順やCIに組み込む制約。</td>
+            <td>気をつける、注意する</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-violet">Mechanism</span>
+        <h2>どう強制するか</h2>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>層</th>
+            <th>仕組み</th>
+            <th>効き方</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CI</td>
+            <td><code>scripts/check-review-artifact-terminology.ps1</code></td>
+            <td>変更された <code>docs/reviews/*.html</code> に用語確認欄がなければ失敗します。</td>
+          </tr>
+          <tr>
+            <td>PR template</td>
+            <td>Human Review Artifact の checkbox</td>
+            <td>PR 作成時に、作業者が標準用語チェックを意識できます。</td>
+          </tr>
+          <tr>
+            <td>Spec / Registry</td>
+            <td><code>LLM-GR-001</code> を Active 化</td>
+            <td>LLM-assisted work 全体の標準ルールとして扱います。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-amber">Limits</span>
+        <h2>限界</h2>
+        <p>
+          CIは「確認欄が存在するか」を見ます。用語選びの質そのものは、人間レビューとCodex Review Recordで確認します。
+        </p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card warning">
+          <span class="tag tag-amber">できないこと</span>
+          <ul>
+            <li>すべての用語選択が正しいかを完全に自動判定する。</li>
+            <li>分野ごとの最適用語をCIだけで決める。</li>
+            <li>読みやすさの最終判断を人間から奪う。</li>
+          </ul>
+        </div>
+        <div class="card approval">
+          <span class="tag tag-green">できること</span>
+          <ul>
+            <li>重要な概念を説明する場面で、用語確認を省略しにくくする。</li>
+            <li>標準用語と独自表現の対応をレビュー対象として表に出す。</li>
+            <li>次のPR #20修正で、同じ観点を必ず確認する入口を作る。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-green">Next Step</span>
+        <h2>次にやること</h2>
+        <p>
+          このガードレールを承認したあと、PR #20 のローカル開発環境レビュー資料を
+          <code>container runtime</code>、<code>preflight check</code>、<code>bootstrap</code>、
+          <code>smoke test</code> などの標準用語で書き直します。
+        </p>
+      </div>
+    </section>
+  <section data-guardrail="standard-terminology">
+  <h2>Terminology Check</h2>
+  <p>This migrated review artifact keeps its original wording. Any future substantive edit should use standard documentation and engineering terminology.</p>
+</section>
+<section data-guardrail="runtime-boundary">
+  <h2>Runtime Boundary Check</h2>
+  <p>This review artifact migration only changes documentation location and guardrail coverage. It does not change runtime services, storage, credentials, host setup, or product data.</p>
+</section>
+<section data-guardrail="primary-references">
+  <h2>References</h2>
+  <p>References: Not applicable. This is a path migration of an existing review artifact.</p>
+</section>
+</main>
+</body>
+</html>
