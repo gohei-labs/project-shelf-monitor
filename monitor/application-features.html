@@ -129,18 +129,18 @@
   <main>
     <nav class="topnav">
       <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="reviews.html">Reviews</a>
       <a href="application-monitor.html">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
       <a class="here" aria-current="page">Features</a>
       <a href="application-architecture.html">Architecture</a>
+      <a href="reviews.html">Reviews</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
       <h1 class="hero">Application Features</h1>
     </header>
     <div class="layout">
-    <section><h2>Features</h2><div class="deck">
+    <section><div class="deck">
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="Features" data-name="Health and status" data-body="Expose backend health, configured managed root, and application readiness to the UI." data-meta1-label="Status" data-meta1="Planned" data-meta2-label="Requirements" data-meta2="REQ-003" data-meta3-label="Components" data-meta3="api, web">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">FEAT-001</span>
@@ -222,6 +222,7 @@
       bd.addEventListener('click', closeModal);
       document.getElementById('mx').addEventListener('click', closeModal);
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
     })();
   </script>
 </body>

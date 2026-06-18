@@ -129,18 +129,18 @@
   <main>
     <nav class="topnav">
       <a href="guardrail-monitor.ja.html">ガードレール</a>
-      <a href="reviews.ja.html">レビュー</a>
       <a href="application-monitor.ja.html">開発ルール</a>
       <a class="here" aria-current="page">要求</a>
       <a href="application-features.ja.html">機能</a>
       <a href="application-architecture.ja.html">アーキテクチャ</a>
+      <a href="reviews.ja.html">レビュー</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
       <h1 class="hero">アプリケーション要求</h1>
     </header>
     <div class="layout">
-    <section><h2>要求</h2><div class="deck">
+    <section><div class="deck">
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="要求" data-name="読み取り専用の本棚表示" data-body="最初の画面は、ファイルの移動、削除、コピー、インポート、書き換えを行わずに管理対象の本棚を表示する。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="優先度" data-meta2="must" data-meta3-label="出典" data-meta3="Issue #2" data-meta4-label="機能" data-meta4="FEAT-002">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">REQ-001</span>
@@ -222,6 +222,7 @@
       bd.addEventListener('click', closeModal);
       document.getElementById('mx').addEventListener('click', closeModal);
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
     })();
   </script>
 </body>

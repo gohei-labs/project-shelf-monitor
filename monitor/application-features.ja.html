@@ -129,18 +129,18 @@
   <main>
     <nav class="topnav">
       <a href="guardrail-monitor.ja.html">ガードレール</a>
-      <a href="reviews.ja.html">レビュー</a>
       <a href="application-monitor.ja.html">開発ルール</a>
       <a href="application-requirements.ja.html">要求</a>
       <a class="here" aria-current="page">機能</a>
       <a href="application-architecture.ja.html">アーキテクチャ</a>
+      <a href="reviews.ja.html">レビュー</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
       <h1 class="hero">アプリケーション機能</h1>
     </header>
     <div class="layout">
-    <section><h2>機能</h2><div class="deck">
+    <section><div class="deck">
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="機能" data-name="ヘルスと状態" data-body="バックエンドの health、設定済み managed root、アプリケーション準備状態を UI に渡す。" data-meta1-label="状態" data-meta1="計画" data-meta2-label="要求" data-meta2="REQ-003" data-meta3-label="コンポーネント" data-meta3="api, web">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">FEAT-001</span>
@@ -222,6 +222,7 @@
       bd.addEventListener('click', closeModal);
       document.getElementById('mx').addEventListener('click', closeModal);
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
     })();
   </script>
 </body>

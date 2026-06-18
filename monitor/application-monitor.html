@@ -129,18 +129,18 @@
   <main>
     <nav class="topnav">
       <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="reviews.html">Reviews</a>
       <a class="here" aria-current="page">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
       <a href="application-features.html">Features</a>
       <a href="application-architecture.html">Architecture</a>
+      <a href="reviews.html">Reviews</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Application monitor</p>
       <h1 class="hero">Application Development Rules</h1>
     </header>
     <div class="layout">
-    <section><h2>Development rules</h2><div class="deck">
+    <section><div class="deck">
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="Development rules" data-name="Application monitor source first" data-body="Changes to application requirements, features, development rules, components, or connections must update product/application-monitor.json before generated monitor HTML." data-meta1-label="Status" data-meta1="Active" data-meta2-label="Control" data-meta2="Hard gate" data-meta3-label="Evidence" data-meta3="check-application-monitor.ps1 verifies generated monitor freshness.">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">APP-RULE-001</span>
@@ -228,6 +228,7 @@
       bd.addEventListener('click', closeModal);
       document.getElementById('mx').addEventListener('click', closeModal);
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
     })();
   </script>
 </body>

@@ -67,11 +67,11 @@
   <main>
     <nav class="topnav">
       <a href="guardrail-monitor.html">Guardrails</a>
-      <a class="here" aria-current="page">Reviews</a>
       <a href="application-monitor.html">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
       <a href="application-features.html">Features</a>
       <a href="application-architecture.html">Architecture</a>
+      <a class="here" aria-current="page">Reviews</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Review monitor</p>
@@ -79,6 +79,12 @@
     </header>
     <div class="layout">
     <div class="deck">
+      <a class="review-item" href="../docs/en/changelog/reviews/0051-monitor-consistency-pass.en.html">
+        <span class="cbar"></span>
+        <span class="cnum">0051</span>
+        <span class="cnm">Monitor consistency pass</span>
+        <span class="cfoot"><span class="cv">Review &middot; en</span></span>
+      </a>
       <a class="review-item" href="../docs/en/changelog/reviews/0050-monitor-editorial-unification.en.html">
         <span class="cbar"></span>
         <span class="cnum">0050</span>
@@ -334,6 +340,7 @@
           if (openRow(a) === false) { e.preventDefault(); }
         });
       });
+      if (wide.matches && rows.length) { openRow(rows[0]); }
     })();
   </script>
 </body>

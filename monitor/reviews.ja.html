@@ -67,11 +67,11 @@
   <main>
     <nav class="topnav">
       <a href="guardrail-monitor.ja.html">ガードレール</a>
-      <a class="here" aria-current="page">レビュー</a>
       <a href="application-monitor.ja.html">開発ルール</a>
       <a href="application-requirements.ja.html">要求</a>
       <a href="application-features.ja.html">機能</a>
       <a href="application-architecture.ja.html">アーキテクチャ</a>
+      <a class="here" aria-current="page">レビュー</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Review monitor</p>
@@ -79,6 +79,12 @@
     </header>
     <div class="layout">
     <div class="deck">
+      <a class="review-item" href="../docs/ja/changelog/reviews/0051-monitor-consistency-pass.ja.html">
+        <span class="cbar"></span>
+        <span class="cnum">0051</span>
+        <span class="cnm">モニターの一貫性調整</span>
+        <span class="cfoot"><span class="cv">レビュー &middot; ja</span></span>
+      </a>
       <a class="review-item" href="../docs/ja/changelog/reviews/0050-monitor-editorial-unification.ja.html">
         <span class="cbar"></span>
         <span class="cnum">0050</span>
@@ -400,6 +406,7 @@
           if (openRow(a) === false) { e.preventDefault(); }
         });
       });
+      if (wide.matches && rows.length) { openRow(rows[0]); }
     })();
   </script>
 </body>

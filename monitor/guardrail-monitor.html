@@ -101,11 +101,11 @@
   <main>
     <nav class="topnav">
       <a class="here" aria-current="page">Guardrails</a>
-      <a href="reviews.html">Reviews</a>
       <a href="application-monitor.html">Development rules</a>
       <a href="application-requirements.html">Requirements</a>
       <a href="application-features.html">Features</a>
       <a href="application-architecture.html">Architecture</a>
+      <a href="reviews.html">Reviews</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Guardrail monitor</p>
@@ -324,6 +324,7 @@
         bd.addEventListener('click', closeModal);
         document.getElementById('mx').addEventListener('click', closeModal);
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+        if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
       }
     })();
   </script>
