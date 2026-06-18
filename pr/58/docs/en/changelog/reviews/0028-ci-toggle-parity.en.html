@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0028: Registry Toggle Parity in CI</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Registry Toggle Parity in CI</h1>
+      <p class="lead">This review asks for approval of a fix for the gap called out in review 0024: CI's <code>human-review-artifact</code> job ran its four review gates directly, so the registry <code>enabled</code> toggle did not reach them. Disabling one of those guardrails was silently ignored on CI, and a recorded <code>disabledReason</code> gave false assurance. The fix makes every enforcement lane honor the same toggle.</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>Requested Approval</h2>
+      <ol>
+        <li>The four CI-invoked gates now consult the registry and skip when their guardrail is disabled, so the registry is the single on/off switch for them too.</li>
+        <li><code>review-artifact-runtime-boundary</code> ran in two lanes with split-brain behavior when disabled; both lanes now agree.</li>
+        <li><code>check-registry.ps1</code> now fails if a CI-wired script gate forgets the toggle, so the bypass cannot silently return.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What Changed</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Role after this change</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrail-lib.ps1</code></td><td>New shared helper: one <code>Test-GuardrailEnabled</code> that reads the registry, fail-closed.</td></tr>
+          <tr><td><code>scripts/check.ps1</code></td><td>Sources the helper instead of its own copy - one toggle implementation.</td></tr>
+          <tr><td>The four review gates</td><td>Dot-source the helper and exit early when disabled, so CI honors the toggle.</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td>Asserts every CI-wired script gate consults the toggle.</td></tr>
+          <tr><td><code>scripts/check-spec-before-impl.ps1</code></td><td>Excludes <code>guardrail-lib.ps1</code> as guardrail tooling.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>Risk</h2>
+      <p>The change is to the guardrail tooling, not the product. With every guardrail enabled today, behavior is unchanged. The one remaining limit is the <code>devcontainer-build</code> guardrail: it is a CI job with no gate script (it builds the Dev Container), so its job-level toggle is still not wired and the new assertion - which covers script gates only - does not flag it. That is tracked as a separate follow-up.</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>Terminology Check</h2>
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Enforcement lane</td><td>A path by which a guardrail actually runs: the local pre-check, the CI <code>check</code> job, the CI <code>human-review-artifact</code> job, or the Dev Container Bash lane.</td></tr>
+          <tr><td>Toggle bypass</td><td>An enforcement lane that runs a gate without reading the registry <code>enabled</code> flag, so a disabled guardrail still runs there.</td></tr>
+          <tr><td>Split-brain</td><td>Two lanes disagreeing about whether a guardrail is on - here, the <code>check</code> job skipping a disabled gate while CI kept enforcing it.</td></tr>
+          <tr><td>Fail-closed</td><td>On an error (an unreadable registry) the safe default is to treat every guardrail as enabled, not to skip.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>Runtime Boundary Check</h2>
+      <p>No new runtime is introduced. The change adds one PowerShell helper file and teaches the existing gate scripts to read the registry. The local pre-check (PowerShell), the CI <code>check</code> job, and the Dev Container Bash lane all run the same <code>scripts/check.ps1</code>; the CI <code>human-review-artifact</code> job runs the four gate scripts directly with Node-free PowerShell. After this change all of those lanes consult the same registry toggle. No new dependency (Node, npm, Docker, package manager) is added.</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>References</h2>
+      <table>
+        <thead><tr><th>Reference</th><th>Supports</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrail-lib.ps1</code></td><td>The shared, fail-closed <code>Test-GuardrailEnabled</code> (single toggle implementation).</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td>The new toggle-bypass assertion for CI-wired script gates.</td></tr>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td>The <code>human-review-artifact</code> job whose direct gate calls now honor the toggle.</td></tr>
+          <tr><td><code>docs/en/changelog/reviews/0024-configurable-guardrails.en.html</code></td><td>The earlier review that named this exact gap as a known limit.</td></tr>
+          <tr><td><code>docs/en/changelog/0034-ci-toggle-parity.md</code></td><td>The change note for this fix.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

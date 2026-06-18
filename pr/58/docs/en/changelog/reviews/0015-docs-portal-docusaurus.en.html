@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0015: Docusaurus Documentation Portal</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --text: #111827;
+      --muted: #4b5563;
+      --line: #d1d5db;
+      --bg: #f9fafb;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #166534;
+      --amber: #92400e;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 8px;
+    }
+    h2 {
+      margin-top: 32px;
+      font-size: 1.25rem;
+    }
+    .lead {
+      color: var(--muted);
+      max-width: 820px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .approval {
+      border-left: 5px solid var(--blue);
+      background: #eff6ff;
+    }
+    .risk {
+      border-left: 5px solid var(--amber);
+      background: #fffbeb;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f4f6;
+    }
+    .ok {
+      color: var(--green);
+      font-weight: 700;
+    }
+    .links a {
+      display: inline-block;
+      margin: 0 12px 8px 0;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Docusaurus Documentation Portal</h1>
+      <p class="lead">Review artifact for Issue #16. This change creates a browser-visible entry point for inspecting LLM-managed rules and work state.</p>
+    </header>
+
+    <section class="card approval">
+      <h2>Requested Review Decision</h2>
+      <ol>
+        <li>Adopt <code>docs-portal/</code> as the Docusaurus source root.</li>
+        <li>Create the first browser-visible LLM work guardrails pages in Japanese and English.</li>
+        <li>Build the portal in CI so broken portal changes do not merge.</li>
+        <li>Promote <code>LLM-GR-004</code> to <code>Active</code> as the default browser-visible control surface rule.</li>
+      </ol>
+    </section>
+
+    <h2>What This Adds</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Portal Root</h3>
+        <p><code>docs-portal/</code> contains the Docusaurus site. The untracked root <code>package.json</code> is not used.</p>
+      </article>
+      <article class="card">
+        <h3>Guardrail View</h3>
+        <p>The LLM work guardrails and statuses become available through browser pages.</p>
+      </article>
+      <article class="card">
+        <h3>CI Check</h3>
+        <p>GitHub Actions sets up Node.js and checks that the portal builds.</p>
+      </article>
+      <article class="card">
+        <h3>Core Context Gate</h3>
+        <p><code>docs/agent-core-context.json</code> defines the fixed reading pack for resumed sessions and future agents.</p>
+      </article>
+    </div>
+
+    <h2>Stack Decision</h2>
+    <table>
+      <thead>
+        <tr><th>Candidate</th><th>Decision</th><th>Reason</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Docusaurus</td><td class="ok">Adopt</td><td>Combines Markdown and React/MDX, with strong static documentation support.</td></tr>
+        <tr><td>VitePress</td><td>Not now</td><td>Lightweight, but Vue-oriented and less aligned with the later React control-surface direction.</td></tr>
+        <tr><td>Material for MkDocs</td><td>Not now</td><td>Excellent for readable docs, but less natural for later React UI integration.</td></tr>
+        <tr><td>Astro Starlight</td><td>Not now</td><td>Strong static content option, but Docusaurus is the better first portal fit here.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Out Of Scope</h2>
+    <div class="card risk">
+      <ul>
+        <li>No external production deployment in this PR.</li>
+        <li>No full migration of existing Markdown pages in this PR.</li>
+        <li>Do not require npm on the Windows host. The Docusaurus build is validated in CI and should run through Docker / Dev Container workflows.</li>
+        <li>Full cleanup of legacy mojibake in existing Japanese Markdown files is tracked in <a href="https://github.com/gohei-labs/project-shelf/issues/37">Issue #37</a> after owner review identified the tracking gap. Future deferred work requires owner confirmation before a new Issue is created.</li>
+      </ul>
+    </div>
+
+    <h2 data-guardrail="runtime-boundary">Runtime Boundary Check</h2>
+    <div class="card">
+      <p>The mistake found during this PR was caused by overreacting to the local fact that npm was unavailable on the Windows host, without re-checking the existing development environment policy.</p>
+      <table>
+        <thead>
+          <tr><th>Boundary</th><th>Decision</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Windows host</td><td>Used as the operator machine. It is not the canonical Node/npm runtime for the project.</td></tr>
+          <tr><td>Docker / Dev Container</td><td>The reproducible local execution path. Local builds should move through this path.</td></tr>
+          <tr><td>CI</td><td>The required verification path for the Docusaurus build.</td></tr>
+          <tr><td>Guardrail</td><td>Future review artifacts that discuss host/runtime/tool boundaries must include this Runtime Boundary Check.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 data-guardrail="standard-terminology">Terminology Check</h2>
+    <table>
+      <thead>
+        <tr><th>Term</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Documentation portal</td><td>A static site for browser-based documentation inspection.</td></tr>
+        <tr><td>Control surface</td><td>A human-facing interface for inspecting rules and work state.</td></tr>
+        <tr><td>Static site generation</td><td>A build-time process that emits static files for hosting.</td></tr>
+        <tr><td>Runtime boundary</td><td>The boundary between the Windows host, Docker / Dev Container, and CI as execution environments.</td></tr>
+        <tr><td>Deferred work owner confirmation</td><td>Asking the owner whether deferred work should become an Issue before review approval is requested.</td></tr>
+        <tr><td>Core context</td><td>The stable required-reading pack an agent must use after handoff, resume, or context compaction.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Handoff Hardening</h2>
+    <div class="card">
+      <p>This PR now adds a fixed Core Context reading gate. The goal is not to detect every possible keyword. The goal is to make every agent start from the same minimum project context before changing code, docs, workflow, GitHub state, or review records.</p>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Added Control</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Source of truth</td><td><code>docs/agent-core-context.json</code> lists always-read and conditionally-read files.</td></tr>
+          <tr><td>Human explanation</td><td><code>docs/agent-core-context.md</code> explains when the reading gate applies.</td></tr>
+          <tr><td>Local and CI checks</td><td><code>scripts/check-agent-core-context.ps1</code> validates the manifest and is included in standard checks.</td></tr>
+          <tr><td>PR workflow</td><td>The PR template now asks whether Core Context was read.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 data-guardrail="primary-references">Primary References</h2>
+    <table>
+      <thead>
+        <tr><th>Source</th><th>Type</th><th>Decision It Supports</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="https://docusaurus.io/docs/installation">Docusaurus Installation</a></td>
+          <td>Official documentation</td>
+          <td>Confirms the standard project structure and build expectations for a Docusaurus site.</td>
+        </tr>
+        <tr>
+          <td><a href="https://docusaurus.io/docs/deployment">Docusaurus Deployment</a></td>
+          <td>Official documentation</td>
+          <td>Confirms that the portal can later be published as a static site without changing the current source layout.</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/gohei-labs/project-shelf/blob/main/docs/specs/development-environment.md">Development Environment Spec</a></td>
+          <td>Project specification</td>
+          <td>Confirms Docker / Dev Container / CI as the canonical execution boundary, not Windows host npm.</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/gohei-labs/project-shelf/issues/16">Issue #16</a></td>
+          <td>Project record</td>
+          <td>Tracks the owner request to make guardrails browser-visible through a documentation control surface.</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/gohei-labs/project-shelf/issues/37">Issue #37</a></td>
+          <td>Project record</td>
+          <td>Tracks the separately identified legacy Japanese Markdown encoding cleanup after owner discussion.</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/gohei-labs/project-shelf/blob/main/docs/agent-core-context.md">Agent Core Context</a></td>
+          <td>Project specification</td>
+          <td>Defines the fixed required-reading gate for context compaction, resume, and handoff.</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>
