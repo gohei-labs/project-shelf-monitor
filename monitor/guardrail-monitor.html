@@ -24,6 +24,7 @@
       --accent-ink:#49590A;
     }
     * { box-sizing:border-box; }
+    html { scrollbar-gutter:stable; }
     html, body { margin:0; }
     body { background:var(--bg); color:var(--ink); font-family:"Inter", system-ui, sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; font-feature-settings:"tnum" 1; }
     main { max-width:1440px; margin:0 auto; padding:24px 18px 44px; }
@@ -36,7 +37,7 @@
     .hero { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:700; font-size:1.84rem; line-height:1.12; letter-spacing:-.01em; margin:6px 0 0; }
     .registry { margin:0; min-width:0; }
     .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
-    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(110px,150px) minmax(0,1fr) auto; align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(120px,170px) 1fr minmax(160px,230px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
     .monitor-item:first-child { border-top:0; }
     .monitor-item:hover { background:var(--panel-soft); }
     .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
@@ -56,7 +57,7 @@
     .status-future-control { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
     .monitor-item.disabled { opacity:.55; }
     .monitor-item.active { background:var(--panel-soft); }
-    .layout { display:grid; grid-template-columns:520px minmax(0,1fr); gap:22px; align-items:start; margin:18px 0 0; }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 384px; gap:22px; align-items:start; margin:18px 0 0; }
     .detail { position:sticky; top:24px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; overflow-y:auto; max-height:calc(100vh - 48px); }
     .mempty { color:var(--muted); font-size:.88rem; line-height:1.6; margin:0; padding:22px; }
     .detail .mbar, .detail .mbody { display:none; }
@@ -118,163 +119,163 @@
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Text encoding</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Document naming" data-rule="A documentation file name must not repeat its parent folder name." data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Document naming</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Encoding &amp; hygiene" data-name="Repository hygiene" data-rule="The diff has no trailing whitespace or conflict markers." data-enf="git diff --check" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Repository hygiene</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Secret / token leak scan</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Dev Container build</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Implementation component contract" data-rule="Implementation component directories must be declared with a stack and check command before product code is added." data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Implementation component contract</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Backend lint and tests</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Frontend build</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="Conditional gate" data-note="Runs only when docker is available.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Compose config validation</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Project-specific control files must use visible paths such as agent-context/.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Root hidden path policy</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Guardrail registry integrity" data-rule="Every active guardrail names a real, wired gate, and the guardrail monitor is up to date with this registry." data-enf="scripts/guardrails/check-registry.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Guardrail registry integrity</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="Advisory" data-status="Future control" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
               <span class="cnm">Branch protection</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Bilingual docs" data-name="Bilingual document pairs" data-rule="docs/en and docs/ja hold the same set of relative Markdown paths." data-enf="scripts/guardrails/check-bilingual-doc-pairs.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Bilingual document pairs</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language roots" data-rule="All Markdown lives under a configured language root." data-enf="scripts/guardrails/check-doc-language-roots.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Documentation language roots</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Bilingual docs" data-name="Documentation language content" data-rule="Each language tree actually contains that language; no untranslated copy is left behind." data-enf="scripts/guardrails/check-doc-language-content.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Documentation language content</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Visualization" data-cat="Docs portal" data-name="Browser-visible control surface" data-rule="Current work state is inspectable in a browser, not only by asking the LLM." data-enf="" data-venue="Advisory" data-status="Working agreement" data-note="Policy (LLM-GR-004). The guardrail monitor is a first step toward it.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Browser-visible control surface</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Application monitor freshness</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item disabled" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact runtime boundary" data-rule="A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section." data-enf="scripts/guardrails/check-review-artifact-runtime-boundary.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Disabled: Paused by review 0048: the owner found the Runtime Boundary Check unclear and removed it from the review template; re-enable if a runtime/tooling assumption mistake recurs.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Review artifact runtime boundary</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Disabled</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Human review artifact link" data-rule="PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact." data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Human review artifact link</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact terminology" data-rule="Changed review artifacts carry a visible Terminology Check section." data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Review artifact terminology</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact references" data-rule="Changed review artifacts carry a References / primary-sources section that explains each source." data-enf="scripts/guardrails/check-review-artifact-references.ps1" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
               <span class="cnm">Review artifact references</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="Agent context" data-name="Agent core-context manifest" data-rule="Every required-reading path in the core-context manifest exists and is unique." data-enf="scripts/guardrails/check-agent-core-context.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Human orchestration</span>
               <span class="cnm">Agent core-context manifest</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Agent context" data-name="Core-context actually read" data-rule="The agent has read the required-reading files before changing or reviewing." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="PR-template checkbox only. Manifest integrity is gated, but reading itself is not.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Human orchestration</span>
               <span class="cnm">Core-context actually read</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Decision records" data-name="AI review record" data-rule="Every implementation PR posts an AI review record comment." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="PR-template checkbox only; no CI gate yet.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Human orchestration</span>
               <span class="cnm">AI review record</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="Decision records" data-name="Decision before implementation" data-rule="Implementation PRs link a prior decision or spec record." data-enf="scripts/guardrails/check-spec-before-impl.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Human orchestration</span>
               <span class="cnm">Decision before implementation</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Working agreements" data-name="Explicit omissions" data-rule="Partial content is labeled partial; uncertainty is surfaced, not hidden." data-enf="" data-venue="Advisory" data-status="Working agreement" data-note="Policy (LLM-GR-002); honor-system.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Human orchestration</span>
               <span class="cnm">Explicit omissions</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Working agreements" data-name="No unilateral issue creation" data-rule="Do not open GitHub issues without owner confirmation." data-enf="" data-venue="Advisory" data-status="Working agreement" data-note="Policy (LLM-GR-005); honor-system.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Human orchestration</span>
               <span class="cnm">No unilateral issue creation</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
       </div>
     </div>
