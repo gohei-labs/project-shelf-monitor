@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0030: Surface Review Artifacts in the Navbar</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Surface Review Artifacts in the Navbar</h1>
+      <p class="lead">This review asks for approval of an always-visible entry point for the human-review HTML artifacts: a <code>レビュー</code> navbar item that opens the reviews index from anywhere in the portal. This realizes the visualization pillar - the review state is legible in a browser, not buried.</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>Requested Approval</h2>
+      <ol>
+        <li>A persistent <code>レビュー</code> navbar item linking to <code>/docs/changelog/reviews/</code>, the maintained index of every review artifact.</li>
+        <li>The reviews index now lists <code>0029</code> and <code>0030</code> and declares bilingual coverage through <code>0013-0030</code>, so the index the navbar points at is complete.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What Changed</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td><code>docs-portal/docusaurus.config.js</code></td><td>Added the left-aligned <code>レビュー</code> navbar item pointing to the reviews index route.</td></tr>
+          <tr><td>Reviews <code>README.md</code> (both languages)</td><td>Listed 0029 and 0030; coverage line set to 0013-0030.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>Risk</h2>
+      <p>Low. The navbar entry points at an existing route (<code>/docs/changelog/reviews/</code>); the build resolves it with no broken-link warning. The only dependency is that the reviews index page keeps existing, which the bilingual-doc-pairs guardrail enforces.</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>Terminology Check</h2>
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Review artifact</td><td>An owner-facing standalone HTML summary of a change, used to judge direction, risk, and scope.</td></tr>
+          <tr><td>Reviews index</td><td>The <code>README</code> page under <code>changelog/reviews/</code> that links to every review artifact.</td></tr>
+          <tr><td>Navbar item</td><td>A persistent top-navigation link shown on every portal page.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>Runtime Boundary Check</h2>
+      <p>No new runtime is introduced. The change is a single Docusaurus navbar entry plus index Markdown; the docs-portal build (Node) is unchanged and produces the same static site with one extra nav link. The local pre-check, the CI <code>check</code> job, and the Dev Container Bash lane all still run the same <code>scripts/check.ps1</code>. No new dependency is added.</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>References</h2>
+      <table>
+        <thead><tr><th>Reference</th><th>Supports</th></tr></thead>
+        <tbody>
+          <tr><td><code>docs-portal/docusaurus.config.js</code></td><td>The new <code>レビュー</code> navbar item.</td></tr>
+          <tr><td><code>docs/en/changelog/reviews/README.md</code></td><td>The reviews index the navbar links to (now lists 0029-0030).</td></tr>
+          <tr><td><code>docs/en/changelog/0036-surface-review-artifacts.md</code></td><td>The change note for this navbar link.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

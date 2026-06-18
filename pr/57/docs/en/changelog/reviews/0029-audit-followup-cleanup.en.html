@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0029: Audit Follow-Up Cleanup</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Audit Follow-Up Cleanup</h1>
+      <p class="lead">This review asks for approval of the safe, mechanical hygiene fixes from a project-state audit, and names the two items deliberately left for an owner decision. No guardrail or product behavior changes.</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>Requested Approval</h2>
+      <ol>
+        <li>The Docusaurus build cache (<code>docs-portal/.docusaurus/</code>) is now gitignored, so it cannot pollute a clone.</li>
+        <li>The deprecated <code>onBrokenMarkdownLinks</code> option moved under <code>markdown.hooks</code>, clearing a Docusaurus v4 warning.</li>
+        <li>The guardrail map lead copy now derives its rule count from the registry, so the prose cannot drift from the real total.</li>
+        <li>The handoff brief and the reviews index no longer point at a deleted branch, old review paths, or a stale bilingual-coverage line.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What Changed</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td><code>.gitignore</code></td><td>Ignore <code>docs-portal/.docusaurus/</code> (regenerated build cache).</td></tr>
+          <tr><td><code>docs-portal/docusaurus.config.js</code></td><td><code>onBrokenMarkdownLinks</code> moved under <code>markdown.hooks</code>; still <code>warn</code>.</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>Lead copy reads the rule count from the registry total; both maps regenerated.</td></tr>
+          <tr><td>Handoff brief (md + html, both languages)</td><td>Refreshed to reflect <code>main</code> after PR #43; HTML review paths corrected.</td></tr>
+          <tr><td>Reviews <code>README.md</code> (both languages)</td><td>Coverage line set to 0013-0028; entries 0022-0028 backfilled.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>Risk</h2>
+      <p>Risk is low: the changes are documentation, gitignore, and generator copy, with no behavior change. Two items are intentionally deferred for an owner decision: (1) the dashboard subsystem is referenced by tracked planning docs but is untracked - commit it or mark those sections not-yet-implemented; (2) <code>docs-portal</code> has no committed lockfile and the build installs with <code>--no-package-lock</code> by design, so adopting a lockfile plus <code>npm ci</code> is a separate call.</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>Terminology Check</h2>
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Build cache</td><td>Files a tool regenerates on each build (here Docusaurus' <code>.docusaurus/</code>); they should never be committed.</td></tr>
+          <tr><td>Deprecation</td><td>An option still working today but scheduled for removal in a future major version (Docusaurus v4).</td></tr>
+          <tr><td>Handoff brief</td><td>The short, disposable status note for the next session; it goes stale by design and is refreshed each change.</td></tr>
+          <tr><td>Lockfile</td><td>A file pinning the exact resolved dependency tree so installs reproduce; <code>npm ci</code> requires one.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>Runtime Boundary Check</h2>
+      <p>No new runtime is introduced. The Docusaurus config edit only relocates an existing option (Node and the docs-portal build are unchanged), and the guardrail map generator change is PowerShell-only. The local pre-check, the CI <code>check</code> job, and the Dev Container Bash lane all still run the same <code>scripts/check.ps1</code>. No new dependency (Node, npm, Docker) is added.</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>References</h2>
+      <table>
+        <thead><tr><th>Reference</th><th>Supports</th></tr></thead>
+        <tbody>
+          <tr><td><code>.gitignore</code></td><td>The new <code>docs-portal/.docusaurus/</code> ignore rule.</td></tr>
+          <tr><td><code>docs-portal/docusaurus.config.js</code></td><td>The <code>markdown.hooks.onBrokenMarkdownLinks</code> migration.</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>The registry-derived rule count in the lead copy.</td></tr>
+          <tr><td><code>docs/en/changelog/0035-audit-followup-cleanup.md</code></td><td>The change note for this cleanup.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
