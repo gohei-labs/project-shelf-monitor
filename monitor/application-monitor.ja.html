@@ -59,7 +59,7 @@
     .status-hard-gate { background:#FAEEED; border-color:#E8C1BD; color:#8B3730; }
     .mini { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
     .mini span { border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:.72rem; color:#5A4F44; background:var(--panel-soft); }
-    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(108px,150px) 1fr minmax(150px,220px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(96px,140px) minmax(0,1fr) auto; align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
     .monitor-item:first-child { border-top:0; }
     .monitor-item:hover { background:var(--panel-soft); }
     .monitor-item:focus-visible { outline:2px solid var(--ink); outline-offset:-2px; }
@@ -69,7 +69,7 @@
     .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
     .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .monitor-item.active { background:var(--panel-soft); }
-    .layout { display:grid; grid-template-columns:minmax(0,1fr) 384px; gap:22px; align-items:start; margin:24px 0 0; }
+    .layout { display:grid; grid-template-columns:520px minmax(0,1fr); gap:22px; align-items:start; margin:24px 0 0; }
     .layout > section { margin:0; min-width:0; }
     .detail { position:sticky; top:24px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; overflow-y:auto; max-height:calc(100vh - 48px); }
     .mempty { color:var(--muted); font-size:.88rem; line-height:1.6; margin:0; padding:22px; }
@@ -145,31 +145,31 @@
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">APP-RULE-001</span>
         <span class="cnm">アプリケーションモニター正本を先に更新</span>
-        <span class="cfoot"><span class="cv">強制ゲート</span><span class="pill status-active">有効</span></span>
+        <span class="cfoot"><span class="pill status-active">有効</span></span>
       </button>
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="開発ルール" data-name="実装ディレクトリは宣言必須" data-body="apps/、packages/、services/ 配下の実装ディレクトリは、application monitor の正本と project-components.json の両方に載せる。" data-meta1-label="状態" data-meta1="有効" data-meta2-label="統制" data-meta2="強制ゲート" data-meta3-label="根拠" data-meta3="guardrail が実ディレクトリ、monitor 正本、component contract を照合する。">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">APP-RULE-002</span>
         <span class="cnm">実装ディレクトリは宣言必須</span>
-        <span class="cfoot"><span class="cv">強制ゲート</span><span class="pill status-active">有効</span></span>
+        <span class="cfoot"><span class="pill status-active">有効</span></span>
       </button>
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="開発ルール" data-name="実装前に要求のつながりを明示" data-body="product behavior は、実装前に requirement、feature、responsible component のつながりを示す。" data-meta1-label="状態" data-meta1="有効" data-meta2-label="統制" data-meta2="運用合意" data-meta3-label="根拠" data-meta3="requirements、features、architecture pages が、requirement、feature、component のつながりを別々に表示する。">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">APP-RULE-003</span>
         <span class="cnm">実装前に要求のつながりを明示</span>
-        <span class="cfoot"><span class="cv">運用合意</span><span class="pill status-active">有効</span></span>
+        <span class="cfoot"><span class="pill status-active">有効</span></span>
       </button>
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="開発ルール" data-name="Phase 1 は読み取り専用" data-body="Phase 1 では、オーナーファイルの移動、削除、コピー、インポート、書き換えを行う UI control や API behavior を追加しない。" data-meta1-label="状態" data-meta1="有効" data-meta2-label="統制" data-meta2="運用合意" data-meta3-label="根拠" data-meta3="読み取り専用の挙動を application development rule と product requirement の両方で追跡する。">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">APP-RULE-004</span>
         <span class="cnm">Phase 1 は読み取り専用</span>
-        <span class="cfoot"><span class="cv">運用合意</span><span class="pill status-active">有効</span></span>
+        <span class="cfoot"><span class="pill status-active">有効</span></span>
       </button>
       <button type="button" class="monitor-item" data-accent="#BCE000" data-kind="開発ルール" data-name="アーキテクチャ変更は専用ページで見る" data-body="component、folder、stack、connection の判断は rules や requirements page に混ぜず、architecture page に置く。" data-meta1-label="状態" data-meta1="有効" data-meta2-label="統制" data-meta2="運用合意" data-meta3-label="根拠" data-meta3="generator が dedicated architecture page を生成する。">
         <span class="cbar" style="background:#BCE000"></span>
         <span class="cid">APP-RULE-005</span>
         <span class="cnm">アーキテクチャ変更は専用ページで見る</span>
-        <span class="cfoot"><span class="cv">運用合意</span><span class="pill status-active">有効</span></span>
+        <span class="cfoot"><span class="pill status-active">有効</span></span>
       </button>
     </div></section>
     <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm">
