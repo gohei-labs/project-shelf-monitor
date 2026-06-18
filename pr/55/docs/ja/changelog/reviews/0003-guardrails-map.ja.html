@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Shelf Guardrails Map</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fa;
+      --paper: #ffffff;
+      --ink: #162033;
+      --muted: #5f6b7d;
+      --line: #d9e0ea;
+      --navy: #173b63;
+      --blue: #2366bd;
+      --teal: #0b756b;
+      --green: #257a45;
+      --amber: #9b6500;
+      --red: #b42318;
+      --violet: #6454c7;
+      --soft-blue: #e8f1ff;
+      --soft-teal: #e2f6f3;
+      --soft-green: #e8f6ec;
+      --soft-amber: #fff3d8;
+      --soft-red: #fdecea;
+      --soft-violet: #efedff;
+      --soft-gray: #eef2f6;
+      --shadow: 0 14px 34px rgba(22, 32, 51, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    main, section, div, aside, article, table { min-width: 0; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: 0.94em; }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3, p, li, td, th { overflow-wrap: anywhere; }
+    h1 { max-width: 980px; font-size: clamp(2.1rem, 4.2vw, 4.4rem); line-height: 1.04; letter-spacing: 0; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 2rem); line-height: 1.16; letter-spacing: 0; }
+    h3 { font-size: 1.02rem; line-height: 1.22; letter-spacing: 0; }
+    .title-line { display: block; }
+    p { color: var(--muted); }
+    ul { margin: 0; padding-left: 1.15rem; color: var(--muted); }
+    li { margin: 5px 0; }
+
+    .page { max-width: 1240px; margin: 0 auto; padding: 28px 22px 64px; }
+    .hero {
+      min-height: 72vh;
+      display: grid;
+      align-content: center;
+      gap: 28px;
+      padding: 36px 0 30px;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .hero-copy { max-width: 860px; font-size: 1.08rem; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr); gap: 18px; align-items: stretch; }
+    .hero-panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tag-blue { background: var(--soft-blue); color: var(--blue); }
+    .tag-teal { background: var(--soft-teal); color: var(--teal); }
+    .tag-green { background: var(--soft-green); color: var(--green); }
+    .tag-amber { background: var(--soft-amber); color: var(--amber); }
+    .tag-red { background: var(--soft-red); color: var(--red); }
+    .tag-violet { background: var(--soft-violet); color: var(--violet); }
+    .tag-gray { background: var(--soft-gray); color: var(--muted); }
+
+    .section { padding: 34px 0 0; }
+    .section-head { display: grid; gap: 8px; max-width: 900px; margin-bottom: 16px; }
+    .grid { display: grid; gap: 14px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card, .rail, .decision {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      min-width: 0;
+    }
+    a.card { color: inherit; text-decoration: none; }
+    a.card:hover { border-color: #9abcf0; box-shadow: 0 10px 24px rgba(35, 102, 189, 0.12); }
+    .card { display: grid; gap: 10px; }
+    .card strong { color: var(--ink); }
+    .card-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .metric {
+      display: grid;
+      gap: 4px;
+      min-height: 106px;
+      align-content: start;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .metric b { font-size: 1.45rem; line-height: 1; color: var(--navy); }
+    .metric span { color: var(--muted); font-size: 0.92rem; }
+
+    .map {
+      display: grid;
+      grid-template-columns: 190px repeat(5, minmax(120px, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+    .map-cell, .map-head, .map-lane {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 76px;
+      padding: 10px;
+      background: var(--paper);
+    }
+    .map-head {
+      min-height: 48px;
+      background: #edf3fa;
+      color: var(--navy);
+      font-weight: 900;
+    }
+    .map-lane {
+      display: grid;
+      align-content: center;
+      background: #f9fbfd;
+      font-weight: 900;
+      color: var(--navy);
+    }
+    .map-cell { display: grid; gap: 6px; align-content: start; }
+    .map-cell small { color: var(--muted); }
+    .strong { border-color: #a7c7f4; background: var(--soft-blue); }
+    .audit { border-color: #9bd6cf; background: var(--soft-teal); }
+    .risk { border-color: #f3b5ae; background: var(--soft-red); }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(96px, 1fr));
+      gap: 8px;
+    }
+    .step {
+      position: relative;
+      min-height: 132px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+    .step::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -8px;
+      width: 8px;
+      height: 1px;
+      background: var(--line);
+    }
+    .step:last-child::after { display: none; }
+    .step-num {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-weight: 900;
+      font-size: 0.82rem;
+    }
+
+    .matrix { width: 100%; border-collapse: collapse; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    .matrix th, .matrix td { border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+    .matrix th { background: #edf3fa; color: var(--navy); }
+    .matrix tr:last-child td { border-bottom: 0; }
+    .matrix td:first-child { font-weight: 800; color: var(--ink); }
+
+    .callout {
+      border-left: 5px solid var(--blue);
+      background: #fbfdff;
+      border-radius: 8px;
+      padding: 16px;
+      display: grid;
+      gap: 8px;
+    }
+    .callout.warning { border-left-color: var(--amber); background: #fffaf0; }
+    .callout.danger { border-left-color: var(--red); background: #fff8f7; }
+
+    .links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .link-pill {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 12px;
+      background: var(--paper);
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 0.9rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .map { grid-template-columns: 1fr; }
+      .map-head { display: none; }
+      .map-lane { min-height: 48px; }
+      .flow { grid-template-columns: 1fr; }
+      .step::after { display: none; }
+      h1, h2, h3, p, li {
+        word-break: break-all;
+        line-break: anywhere;
+      }
+      .matrix {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page { padding: 24px 14px 48px; }
+      .hero { min-height: auto; align-content: start; padding-top: 26px; }
+      h1 { font-size: 1.92rem; line-height: 1.12; }
+      h2 { font-size: 1.34rem; line-height: 1.22; }
+      .hero-copy { font-size: 1rem; }
+      .hero-panel { padding: 12px; }
+      .metric { min-height: 92px; }
+      .tag { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="tag tag-violet">Permanent Reference</span>
+        <span class="tag tag-blue">Guardrails Map</span>
+        <span class="tag tag-green">LLM-Driven Development</span>
+      </div>
+      <div class="hero-grid">
+        <div class="grid">
+          <h1><span class="title-line">LLM駆動開発を</span><span class="title-line">暴走させないための</span><span class="title-line">ガードレール地図</span></h1>
+          <p class="hero-copy">Project Shelf は実用アプリであると同時に、LLMを使った開発スキルと知見を蓄積するプロジェクトです。この資料は、どこにどんなガードレールを置き、何を防ぎ、どの記録で確認できるようにしているかを常設で可視化します。</p>
+        </div>
+        <aside class="hero-panel">
+          <div class="grid grid-2">
+            <div class="metric"><b>8</b><span>主なガードレール領域</span></div>
+            <div class="metric"><b>5</b><span>強制または監査の仕組み</span></div>
+            <div class="metric"><b>1</b><span>共通の開発導線</span></div>
+            <div class="metric"><b>0</b><span>後回し作業の口約束</span></div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-amber">What To Watch</span>
+        <h2>このプロジェクトで一番大事にすること</h2>
+        <p>コードを書く速さより、変更が安全に進む道筋を作ることを優先します。AIエージェントは強い実装力を持つ一方で、文脈の取り違え、確認漏れ、後回し作業の消失、広すぎる変更を起こしやすいためです。</p>
+      </div>
+      <div class="grid grid-4">
+        <a class="card" href="guardrails/context-lock.html">
+          <div class="card-top"><h3>文脈を固定する</h3><span class="tag tag-blue">Docs</span></div>
+          <p>仕様、ADR、変更ノートを source of truth にして、チャットだけに判断を残さない。</p>
+        </a>
+        <div class="card">
+          <div class="card-top"><h3>作業を小さくする</h3><span class="tag tag-green">Scope</span></div>
+          <p>Issue、branch、PR の intent を1つに絞り、レビュー可能な大きさを保つ。</p>
+        </div>
+        <div class="card">
+          <div class="card-top"><h3>証拠を残す</h3><span class="tag tag-teal">Audit</span></div>
+          <p>CI、check results、Codex Review Record、Issue links で「やったこと」を追跡できるようにする。</p>
+        </div>
+        <div class="card">
+          <div class="card-top"><h3>安全側に倒す</h3><span class="tag tag-red">Safety</span></div>
+          <p>file operation、secrets、external access、storage は read-only と明示的承認を基本にする。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-blue">Guardrail Map</span>
+        <h2>どこにガードレールがあるか</h2>
+        <p>ガードレールは1つの巨大なルールではなく、開発の各地点に置かれた小さな制約と記録の組み合わせです。</p>
+      </div>
+      <div class="map" aria-label="Guardrail map">
+        <div class="map-head">領域</div>
+        <div class="map-head">何を防ぐか</div>
+        <div class="map-head">どこに書くか</div>
+        <div class="map-head">どう強制するか</div>
+        <div class="map-head">何を記録するか</div>
+        <div class="map-head">確認ポイント</div>
+
+        <div class="map-lane">開発環境</div>
+        <div class="map-cell strong"><b>その場しのぎの環境</b><small>ローカルPC依存、PATH依存、再現不能なsetup</small></div>
+        <div class="map-cell"><b>Development Environment Spec</b><small>Dev Container、Compose、bootstrap/check</small></div>
+        <div class="map-cell strong"><b>scripts/check</b><small>CI と人間が同じ入口を使う</small></div>
+        <div class="map-cell audit"><b>CI run</b><small>GitHub Actions に成功/失敗を残す</small></div>
+        <div class="map-cell"><b>PR verification</b><small>実行できない場合は理由を書く</small></div>
+
+        <div class="map-lane">作業単位</div>
+        <div class="map-cell strong"><b>巨大PRと混線</b><small>関係ない変更、prototype cleanup混入</small></div>
+        <div class="map-cell"><b>GitHub Workflow Spec</b><small>Issue、branch、PR の単位</small></div>
+        <div class="map-cell strong"><b>short-lived branch</b><small>main に直接 push しない</small></div>
+        <div class="map-cell audit"><b>PR history</b><small>diff、comments、checks を残す</small></div>
+        <div class="map-cell"><b>PR size</b><small>AI/人間が一度にreviewできる範囲</small></div>
+
+        <div class="map-lane">後回し作業</div>
+        <div class="map-cell risk"><b>口約束で消えるTODO</b><small>chatだけ、finalだけ、PR commentだけ</small></div>
+        <div class="map-cell"><b>Deferred Work Rules</b><small>後回しは必ず別Issue</small></div>
+        <div class="map-cell strong"><b>GitHub Issue</b><small>acceptance criteria と理由を書く</small></div>
+        <div class="map-cell audit"><b>Project board</b><small>Status は Todo/In Progress/Done</small></div>
+        <div class="map-cell"><b>PR link</b><small>PRから follow-up Issue を辿れる</small></div>
+
+        <div class="map-lane">AIレビュー</div>
+        <div class="map-cell strong"><b>自分で自分を甘く見る</b><small>実装者の “looks good” だけで進む</small></div>
+        <div class="map-cell"><b>AI Review Protocol</b><small>review-only pass と専用prompt</small></div>
+        <div class="map-cell strong"><b>No file edits</b><small>review pass は findings first</small></div>
+        <div class="map-cell audit"><b>Codex Review Record</b><small>PR top-level comment に残す</small></div>
+        <div class="map-cell"><b>findings resolution</b><small>修正または不採用理由を書く</small></div>
+
+        <div class="map-lane">人間レビュー</div>
+        <div class="map-cell strong"><b>承認対象が曖昧</b><small>説明と判断事項が混ざる</small></div>
+        <div class="map-cell"><b>Human Review Artifacts Spec</b><small>HTMLで判断を可視化</small></div>
+        <div class="map-cell strong"><b>approval section</b><small>何を承認するかを分ける</small></div>
+        <div class="map-cell audit"><b>docs/reviews</b><small>レビュー資料を残す</small></div>
+        <div class="map-cell"><b>owner decision</b><small>方向性、risk、scope を見る</small></div>
+
+        <div class="map-lane">ログ</div>
+        <div class="map-cell strong"><b>障害時に何も分からない</b><small>再現、検証、運用状況が追えない</small></div>
+        <div class="map-cell"><b>Logging Spec</b><small>JSONL、topic/action/data</small></div>
+        <div class="map-cell strong"><b>required events</b><small>startup、config、path block</small></div>
+        <div class="map-cell audit"><b>log viewer API</b><small>時間範囲、level、topicで確認</small></div>
+        <div class="map-cell"><b>tests</b><small>重要log eventをassertする</small></div>
+
+        <div class="map-lane">Storage/Security</div>
+        <div class="map-cell risk"><b>ローカルファイルの露出</b><small>path traversal、secret、意図しないwrite</small></div>
+        <div class="map-cell"><b>Operations + Storage ADR</b><small>managed root と read-only方針</small></div>
+        <div class="map-cell strong"><b>backend validation</b><small>client pathを信用しない</small></div>
+        <div class="map-cell audit"><b>path/security review</b><small>危険領域は専用review</small></div>
+        <div class="map-cell"><b>dry-run first</b><small>write/delete/import前に別承認</small></div>
+
+        <div class="map-lane">文書体系</div>
+        <div class="map-cell strong"><b>思想が消える</b><small>なぜそうしたかが引き継げない</small></div>
+        <div class="map-cell"><b>Documentation System Spec</b><small>spec、ADR、change note</small></div>
+        <div class="map-cell strong"><b>bilingual specs</b><small>英語はagent、日本語はowner</small></div>
+        <div class="map-cell audit"><b>docs index</b><small>読む順番を固定する</small></div>
+        <div class="map-cell"><b>change note</b><small>何を、なぜ、どう検証したか</small></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-green">Development Path</span>
+        <h2>開発の道筋</h2>
+        <p>AIエージェントが自由に動くのではなく、この順路に沿って進めます。各地点で次へ進む条件を置くことで、暴走や漏れを抑えます。</p>
+      </div>
+      <div class="flow" aria-label="Development workflow">
+        <div class="step"><span class="step-num">1</span><h3>Issue</h3><p>目的、acceptance criteria、risk、関連specを置く。</p></div>
+        <div class="step"><span class="step-num">2</span><h3>Branch</h3><p>1つの intent に絞った short-lived branch で作業する。</p></div>
+        <div class="step"><span class="step-num">3</span><h3>Implement</h3><p>編集前に周辺ファイルと関連specを読む。大きく作りすぎない。</p></div>
+        <div class="step"><span class="step-num">4</span><h3>Check</h3><p><code>scripts/check</code> を実行する。できないcheckは理由を書く。</p></div>
+        <div class="step"><span class="step-num">5</span><h3>Docs</h3><p>behavior が変わるなら spec または change note を更新する。</p></div>
+        <div class="step"><span class="step-num">6</span><h3>PR</h3><p>変更内容、検証、残リスク、後回しIssueを明記する。</p></div>
+        <div class="step"><span class="step-num">7</span><h3>AI Review</h3><p>review-only pass を実行し、Codex Review Record を残す。</p></div>
+        <div class="step"><span class="step-num">8</span><h3>Merge</h3><p>checks、review、deferred Issue の記録が揃ってから進める。</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-teal">Enforcement</span>
+        <h2>ガードレールの強さ</h2>
+        <p>すべてのガードレールが同じ強さではありません。今の段階では「仕様」「スクリプト」「CI」「PRコメント」「Issue/Project」の組み合わせで段階的に強くします。</p>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>強さ</th>
+            <th>仕組み</th>
+            <th>今の使い方</th>
+            <th>次に強くする余地</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Policy</td>
+            <td>Specs / ADRs</td>
+            <td>判断基準を固定し、AIエージェントが読む前提を作る。</td>
+            <td>新しい機能領域ごとに spec を追加する。</td>
+          </tr>
+          <tr>
+            <td>Script</td>
+            <td><code>scripts/check</code></td>
+            <td>人間、CI、AIが同じ validation entry point を使う。</td>
+            <td>app が増えたら backend/frontend/browser checks を実体化する。</td>
+          </tr>
+          <tr>
+            <td>CI</td>
+            <td>GitHub Actions</td>
+            <td>PR diff の hygiene と将来の test/build を記録する。</td>
+            <td>branch protection と required checks を有効化する。</td>
+          </tr>
+          <tr>
+            <td>Audit</td>
+            <td>PR comments / Codex Review Record</td>
+            <td>AI review が本当に行われた証拠を GitHub に残す。</td>
+            <td>review type ごとの template と checklist を増やす。</td>
+          </tr>
+          <tr>
+            <td>Tracking</td>
+            <td>Issues / GitHub Project</td>
+            <td>後回し、risk、acceptance check を消さない。</td>
+            <td>Issue template と project automation を追加する。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-red">Failure Modes</span>
+        <h2>この資料が防ぎたい失敗</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="callout danger">
+          <h3>AIが勝手に広げる</h3>
+          <p>対策: Issue intent、small PR、spec参照、PR size rule。</p>
+        </div>
+        <div class="callout warning">
+          <h3>後回しが消える</h3>
+          <p>対策: deferred work は必ず別Issue。PR commentだけでは不十分。</p>
+        </div>
+        <div class="callout">
+          <h3>レビューしたことにする</h3>
+          <p>対策: Codex Review Record を PR の top-level comment に残す。</p>
+        </div>
+        <div class="callout danger">
+          <h3>ローカルファイルを危険に触る</h3>
+          <p>対策: read-only first、path validation、dry-run、専用security review。</p>
+        </div>
+        <div class="callout warning">
+          <h3>なぜそうしたか忘れる</h3>
+          <p>対策: docs/specs、ADRs、docs/changes を更新する。</p>
+        </div>
+        <div class="callout">
+          <h3>人間が承認できない</h3>
+          <p>対策: HTML review artifact で説明と承認対象を分ける。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-guardrail="standard-terminology">
+      <div class="section-head">
+        <span class="tag tag-blue">Terminology</span>
+        <h2>標準用語チェック</h2>
+      </div>
+      <table>
+        <thead>
+          <tr><th>用語</th><th>この資料での意味</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Guardrail</td><td>AIエージェントや人間の作業が逸脱しないようにする、明示された制約や確認手順。</td></tr>
+          <tr><td>Review artifact</td><td>オーナーが重要判断を確認するための、ブラウザで読めるレビュー資料。</td></tr>
+          <tr><td>Spec</td><td>実装や運用が従う安定したルール。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" data-guardrail="runtime-boundary">
+      <div class="section-head">
+        <span class="tag tag-amber">Runtime Boundary</span>
+        <h2>実行環境境界チェック</h2>
+      </div>
+      <p>この資料は開発方法とドキュメント運用のガードレールを説明するHTMLです。アプリ本体、ローカルストレージ、Docker、npm、ホストPC設定の挙動は変更しません。</p>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-violet">Source Documents</span>
+        <h2>この地図の根拠</h2>
+        <p>このHTMLは見やすくするための入口です。安定したルールの正本は specs、判断履歴は ADRs と change notes に置きます。</p>
+      </div>
+      <div class="links">
+        <a class="link-pill" href="../specs/ja/development-guardrails.md">Development Guardrails</a>
+        <a class="link-pill" href="../specs/ja/github-workflow.md">GitHub Workflow</a>
+        <a class="link-pill" href="../specs/ja/code-review.md">Code Review</a>
+        <a class="link-pill" href="../specs/ja/ai-review-protocol.md">AI Review Protocol</a>
+        <a class="link-pill" href="../specs/ja/logging.md">Logging</a>
+        <a class="link-pill" href="../specs/ja/operations-guardrails.md">Operations Guardrails</a>
+        <a class="link-pill" href="../ja/specs/documentation-system.md">Documentation System</a>
+      </div>
+    </section>
+
+    <section class="section" data-guardrail="primary-references">
+      <div class="section-head">
+        <span class="tag tag-violet">References</span>
+        <h2>参考情報</h2>
+      </div>
+      <table>
+        <thead>
+          <tr><th>参照先</th><th>支えている内容</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Development / GitHub / Code Review specs</td><td>進行管理、レビュー、AIレビューのガードレール。</td></tr>
+          <tr><td>Logging / Operations specs</td><td>運用、障害対応、ログ、環境境界のガードレール。</td></tr>
+          <tr><td>Documentation System spec</td><td>仕様、変更ノート、レビュー資料をどこに置き、どう参照するか。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0016: docs 正本駆動の Docusaurus ポータル</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --text: #111827;
+      --muted: #4b5563;
+      --line: #d1d5db;
+      --bg: #f9fafb;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #166534;
+      --amber: #92400e;
+      --red: #991b1b;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 8px;
+    }
+    h2 {
+      margin-top: 32px;
+      font-size: 1.25rem;
+    }
+    .lead {
+      color: var(--muted);
+      max-width: 860px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .approval {
+      border-left: 5px solid var(--blue);
+      background: #eff6ff;
+    }
+    .ok {
+      border-left: 5px solid var(--green);
+      background: #f0fdf4;
+    }
+    .risk {
+      border-left: 5px solid var(--amber);
+      background: #fffbeb;
+    }
+    .stop {
+      border-left: 5px solid var(--red);
+      background: #fef2f2;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f4f6;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    a {
+      color: var(--blue);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>docs 正本駆動の Docusaurus ポータル</h1>
+      <p class="lead">Issue #38 のレビュー資料です。Docusaurus をドキュメント本体にせず、<code>docs/</code> の Markdown をブラウザで見やすく表示するための表示層に戻す判断です。</p>
+    </header>
+
+    <section class="card approval">
+      <h2>承認してほしいこと</h2>
+      <ol>
+        <li><code>docs/</code> をルール、仕様、変更ノートの正本として維持する。</li>
+        <li>Docusaurus は <code>docs/</code> の選択された Markdown を直接読む表示層にする。</li>
+        <li><code>docs-portal/docs/</code> に手書きの重複ページを持たない。</li>
+        <li>CI が Docusaurus のビルド成果物を artifact として残し、オーナーが確認できるようにする。</li>
+      </ol>
+    </section>
+
+    <h2>今回直す問題</h2>
+    <div class="grid">
+      <article class="card stop">
+        <h3>以前の状態</h3>
+        <p><code>docs/</code> にあるルールや仕様とは別に、<code>docs-portal/docs/</code> に手書きページを置いていました。</p>
+      </article>
+      <article class="card risk">
+        <h3>リスク</h3>
+        <p>同じ内容の正本が2つに分かれると、片方だけ更新され、オーナーや次のAIエージェントが古い内容を信じる危険があります。</p>
+      </article>
+      <article class="card ok">
+        <h3>今回の方針</h3>
+        <p>Docusaurus は <code>docs/</code> を読み、ブラウザ表示だけを担当します。編集する場所は <code>docs/</code> に寄せます。</p>
+      </article>
+    </div>
+
+    <h2>境界の見取り図</h2>
+    <table>
+      <thead>
+        <tr><th>領域</th><th>役割</th><th>手書きしてよいもの</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>docs/</code></td>
+          <td>正本。AI と人間が読むルール、仕様、判断、変更ノートを置く。</td>
+          <td>ルールブック、仕様、変更ノート、レビュー資料、ADR。</td>
+        </tr>
+        <tr>
+          <td><code>docs-portal/</code></td>
+          <td>表示層。Docusaurus が <code>docs/</code> をブラウザで見せる。</td>
+          <td>設定、サイドバー、スタイル、入口ページ。</td>
+        </tr>
+        <tr>
+          <td><code>docs-portal/build/</code></td>
+          <td>生成物。CI やローカルで作る確認用の静的サイト。</td>
+          <td>手書きしない。Git にコミットしない。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>成果物の確認方法</h2>
+    <table>
+      <thead>
+        <tr><th>確認したいもの</th><th>見る場所</th><th>意味</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>正本の内容</td>
+          <td><code>docs/</code> の Markdown</td>
+          <td>AI エージェントと人間が信頼する元データです。</td>
+        </tr>
+        <tr>
+          <td>ブラウザ表示</td>
+          <td>CI の <code>docs-portal-build</code> artifact</td>
+          <td>Docusaurus でビルドされた静的サイトです。生成物はコミットしません。</td>
+        </tr>
+        <tr>
+          <td>レビュー判断</td>
+          <td>この HTML</td>
+          <td>今回は「正本と表示層の分離」を承認するための資料です。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>Runtime Boundary Check</h2>
+      <table>
+        <thead>
+          <tr><th>対象</th><th>今回の扱い</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Windows ホスト</td><td>npm を必須にしません。ホストの環境整備には広げません。</td></tr>
+          <tr><td>CI</td><td>Node.js を用意して Docusaurus をビルドし、成果物を artifact として残します。</td></tr>
+          <tr><td>Docker / Dev Container</td><td>今後の再現可能なローカル実行経路として維持します。この PR では新しい依存を増やしません。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>標準用語チェック</h2>
+      <table>
+        <thead>
+          <tr><th>用語</th><th>この資料での意味</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Source of truth / 正本</td><td>編集して信頼する元データ。今回は <code>docs/</code> の Markdown です。</td></tr>
+          <tr><td>Presentation layer / 表示層</td><td>正本を読みやすく見せる層。今回は Docusaurus です。</td></tr>
+          <tr><td>Build artifact</td><td>CI が生成して保存する確認用の成果物。Git にはコミットしません。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考にした一次情報</h2>
+      <table>
+        <thead>
+          <tr><th>参照先</th><th>この判断で使った根拠</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs">Docusaurus docs plugin options</a></td><td>docs plugin が読み込む Markdown の場所や対象を設定できることの確認。</td></tr>
+          <tr><td><a href="../ja/specs/documentation-system.md">Documentation System Spec</a></td><td><code>docs/</code> を正本、レビュー資料やポータルを表示層として扱う根拠。</td></tr>
+          <tr><td><a href="https://github.com/gohei-labs/project-shelf/issues/38">Issue #38</a></td><td>今回の作業範囲と、Docusaurus を正本化しない要求の記録。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <h2>次のステップ</h2>
+    <p>この方針で PR を作成し、CI が生成した <code>docs-portal-build</code> artifact を確認できる状態にします。</p>
+  </main>
+</body>
+</html>

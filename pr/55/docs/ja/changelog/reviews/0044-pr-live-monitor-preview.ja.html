@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>レビュー 0044 - PR live monitor preview</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.2; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">レビュー資料 0044。状態: オーナーレビュー用ドラフト。日付: 2026-06-17。</p>
+  <h1>PR live monitor preview</h1>
+  <p><span class="tag">推奨</span><span class="tag">Monitor</span><span class="tag">Mobile review</span><span class="tag">Public preview</span></p>
+
+  <section>
+    <h2>判断サマリー</h2>
+    <p>pull request ごとの monitor preview を public mirror の <code>pr/&lt;number&gt;/</code> に publish し、direct links を含む安定した PR comment を追加する。</p>
+  </section>
+
+  <section>
+    <h2>オーナーに承認してほしいこと</h2>
+    <div class="box">pull request の public・unmerged monitor previews を承認する。preview は generated output のみであり、production monitor root は上書きしない。</div>
+  </section>
+
+  <section>
+    <h2>推奨</h2>
+    <p>進めてよい。通常の URL は Actions artifact を download するより mobile で確認しやすく、merge 前承認の導線も見えやすい。</p>
+  </section>
+
+  <section>
+    <h2>リスクと軽減策</h2>
+    <table>
+      <tr><th>リスク</th><th>軽減策</th></tr>
+      <tr><td>merge 前の generated output が public になる。</td><td>公開するのは generated monitor site files だけにし、既存 public mirror boundary の中で <code>pr/&lt;number&gt;/</code> に置く。</td></tr>
+      <tr><td>publish credentials が PR 側で変更された scripts に露出する。</td><td>PR workflow は artifact を upload するだけにする。default branch の trusted な <code>workflow_run</code> workflow が artifact を download し、PR code を実行せずに publish する。</td></tr>
+      <tr><td>PR preview が production monitor を上書きする。</td><td>workflow は scoped target path を渡し、publisher は PR preview では mirror root を保持する。</td></tr>
+      <tr><td>PR に preview comment が重複する。</td><td>workflow は marker comment が既にある場合、それを更新する。</td></tr>
+      <tr><td>deploy key が使えず preview publish が実行できない。</td><td>Actions artifact を fallback preview として残す。</td></tr>
+      <tr><td>却下された PR previews が public に残る。</td><td>残るリスクとして記録する。必要なら PR close 時 cleanup を follow-up で追加する。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>変更しないこと</h2>
+    <p>private source repository の公開、guardrail source of truth、production root URL への PR preview deploy は変更しない。</p>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>用語</th><th>ここでの使い方</th></tr>
+      <tr><td>PR preview</td><td>1つの pull request の generated monitor output。<code>pr/&lt;number&gt;/</code> に publish される。</td></tr>
+      <tr><td>Production monitor</td><td>public mirror root。<code>main</code> からのみ更新される。</td></tr>
+      <tr><td>Public mirror</td><td>GitHub Pages で monitor HTML を host する generated-output repository。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>runtime は GitHub Actions、PowerShell、git、既存 public mirror repository のまま。preview workflow は GitHub API による PR comment write を追加するが、package manager、server runtime、Docker dependency、新しい hosting provider は追加しない。</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><code>.github/workflows/pages.yml</code></td><td>publish credentials なしで PR monitor artifact を build する。</td></tr>
+      <tr><td><code>.github/workflows/monitor-preview.yml</code></td><td>成功した PR artifact を download し、live preview を publish し、PR comment を書く。</td></tr>
+      <tr><td><code>scripts/ci/publish-monitor-mirror.ps1</code></td><td>production root を上書きせずに <code>pr/&lt;number&gt;/</code> へ scoped publish する。</td></tr>
+      <tr><td><code>README.md</code></td><td>owner 向け links と fallback artifact workflow を記録する。</td></tr>
+      <tr><td><code>docs/en/rules/observability/documentation-system.md</code></td><td>monitor preview rule の English durable rule。</td></tr>
+      <tr><td><code>docs/ja/rules/observability/documentation-system.md</code></td><td>monitor preview rule の Japanese durable rule。</td></tr>
+    </table>
+  </section>
+</main>
+</body>
+</html>
