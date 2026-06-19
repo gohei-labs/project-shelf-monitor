@@ -87,7 +87,7 @@
       <ol class="asks">
         <li><b>Project rules ビューを新設する。</b> 新しい生成ページ（<code>monitor/project-rules.html</code>＋<code>.ja.html</code>）が、レジストリの <code>scope</code> が <code>product</code> のガードレールを一覧します。現在は6件: Dev Container build、Implementation component contract、Backend lint and tests、Frontend build、Compose config validation、Application monitor freshness。ハードコードではなく <code>scope</code> フィールドで駆動するため、ルールのタグを変えればコード変更なしでビュー間を移動します。</li>
         <li><b>Guardrails を再利用可能ルール専用に保つ。</b> Guardrails ビューは再利用可能な21件（<code>scope</code> が generic＋bilingual）のみを表示し、プロジェクト固有のものは一覧しなくなります。</li>
-        <li><b>モニターのナビに Project rules タブを追加する。</b> 全ページ（Guardrails と Development rules の間）に、英語・日本語の両方で追加します。</li>
+        <li><b>モニターのナビに Project rules タブを追加する。</b> 全ページに、英語・日本語の両方で追加します。並びは「広い→具体」の順: <b>Guardrails → Development rules → Project rules</b> — Guardrails は最も広い再利用可能な枠、Development rules は再利用可能な開発特化の層、Project rules はこのプロジェクト固有で汎用化できないルール。</li>
       </ol>
     </section>
 

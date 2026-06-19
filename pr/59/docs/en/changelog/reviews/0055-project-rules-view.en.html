@@ -87,7 +87,7 @@
       <ol class="asks">
         <li><b>Add a Project rules view.</b> A new generated page (<code>monitor/project-rules.html</code> + <code>.ja.html</code>) lists the guardrails whose registry <code>scope</code> is <code>product</code> — currently 6: Dev Container build, Implementation component contract, Backend lint and tests, Frontend build, Compose config validation, Application monitor freshness. The page is driven by the <code>scope</code> field, not a hardcoded list, so re-tagging a rule moves it between views with no code change.</li>
         <li><b>Keep Guardrails reusable-only.</b> The Guardrails view now shows the 21 reusable rules (<code>scope</code> generic + bilingual) and no longer lists the project-specific ones.</li>
-        <li><b>Add the Project rules tab to the monitor nav</b> on every page (between Guardrails and Development rules), in both English and Japanese.</li>
+        <li><b>Add the Project rules tab to the monitor nav</b> on every page, in both English and Japanese. The nav runs broad &rarr; specific: <b>Guardrails &rarr; Development rules &rarr; Project rules</b> &mdash; Guardrails is the broadest reusable frame, Development rules the reusable development-specific layer, and Project rules this project's non-generalizable rules.</li>
       </ol>
     </section>
 
