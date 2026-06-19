@@ -103,6 +103,7 @@
     <nav class="topnav">
       <a class="here" aria-current="page">Guardrails</a>
       <a href="application-monitor.html">Development rules</a>
+      <a href="project-rules.html">Project rules</a>
       <a href="application-requirements.html">Requirements</a>
       <a href="application-features.html">Features</a>
       <a href="application-architecture.html">Architecture</a>
@@ -138,36 +139,6 @@
               <span class="ccat">Guardrails</span>
               <span class="cnm">Secret / token leak scan</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="Hard gate" data-note="">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Dev Container build</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Implementation component contract" data-rule="Implementation component directories must be declared with a stack and check command before product code is added." data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Implementation component contract</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Backend lint and tests</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Frontend build</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="Conditional gate" data-note="Runs only when docker is available.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Compose config validation</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Project-specific control files must use visible paths such as agent-context/.">
               <span class="cbar" style="background:#BCE000"></span>
@@ -210,12 +181,6 @@
               <span class="ccat">Visualization</span>
               <span class="cnm">Browser-visible control surface</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Visualization</span>
-              <span class="cnm">Application monitor freshness</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item disabled" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact runtime boundary" data-rule="A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section." data-enf="scripts/guardrails/check-review-artifact-runtime-boundary.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Disabled: Paused by review 0048: the owner found the Runtime Boundary Check unclear and removed it from the review template; re-enable if a runtime/tooling assumption mistake recurs.">
               <span class="cbar" style="background:#BCE000"></span>
