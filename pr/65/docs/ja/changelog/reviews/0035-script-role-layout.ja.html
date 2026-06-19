@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>レビュー 0035 - スクリプト役割別レイアウト</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.25; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">レビュー成果物 0035。Status: owner review draft。Date: 2026-06-17.</p>
+  <h1>スクリプト役割別レイアウト</h1>
+  <p><span class="tag">推奨</span><span class="tag">Governance</span><span class="tag">Tooling</span></p>
+
+  <section>
+    <h2>Decision Summary</h2>
+    <p>standard check entrypoints の <code>scripts/check.ps1</code> と <code>scripts/check.sh</code> は直下に残しつつ、scripts を役割別に分ける。</p>
+  </section>
+
+  <section>
+    <h2>What The Owner Needs To Approve</h2>
+    <div class="box">script taxonomy を承認する。<code>scripts/guardrails/</code> は gates、<code>scripts/generate/</code> は monitor builders、<code>scripts/local/</code> は local helpers、<code>scripts/setup/</code> は bootstrap helpers。</div>
+  </section>
+
+  <section>
+    <h2>Recommendation</h2>
+    <p>進める。top-level に競合する directory を増やさず、guardrail body が見える構造になる。</p>
+  </section>
+
+  <section>
+    <h2>Risks And Mitigations</h2>
+    <table>
+      <tr><th>Risk</th><th>Mitigation</th></tr>
+      <tr><td>CI が古い script paths を呼ぶ。</td><td>workflow calls を更新し、<code>scripts/check.ps1</code> は shared entrypoint として残す。</td></tr>
+      <tr><td>registry paths が実ファイルから drift する。</td><td><code>monitor/registry.json</code> を更新し、<code>scripts/guardrails/check-registry.ps1</code> で検証する。</td></tr>
+      <tr><td>local helper commands が移動する。</td><td>README と live rule docs に新しい <code>scripts/local/</code> paths を記録する。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>What Is Not Decided Here</h2>
+    <p>local と CI の check suite を分離しない。意図的に <code>scripts/check.ps1</code> を共有し、local helper utilities だけを分ける。</p>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>Term</th><th>Use here</th></tr>
+      <tr><td>Guardrail gates</td><td><code>scripts/guardrails/</code> 配下の executable validation scripts。</td></tr>
+      <tr><td>Generators</td><td><code>monitor/*.html</code> を書き出す <code>scripts/generate/</code> 配下の scripts。</td></tr>
+      <tr><td>Local helpers</td><td><code>scripts/local/</code> 配下の owner/developer convenience scripts。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>runtime は変えない。PowerShell が guardrail runtime のまま、Bash は PowerShell に委譲し、CI は同じ entrypoint と PR-context review gates を実行し続ける。</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><code>docs/ja/changelog/0041-script-role-layout.md</code></td><td>script layout change の実装記録。</td></tr>
+      <tr><td><code>scripts/check.ps1</code></td><td>local/CI 共通の guardrail entrypoint。</td></tr>
+      <tr><td><code>.github/workflows/ci.yml</code></td><td>CI が更新後の guardrail paths を呼ぶこと。</td></tr>
+      <tr><td><code>monitor/registry.json</code></td><td>machine-readable guardrail path registry。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Next Step</h2>
+    <p><code>monitor/*.html</code> を再生成し、<code>pwsh scripts/check.ps1</code> を実行する。</p>
+  </section>
+</main>
+</body>
+</html>

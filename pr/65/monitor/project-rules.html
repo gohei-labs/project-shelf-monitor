@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project rules</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#FBFBF8;
+      --panel:#FFFFFF;
+      --panel-soft:#F1F1EC;
+      --ink:#0C0C0D;
+      --muted:#6E6E70;
+      --line:#E4E4DD;
+      --line-strong:#C7C7BF;
+      --green:#457B5B;
+      --blue:#5B7DB5;
+      --amber:#A67D3D;
+      --red:#B84C42;
+      --accent:#BCE000;
+      --accent-ink:#49590A;
+    }
+    * { box-sizing:border-box; }
+    html { scrollbar-gutter:stable; }
+    html, body { margin:0; }
+    body { background:var(--bg); color:var(--ink); font-family:"Inter", system-ui, sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; font-feature-settings:"tnum" 1; }
+    main { max-width:1440px; margin:0 auto; padding:24px 18px 44px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:700; font-size:1.84rem; line-height:1.12; letter-spacing:-.01em; margin:6px 0 0; }
+    .registry { margin:0; min-width:0; }
+    .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(120px,170px) 1fr minmax(160px,230px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item:first-child { border-top:0; }
+    .monitor-item:hover { background:var(--panel-soft); }
+    .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
+    .ccat { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cmk { width:6px; height:6px; flex:0 0 auto; border-radius:50%; }
+    .cmk.enf { background:var(--green); }
+    .cmk.oth { border:1px solid var(--muted); }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .cstatus { flex:0 0 auto; border-radius:999px; border:1px solid transparent; padding:2px 7px; font-size:.7rem; font-weight:700; letter-spacing:0; }
+    .status-hard-gate { background:#EDF4EF; border-color:#C5D9CC; color:#2E5C3E; }
+    .status-conditional-gate { background:#FBF4E8; border-color:#E8D4A6; color:#7D5E25; }
+    .status-external-control { background:#FAEEED; border-color:#E8C1BD; color:#8B3730; }
+    .status-working-agreement { background:#F0ECE8; border-color:#D5CEC6; color:#5A4F44; }
+    .status-future-control { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
+    .monitor-item.disabled { opacity:.55; }
+    .monitor-item.active { background:var(--panel-soft); }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 384px; gap:22px; align-items:start; margin:18px 0 0; }
+    .detail { position:sticky; top:24px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; overflow-y:auto; max-height:calc(100vh - 48px); }
+    .mempty { color:var(--muted); font-size:.88rem; line-height:1.6; margin:0; padding:22px; }
+    .detail .mbar, .detail .mbody { display:none; }
+    .detail.has-item .mbar { display:block; }
+    .detail.has-item .mbody { display:block; }
+    .detail.has-item .mempty { display:none; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.5); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:50; }
+    .mbar { display:block; height:4px; width:100%; }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; display:none; }
+    .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0 36px 0 0; }
+    .mname { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:1.2rem; letter-spacing:0; line-height:1.28; margin:8px 0 0; }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.8rem; color:var(--ink); }
+    @media (prefers-reduced-motion: reduce) { .detail, .backdrop { transition:none; } }
+    @media (max-width:1000px) {
+      .layout { grid-template-columns:1fr; }
+      .detail { position:fixed; top:0; right:0; bottom:0; left:auto; width:min(440px,92vw); max-height:none; border-radius:0; border:0; border-left:1px solid var(--line); transform:translateX(100%); transition:transform .22s ease; z-index:51; }
+      .detail.show { transform:translateX(0); box-shadow:-18px 0 48px rgba(24,24,27,.22); }
+      .mclose { display:block; }
+      .backdrop.show { opacity:1; pointer-events:auto; }
+    }
+    @media (max-width:760px) {
+      main { padding:18px 12px 36px; }
+      .topnav { margin-bottom:18px; gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
+      .hero { font-size:1.36rem; }
+      .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav">
+      <a href="guardrail-monitor.html">Guardrails</a>
+      <a href="application-monitor.html">Development rules</a>
+      <a class="here" aria-current="page">Project rules</a>
+      <a href="application-requirements.html">Requirements</a>
+      <a href="application-features.html">Features</a>
+      <a href="application-architecture.html">Architecture</a>
+      <a href="reviews.html">Reviews</a>
+    </nav>
+    <header class="pagehead">
+      <p class="eyebrow">Project rules</p>
+      <h1 class="hero">Project Rules</h1>
+    </header>
+    <div class="layout">
+    <div class="registry">
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="Hard gate" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Dev Container build</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Implementation component contract" data-rule="Implementation component directories must be declared with a stack and check command before product code is added." data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Implementation component contract</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Backend lint and tests</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Frontend build</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="Conditional gate" data-note="Runs only when docker is available.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Compose config validation</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Visualization</span>
+              <span class="cnm">Application monitor freshness</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+      </div>
+    </div>
+    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Control" data-l-note="Note">
+      <p class="mempty" id="mempty">Select a guardrail to see its rule and how it is enforced.</p>
+      <span class="mbar" id="mbar"></span>
+      <div class="mbody">
+        <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
+        <p class="meb" id="meb"></p>
+        <h3 class="mname" id="mnm"></h3>
+        <p class="mrule" id="mrl"></p>
+        <div class="mdiv"></div>
+        <dl class="mmeta" id="mmeta"></dl>
+      </div>
+    </aside>
+    </div>
+    <div class="backdrop" id="bd"></div>
+  </main>
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.monitor-item'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (md) {
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), note: md.getAttribute('data-l-note') };
+        function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
+        function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function openCard(c) {
+          var acc = c.getAttribute('data-acc');
+          mbar.style.background = acc;
+          meb.textContent = c.getAttribute('data-pil') + ' · ' + c.getAttribute('data-cat');
+          mnm.textContent = c.getAttribute('data-name');
+          mrl.textContent = c.getAttribute('data-rule') || '';
+          var h = '';
+          var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }
+          h += row(L.venue, esc(c.getAttribute('data-venue') || ''));
+          h += row(L.status, esc(c.getAttribute('data-status') || ''));
+          var note = c.getAttribute('data-note'); if (note) { h += row(L.note, esc(note)); }
+          mmeta.innerHTML = h;
+          cards.forEach(function (x) { x.classList.remove('active'); });
+          c.classList.add('active');
+          md.classList.add('has-item'); md.classList.add('show'); bd.classList.add('show');
+        }
+        function closeModal() { bd.classList.remove('show'); md.classList.remove('show'); }
+        cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+        bd.addEventListener('click', closeModal);
+        document.getElementById('mx').addEventListener('click', closeModal);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+        if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
+      }
+    })();
+  </script>
+</body>
+</html>
