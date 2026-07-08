@@ -201,11 +201,11 @@
               <span class="cnm">エージェント・コアコンテキスト manifest</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="エージェント文脈" data-name="コアコンテキストを実際に読む" data-rule="変更やレビューの前に、必読ファイルを実際に読んでいる。" data-enf="" data-venue="名目" data-status="作業合意" data-note="PR テンプレのチェックボックスのみ。manifest 整合は強制されるが、読了自体は強制されない。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="エージェント文脈" data-name="コアコンテキストをセッション開始時に配達" data-rule="決定的な SessionStart フックが、全 alwaysRead ファイルの全文をエージェントのコンテキストへ注入する — 必読はエージェントの選択ではなく構造として成立する。readWhenRelevant はトリガー付きで一覧され、必要時に読む。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="ゲートはフックフラグの有効と追跡スクリプトの存在を検証する。配達自体は Claude Code ハーネスが行う。他ハーネスはエミッター追加まで manifest 依存のまま。注入コストは従順な読了と同等。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">人間オーケストレーション</span>
-              <span class="cnm">コアコンテキストを実際に読む</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-working-agreement">作業合意</span></span>
+              <span class="cnm">コアコンテキストをセッション開始時に配達</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="決定記録" data-name="AI レビュー記録" data-rule="実装ファイルまたは統制ファイルを変更する PR は、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。" data-enf="scripts/guardrails/check-ai-review-record.ps1" data-venue="CI" data-status="強制ゲート" data-note="ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。このエントリを無効化すると、このゲート内で動く independent-ai-review も無効になる。">
               <span class="cbar" style="background:#BCE000"></span>

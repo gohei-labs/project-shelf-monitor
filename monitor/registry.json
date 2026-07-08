@@ -425,18 +425,18 @@
       "id": "core-context-reading",
       "enabled": true,
       "category": "agent-context",
-      "title": { "en": "Core-context actually read", "ja": "コアコンテキストを実際に読む" },
+      "title": { "en": "Core context delivered at session start", "ja": "コアコンテキストをセッション開始時に配達" },
       "rule": {
-        "en": "The agent has read the required-reading files before changing or reviewing.",
-        "ja": "変更やレビューの前に、必読ファイルを実際に読んでいる。"
+        "en": "The full content of every alwaysRead file is injected into the agent's context by a deterministic SessionStart hook - required reading happens by construction, not by the agent's choice. readWhenRelevant entries are listed with their triggers for on-demand reading.",
+        "ja": "決定的な SessionStart フックが、全 alwaysRead ファイルの全文をエージェントのコンテキストへ注入する — 必読はエージェントの選択ではなく構造として成立する。readWhenRelevant はトリガー付きで一覧され、必要時に読む。"
       },
       "pillar": "human-orchestration",
-      "status": "advisory",
-      "controlType": "working-agreement",
-      "runsAt": "honor",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
       "scope": "generic",
-      "enforcedBy": null,
-      "note": { "en": "PR-template checkbox only. Manifest integrity is gated, but reading itself is not.", "ja": "PR テンプレのチェックボックスのみ。manifest 整合は強制されるが、読了自体は強制されない。" }
+      "enforcedBy": { "script": "scripts/guardrails/check-agent-policy.ps1", "wiredIn": ["scripts/check.ps1"] },
+      "note": { "en": "The gate verifies the hook flag stays on and the tracked hook script exists; delivery itself is the Claude Code harness. Other harnesses still rely on the manifest until their emitters land. Injection costs the same tokens obedient reading would.", "ja": "ゲートはフックフラグの有効と追跡スクリプトの存在を検証する。配達自体は Claude Code ハーネスが行う。他ハーネスはエミッター追加まで manifest 依存のまま。注入コストは従順な読了と同等。" }
     },
     {
       "id": "ai-review-record",
