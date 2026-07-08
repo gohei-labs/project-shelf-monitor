@@ -207,11 +207,11 @@
               <span class="cnm">Core-context actually read</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="Decision records" data-name="AI review record" data-rule="Every implementation PR posts an AI review record comment." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="PR-template checkbox only; no CI gate yet.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="Decision records" data-name="AI review record" data-rule="A PR that changes implementation or control files must carry an AI Review Record (PR body or comment) that states its findings and cites the PR's CURRENT head commit - a record for an older commit fails until the review is re-run on the final code." data-enf="scripts/guardrails/check-ai-review-record.ps1" data-venue="CI" data-status="Hard gate" data-note="Guardrail tooling is deliberately NOT exempt: control code is exactly what needs independent eyes. Docs-only PRs are exempt.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Human orchestration</span>
               <span class="cnm">AI review record</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="Decision records" data-name="Decision before implementation" data-rule="Implementation PRs link a prior decision or spec record." data-enf="scripts/guardrails/check-spec-before-impl.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors.">
               <span class="cbar" style="background:#BCE000"></span>

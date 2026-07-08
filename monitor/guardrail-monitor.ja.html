@@ -207,11 +207,11 @@
               <span class="cnm">コアコンテキストを実際に読む</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-working-agreement">作業合意</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Human orchestration" data-cat="決定記録" data-name="AI レビュー記録" data-rule="実装 PR ごとに AI レビュー記録コメントを投稿する。" data-enf="" data-venue="名目" data-status="作業合意" data-note="PR テンプレのチェックボックスのみ。CI ゲートは未整備。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="決定記録" data-name="AI レビュー記録" data-rule="実装ファイルまたは統制ファイルを変更する PR は、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。" data-enf="scripts/guardrails/check-ai-review-record.ps1" data-venue="CI" data-status="強制ゲート" data-note="ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">人間オーケストレーション</span>
               <span class="cnm">AI レビュー記録</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-working-agreement">作業合意</span></span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Human orchestration" data-cat="決定記録" data-name="実装前の決定" data-rule="実装 PR は事前の決定／仕様記録をリンクする。" data-enf="scripts/guardrails/check-spec-before-impl.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="実装コード（apps/、src/、scripts/ 等。ガードレールツールは除外）の変更には番号付きの決定／変更記録が必要。git 失敗時は fail-closed。">
               <span class="cbar" style="background:#BCE000"></span>

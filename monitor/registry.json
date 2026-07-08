@@ -444,16 +444,16 @@
       "category": "decision-records",
       "title": { "en": "AI review record", "ja": "AI レビュー記録" },
       "rule": {
-        "en": "Every implementation PR posts an AI review record comment.",
-        "ja": "実装 PR ごとに AI レビュー記録コメントを投稿する。"
+        "en": "A PR that changes implementation or control files must carry an AI Review Record (PR body or comment) that states its findings and cites the PR's CURRENT head commit - a record for an older commit fails until the review is re-run on the final code.",
+        "ja": "実装ファイルまたは統制ファイルを変更する PR は、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。"
       },
       "pillar": "human-orchestration",
-      "status": "advisory",
-      "controlType": "working-agreement",
-      "runsAt": "honor",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
       "scope": "generic",
-      "enforcedBy": null,
-      "note": { "en": "PR-template checkbox only; no CI gate yet.", "ja": "PR テンプレのチェックボックスのみ。CI ゲートは未整備。" }
+      "enforcedBy": { "script": "scripts/guardrails/check-ai-review-record.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" },
+      "note": { "en": "Guardrail tooling is deliberately NOT exempt: control code is exactly what needs independent eyes. Docs-only PRs are exempt.", "ja": "ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。" }
     },
     {
       "id": "spec-before-implementation",
