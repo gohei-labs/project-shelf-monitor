@@ -158,6 +158,12 @@
               <span class="cnm">Agent permission boundary</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Agent pre-execution hooks" data-rule="Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Agent pre-execution hooks</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="Advisory" data-status="Future control" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>

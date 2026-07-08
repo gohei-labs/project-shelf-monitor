@@ -158,6 +158,12 @@
               <span class="cnm">エージェント権限境界</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="エージェント実行前フック" data-rule="決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">エージェント実行前フック</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="統制・ツール" data-name="ブランチ保護" data-rule="必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。" data-enf="" data-venue="方針" data-status="将来統制" data-note="現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">ガードレール</span>

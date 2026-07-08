@@ -145,6 +145,22 @@
       "enforcedBy": { "script": "scripts/guardrails/check-agent-policy.ps1", "wiredIn": ["scripts/check.ps1"] }
     },
     {
+      "id": "agent-pre-execution-hooks",
+      "enabled": true,
+      "category": "governance-meta",
+      "title": { "en": "Agent pre-execution hooks", "ja": "エージェント実行前フック" },
+      "rule": {
+        "en": "Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled.",
+        "ja": "決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-agent-policy.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
       "id": "bilingual-doc-pairs",
       "enabled": true,
       "category": "bilingual-docs",
