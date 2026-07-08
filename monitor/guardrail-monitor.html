@@ -146,6 +146,12 @@
               <span class="cnm">Secret / token leak scan</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Agent execution sandbox" data-rule="Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow." data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="External" data-status="External control" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Agent execution sandbox</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external-control">External control</span></span>
+            </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Project-specific control files must use visible paths such as agent-context/.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>

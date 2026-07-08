@@ -146,6 +146,12 @@
               <span class="cnm">秘密情報／トークン漏れスキャン</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-pil="Guardrails" data-cat="ビルド・環境" data-name="エージェント実行サンドボックス" data-rule="エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。" data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="外部" data-status="外部統制" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">エージェント実行サンドボックス</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">外部</span><span class="cstatus status-external-control">外部統制</span></span>
+            </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="root hidden path 方針" data-rule="root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。" data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="project-specific control files は agent-context/ のような見える path を使う。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">ガードレール</span>

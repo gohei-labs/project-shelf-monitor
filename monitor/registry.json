@@ -145,6 +145,22 @@
       "enforcedBy": { "script": "scripts/guardrails/check-agent-policy.ps1", "wiredIn": ["scripts/check.ps1"] }
     },
     {
+      "id": "agent-execution-sandbox",
+      "enabled": true,
+      "category": "build-environment",
+      "title": { "en": "Agent execution sandbox", "ja": "エージェント実行サンドボックス" },
+      "rule": {
+        "en": "Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow.",
+        "ja": "エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。"
+      },
+      "pillar": "guardrails",
+      "status": "external",
+      "controlType": "external-control",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-sandbox-config.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
       "id": "credential-exfiltration-boundary",
       "enabled": true,
       "category": "secrets",
