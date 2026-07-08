@@ -100,7 +100,7 @@
           <tr><td><code>agent-policy/policy.json</code></td><td>新規。ツール非依存の正本（deny ルール、保護パス、認証情報 denyRead、egress allowlist、hook 意図、allow ベースライン）。</td></tr>
           <tr><td><code>scripts/generate/build-agent-config.ps1</code></td><td>新規。ポリシーを <code>.claude/settings.json</code> に生成。<code>-Verify</code> で同期検査（monitor 生成器と同じパターン）。</td></tr>
           <tr><td><code>scripts/guardrails/check-agent-policy.ps1</code></td><td>新規。<code>agent-permission-boundary</code> ハードゲート。</td></tr>
-          <tr><td><code>.claude/settings.json</code></td><td>追跡＋生成に。deny 8件＋チーム allow ベースライン。</td></tr>
+          <tr><td><code>.claude/settings.json</code></td><td>追跡＋生成に。deny パターン（各破壊的フラグを引数のどの位置でも照合）＋チーム allow ベースライン。</td></tr>
           <tr><td><code>.gitignore</code></td><td><code>.claude/settings.json</code> のみ追跡（<code>.claude/*</code>＋否定）。ローカル状態は除外のまま。</td></tr>
           <tr><td><code>scripts/guardrails/check-root-hidden-paths.ps1</code></td><td><code>.claude</code> を文書化済みの追跡許可パスとして許可。</td></tr>
           <tr><td><code>monitor/registry.json</code></td><td><code>agent-permission-boundary</code> を登録（generic・hard-gate）。</td></tr>
@@ -114,7 +114,7 @@
     <section>
       <p class="kicker">リスク（Risk）</p>
       <div class="risk">
-        <p><code>.claude/settings.json</code> を追跡すると、広すぎる deny ルールが全員の正当なコマンドをブロックしうる。緩和策: deny ルールは破壊的なものに限定して狭く（force-push、リモートへの hard-reset、force-clean、force-branch-delete、<code>rm -rf /</code> と <code>~</code>）、allow ベースラインは従来のローカル設定から保持、各自の許可は除外の <code>.claude/settings.local.json</code> に残し、ゲートが同期を検査するのでファイルが正本から無言で乖離できない。<code>pwsh scripts/check.ps1</code> はパスする。</p>
+        <p><code>.claude/settings.json</code> を追跡すると、広すぎる deny ルールが全員の正当なコマンドをブロックしうる。緩和策: deny ルールは破壊的なものに限定して狭く（force-push、<code>git reset --hard</code>、force-clean、force-branch-delete、<code>rm -rf /</code> と <code>~</code>）、かつ各危険フラグを引数の<em>どの位置でも</em>照合するので並べ替えでは回避できない（例: <code>git push --force</code> だけでなく <code>git push origin main --force</code> も deny）。allow ベースラインは従来のローカル設定から保持、各自の許可は除外の <code>.claude/settings.local.json</code> に残し、ゲートが同期を検査するのでファイルが正本から無言で乖離できない。残る少数のエッジケース（短縮フラグの文字順違い <code>git clean -df</code> や並べ替えた <code>rm -fr /</code>）は、解決後のコマンドを検査する決定論的な PreToolUse フック（#64）に委ねる。<code>pwsh scripts/check.ps1</code> はパスする。</p>
       </div>
     </section>
 

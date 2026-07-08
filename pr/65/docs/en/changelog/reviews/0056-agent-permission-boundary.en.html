@@ -100,7 +100,7 @@
           <tr><td><code>agent-policy/policy.json</code></td><td>New. The tool-agnostic source of truth (deny rules, protected paths, credential denyRead, egress allowlist, hook intents, allow baseline).</td></tr>
           <tr><td><code>scripts/generate/build-agent-config.ps1</code></td><td>New. Compiles the policy into <code>.claude/settings.json</code>; <code>-Verify</code> mode checks sync (same pattern as the monitor generator).</td></tr>
           <tr><td><code>scripts/guardrails/check-agent-policy.ps1</code></td><td>New. The <code>agent-permission-boundary</code> hard gate.</td></tr>
-          <tr><td><code>.claude/settings.json</code></td><td>Now tracked and generated: 8 deny rules + the team allow baseline.</td></tr>
+          <tr><td><code>.claude/settings.json</code></td><td>Now tracked and generated: deny patterns (each destructive flag matched in any argument position) + the team allow baseline.</td></tr>
           <tr><td><code>.gitignore</code></td><td>Track only <code>.claude/settings.json</code> (<code>.claude/*</code> + negation); local state stays ignored.</td></tr>
           <tr><td><code>scripts/guardrails/check-root-hidden-paths.ps1</code></td><td>Allow <code>.claude</code> as a documented tracked hidden path.</td></tr>
           <tr><td><code>monitor/registry.json</code></td><td>Register <code>agent-permission-boundary</code> (generic, hard-gate).</td></tr>
@@ -114,7 +114,7 @@
     <section>
       <p class="kicker">Risk</p>
       <div class="risk">
-        <p>Tracking <code>.claude/settings.json</code> means a deny rule that is too broad could block a legitimate command for everyone. Mitigation: deny rules are narrow and destructive-only (force-push, hard-reset-to-remote, force-clean, force-branch-delete, <code>rm -rf /</code> and <code>~</code>); the allow baseline is preserved from the prior local config; per-user grants remain in the ignored <code>.claude/settings.local.json</code>; and the gate is in sync-checked so the file cannot silently drift from the policy. <code>pwsh scripts/check.ps1</code> passes.</p>
+        <p>Tracking <code>.claude/settings.json</code> means a deny rule that is too broad could block a legitimate command for everyone. Mitigation: deny rules are narrow and destructive-only (force-push, <code>git reset --hard</code>, force-clean, force-branch-delete, <code>rm -rf /</code> and <code>~</code>), and each dangerous flag is matched in <em>any</em> argument position so it cannot be evaded by reordering (for example <code>git push origin main --force</code> is denied, not only <code>git push --force</code>); the allow baseline is preserved from the prior local config; per-user grants remain in the ignored <code>.claude/settings.local.json</code>; and the gate is sync-checked so the file cannot silently drift from the policy. A few residual edge cases — combined short flags in a different letter order (<code>git clean -df</code>) or a reordered <code>rm -fr /</code> — are deferred to the deterministic PreToolUse hook (#64), which inspects the resolved command rather than its text. <code>pwsh scripts/check.ps1</code> passes.</p>
       </div>
     </section>
 
