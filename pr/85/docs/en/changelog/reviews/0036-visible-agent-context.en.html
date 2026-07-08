@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Review 0036 - Visible Agent Context</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.2; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">Review artifact 0036. Status: Draft for owner review. Date: 2026-06-17.</p>
+  <h1>Visible Agent Context</h1>
+  <p><span class="tag">Recommended</span><span class="tag">Governance</span><span class="tag">Agent Context</span></p>
+
+  <section>
+    <h2>Decision Summary</h2>
+    <p>Move project-specific control metadata out of root hidden paths and add a guardrail that fails on unapproved root dot-prefixed paths.</p>
+  </section>
+
+  <section>
+    <h2>What The Owner Needs To Approve</h2>
+    <div class="box">Approve `agent-context/` as the shared visible agent manifest location, removal of the obsolete secret-scan allowlist, and the policy that root hidden paths require explicit tool or ecosystem reasons.</div>
+  </section>
+
+  <section>
+    <h2>Recommendation</h2>
+    <p>Proceed. This makes the repository easier to inspect and turns the naming rule into an executable check instead of a style preference.</p>
+  </section>
+
+  <section>
+    <h2>Risks And Mitigations</h2>
+    <table>
+      <tr><th>Risk</th><th>Mitigation</th></tr>
+      <tr><td>Agents still look for the old hidden manifest.</td><td>Add visible adapter files `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` that all point to `agent-context/agent-core-context.json`.</td></tr>
+      <tr><td>A future contributor adds a project-specific dotfile by habit.</td><td>`scripts/guardrails/check-root-hidden-paths.ps1` fails unless the path is explicitly allowed.</td></tr>
+      <tr><td>Local secrets are confused with tracked control files.</td><td>The policy allows ignored local runtime files such as `.env` while blocking tracked or unignored hidden control paths.</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>Term</th><th>Use here</th></tr>
+      <tr><td>Root hidden path</td><td>A repository-root file or directory whose name starts with a dot.</td></tr>
+      <tr><td>Adapter file</td><td>A thin tool-specific entry point that redirects to the shared manifest without duplicating rules.</td></tr>
+      <tr><td>Project-specific control metadata</td><td>Repository-owned data that controls agent behavior or guardrail checks.</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>The runtime does not change. This adds a PowerShell guardrail to the existing local and CI check suite; it does not require a new host tool or development environment.</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><code>docs/en/changelog/0042-visible-agent-context.md</code></td><td>Implementation record for this layout change.</td></tr>
+      <tr><td><code>docs/en/rules/observability/repository-layout.md</code></td><td>Policy for visible project-specific paths and allowed root hidden paths.</td></tr>
+      <tr><td><code>scripts/guardrails/check-root-hidden-paths.ps1</code></td><td>Executable gate for the hidden-path policy.</td></tr>
+      <tr><td><code>monitor/registry.json</code></td><td>Machine-readable guardrail registry entry.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Next Step</h2>
+    <p>Regenerate <code>monitor/*.html</code> and run <code>pwsh scripts/check.ps1</code>.</p>
+  </section>
+</main>
+</body>
+</html>
