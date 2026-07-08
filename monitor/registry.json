@@ -129,6 +129,22 @@
       "enforcedBy": { "script": "scripts/guardrails/check-registry.ps1", "wiredIn": ["scripts/check.ps1"] }
     },
     {
+      "id": "agent-permission-boundary",
+      "enabled": true,
+      "category": "governance-meta",
+      "title": { "en": "Agent permission boundary", "ja": "エージェント権限境界" },
+      "rule": {
+        "en": "An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy.",
+        "ja": "AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-agent-policy.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
       "id": "bilingual-doc-pairs",
       "enabled": true,
       "category": "bilingual-docs",
