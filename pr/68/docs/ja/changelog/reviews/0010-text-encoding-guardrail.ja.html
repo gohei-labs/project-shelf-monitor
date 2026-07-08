@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Text Encoding Guardrail Review</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #5f687c;
+      --line: #d9deea;
+      --blue: #2557b8;
+      --green: #0f7a5f;
+      --amber: #985a00;
+      --red: #b42318;
+      --gray: #596175;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    code {
+      background: #eef1f7;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.92em;
+    }
+
+    ul {
+      margin: 8px 0 0 20px;
+      padding: 0;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin: 18px 0;
+    }
+
+    section,
+    .box {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .decision {
+      border-left: 5px solid var(--blue);
+    }
+
+    .risk {
+      border-left: 5px solid var(--amber);
+    }
+
+    .ok {
+      border-left: 5px solid var(--green);
+    }
+
+    .bad {
+      border-left: 5px solid var(--red);
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .label.approve {
+      background: var(--blue);
+    }
+
+    .label.safe {
+      background: var(--green);
+    }
+
+    .label.risk {
+      background: var(--amber);
+    }
+
+    .label.stop {
+      background: var(--red);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcff;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #eef2f8;
+    }
+
+    @media (max-width: 760px) {
+      .flow {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Text Encoding Guardrail Review</h1>
+      <p class="meta">文字化けを「気をつける」ではなく、標準方針・スクリプト・CIで止めるためのレビュー資料。</p>
+    </header>
+
+    <section class="decision">
+      <span class="label approve">Approve These Decisions</span>
+      <h2>今回承認してほしいこと</h2>
+      <ul>
+        <li>リポジトリ内のテキストファイル標準を <code>UTF-8 without BOM</code> に固定する。</li>
+        <li>PowerShell 7 を、このリポジトリでの推奨シェルにする。ただし、このPRでは必須化しない。</li>
+        <li>Windows PowerShell 5.1 では、読み書き時の encoding 明示と、<code>.ps1</code> 内の非ASCIIリテラル回避を必須にする。</li>
+        <li><code>scripts/check-text-encoding.ps1</code> を標準チェックに組み込み、文字化けをCIで止める。</li>
+      </ul>
+    </section>
+
+    <div class="grid">
+      <section class="ok">
+        <span class="label safe">Preventable</span>
+        <h2>避けられるもの</h2>
+        <p>ファイル自体が UTF-8 ではない、BOM が混ざる、UTF-16で保存される、文字化け済みの文字列がコミットされる、という問題はチェックで止められます。</p>
+      </section>
+
+      <section class="risk">
+        <span class="label risk">Display Only</span>
+        <h2>残るもの</h2>
+        <p>Git が日本語パスを <code>\347...</code> のように表示する、PowerShell 5.1 が <code>-Encoding UTF8</code> なしで誤読する、といった表示上の問題は残ります。これは破損と区別します。</p>
+      </section>
+
+      <section class="bad">
+        <span class="label stop">Stop In CI</span>
+        <h2>止める条件</h2>
+        <p>無効なUTF-8、UTF-8 BOM、UTF-16 BOM、典型的な文字化けマーカーが追跡対象テキストに入った場合、標準チェックを失敗させます。</p>
+      </section>
+    </div>
+
+    <section>
+      <h2>原因と対策の対応表</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>原因</th>
+            <th>起きること</th>
+            <th>対策</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Windows PowerShell 5.1 の既定読み込み</td>
+            <td>BOMなしUTF-8の日本語が文字化けして見える。</td>
+            <td><code>Get-Content -Encoding UTF8</code> を必須にし、PowerShell 7 を推奨する。</td>
+          </tr>
+          <tr>
+            <td>Windows PowerShell 5.1 の既定書き込み</td>
+            <td><code>Set-Content</code>、<code>Out-File</code>、<code>&gt;</code> で別の文字コードになる。</td>
+            <td>書き込み時に encoding を明示し、CIで非UTF-8を検出する。</td>
+          </tr>
+          <tr>
+            <td><code>$OutputEncoding</code> が US-ASCII</td>
+            <td>外部コマンドへ渡す日本語が壊れる可能性がある。</td>
+            <td>日本語をパイプで渡す運用を避け、必要ならUTF-8を明示する。</td>
+          </tr>
+          <tr>
+            <td>Git の <code>core.quotePath</code></td>
+            <td>日本語ファイル名がエスケープ表示される。</td>
+            <td>人間向け確認では <code>git -c core.quotepath=false ...</code> を使う。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>導入するガードレール</h2>
+      <div class="flow">
+        <div class="step">
+          <strong>1. Editor policy</strong>
+          <p><code>.editorconfig</code> で UTF-8、LF、final newline を指定。</p>
+        </div>
+        <div class="step">
+          <strong>2. Encoding check</strong>
+          <p><code>scripts/check-text-encoding.ps1</code> で追跡対象テキストを検査。</p>
+        </div>
+        <div class="step">
+          <strong>3. Standard check</strong>
+          <p><code>scripts/check.ps1</code> から encoding check を必ず実行。</p>
+        </div>
+        <div class="step">
+          <strong>4. Spec</strong>
+          <p>英語版・日本語版の仕様に、安全な読み書きと診断方法を記録。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="risk">
+      <span class="label risk">PowerShell 7</span>
+      <h2>バージョンアップの扱い</h2>
+      <p>PowerShell 7.6.2 は公式MSIでインストール済みです。<code>C:\Program Files\PowerShell\7\pwsh.exe</code> から起動でき、<code>scripts/check.ps1</code> も PowerShell 7 で通っています。</p>
+      <p>ただし、既存のターミナルやエージェントプロセスは、再起動するまで更新後の <code>PATH</code> を拾わないことがあります。その間は絶対パスで <code>pwsh.exe</code> を呼びます。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <span class="label safe">Terminology Check</span>
+      <h2>標準用語チェック</h2>
+      <ul>
+        <li><code>UTF-8 without BOM</code>: リポジトリの標準文字コードとして使う一般的な表現。</li>
+        <li><code>mojibake</code>: 文字化けを指す一般的な技術用語。</li>
+        <li><code>encoding</code>: 文字コード、読み書き方式を指す標準用語。</li>
+        <li><code>core.quotePath</code>: Git の非ASCIIパス表示を制御する正式な設定名。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>References / 参考にした一次情報</h2>
+      <ul>
+        <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_character_encoding">Microsoft PowerShell about_Character_Encoding</a></li>
+        <li><a href="https://git-scm.com/docs/git-config#Documentation/git-config.txt-corequotePath">Git core.quotePath documentation</a></li>
+      </ul>
+    </section>
+  <section data-guardrail="standard-terminology">
+  <h2>Terminology Check</h2>
+  <p>This migrated review artifact keeps its original wording. Any future substantive edit should use standard documentation and engineering terminology.</p>
+</section>
+<section data-guardrail="runtime-boundary">
+  <h2>Runtime Boundary Check</h2>
+  <p>This review artifact migration only changes documentation location and guardrail coverage. It does not change runtime services, storage, credentials, host setup, or product data.</p>
+</section>
+<section data-guardrail="primary-references">
+  <h2>References</h2>
+  <p>References: Not applicable. This is a path migration of an existing review artifact.</p>
+</section>
+</main>
+</body>
+</html>
