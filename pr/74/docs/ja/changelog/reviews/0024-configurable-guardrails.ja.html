@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0024: 設定可能なガードレール</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .approval { border-left: 5px solid var(--blue); background: #eff6ff; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>設定可能なガードレール</h1>
+      <p class="lead">この成果物は、各ガードレールをレジストリの <code>enabled</code> フィールドで<strong>プロジェクトごとに on/off</strong> できるようにし、プレイブックを他リポジトリへきれいに移植できるようにすることの承認を求めます。ただし「無効化は可視で理由付きの判断であり、黙った迂回ではない」という原則は保ちます。</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>承認のお願い（Requested Approval）</h2>
+      <ol>
+        <li><code>playbook/registry.json</code> の各ゲートに <code>enabled</code>（既定 <code>true</code>）を追加。<code>enabled: false</code> にする場合は空でない <code>disabledReason</code> を必須とする。</li>
+        <li><code>scripts/check.ps1</code> がレジストリを読み、無効ゲートをスキップする。レジストリが読めない場合は全ゲートを実行（fail-closed＝エラー時に飛ばさない）。</li>
+        <li><code>scripts/check-registry.ps1</code> がトグルと理由を検証し、地図は無効ゲートをグレー＋バッジ＋件数で表示。トグルはコミット済みレジストリ上でのみ行い、ブラウザ上の切替スイッチは無い。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>変更内容（What Changed）</h2>
+      <table>
+        <thead><tr><th>対象</th><th>変更後の役割</th></tr></thead>
+        <tbody>
+          <tr><td><code>playbook/registry.json</code></td><td>on/off のスイッチ盤。各ゲートが <code>enabled</code>（無効時は <code>disabledReason</code>）を持つ。</td></tr>
+          <tr><td><code>scripts/check.ps1</code></td><td>レジストリを読み、無効ゲートをスキップ。読めない時は fail-closed で全実行。</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td><code>enabled</code> を検証し、無効時は理由を必須化、無効エントリには実ゲート要求を緩和。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>無効ゲートをグレー＋バッジ＋理由＋件数で表示。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>リスク（Risk）</h2>
+      <p>明白なリスクは、トグルが迂回手段になること（「ゲートを切ればいい」）。これは 3 点で抑える：無効化には記録された <code>disabledReason</code> が必須（強制）、変更はコミット済みレジストリと git レビューで可視、地図は無効ゲートを件数付きで明示。現状の制限：CI の別ジョブ <code>human-review-artifact</code> はゲートを <code>check.ps1</code> 経由でなく直接実行するため、それらを無効化してもまだ当該ジョブは止まらない。今日は全ゲートが有効なので挙動は不変。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>用語チェック（Terminology Check / 標準用語チェック）</h2>
+      <table>
+        <thead><tr><th>用語</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>enabled トグル</td><td>このリポジトリでガードレールを on/off するプロジェクト単位の真偽値（<code>enabled</code>）。</td></tr>
+          <tr><td>fail-closed</td><td>エラー時（ここではレジストリが読めない時）は、飛ばさず全ゲートを実行するのが安全側の既定。</td></tr>
+          <tr><td>単一の正（Single source of truth）</td><td>どのゲートが走るかはレジストリだけが決め、チェック実行器と地図が共にそれを読む。</td></tr>
+          <tr><td>無効理由（disabled reason）</td><td>ガードレールを切る際に必須で記録される根拠。レジストリと地図に可視で残す。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>ランタイム境界チェック（Runtime Boundary Check）</h2>
+      <p>本変更はガードレール・ツールの変更であり、プロダクトではない。設定フィールドを 1 つ足し、PowerShell のチェック実行器と地図生成器にそれを読ませるだけ。新たなランタイムは導入しない：ローカル事前チェック（PowerShell）、CI の <code>check</code> ジョブ、Dev Container の Bash レーンは、いずれも同じ <code>scripts/check.ps1</code> を実行するのでトグルを尊重する。</p>
+      <p>オーナー認識のための境界注記：CI の <code>human-review-artifact</code> ジョブはレビュー成果物ゲートを <code>check.ps1</code> 経由でなく直接呼ぶため、まだレジストリのトグルを読まない。権威ある環境は引き続き Dev Container と Docker Compose。</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考情報（References）</h2>
+      <table>
+        <thead><tr><th>参照</th><th>裏付ける内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>playbook/registry.json</code></td><td><code>enabled</code> / <code>disabledReason</code> のスイッチ盤（正本）。</td></tr>
+          <tr><td><code>scripts/check.ps1</code></td><td>レジストリを読み無効ゲートをスキップ（fail-closed）。</td></tr>
+          <tr><td><code>scripts/check-registry.ps1</code></td><td>トグルを検証し、無効時は理由を必須化。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>地図に無効状態を描画。</td></tr>
+          <tr><td><code>docs/ja/changelog/0030-configurable-guardrails.md</code></td><td>無効パステストを含む変更ノート。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
