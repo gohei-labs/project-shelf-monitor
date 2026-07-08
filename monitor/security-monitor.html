@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project rules</title>
+  <title>Security monitor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -102,56 +102,56 @@
   <main>
     <nav class="topnav">
       <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="security-monitor.html">Security</a>
+      <a class="here" aria-current="page">Security</a>
       <a href="application-monitor.html">Development rules</a>
-      <a class="here" aria-current="page">Project rules</a>
+      <a href="project-rules.html">Project rules</a>
       <a href="application-requirements.html">Requirements</a>
       <a href="application-features.html">Features</a>
       <a href="application-architecture.html">Architecture</a>
       <a href="reviews.html">Reviews</a>
     </nav>
     <header class="pagehead">
-      <p class="eyebrow">Project rules</p>
-      <h1 class="hero">Project Rules</h1>
+      <p class="eyebrow">Security monitor</p>
+      <h1 class="hero">Security Monitor</h1>
     </header>
     <div class="layout">
     <div class="registry">
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Credential exfiltration boundary" data-rule="The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes)." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
-              <span class="cnm">Dev Container build</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Implementation component contract" data-rule="Implementation component directories must be declared with a stack and check command before product code is added." data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Implementation component contract</span>
+              <span class="cnm">Credential exfiltration boundary</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>
-              <span class="cnm">Backend lint and tests</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Frontend build</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="Conditional gate" data-note="Runs only when docker is available.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Compose config validation</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Visualization</span>
-              <span class="cnm">Application monitor freshness</span>
+              <span class="cnm">Secret / token leak scan</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Agent execution sandbox" data-rule="Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow." data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="External" data-status="External control" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Agent execution sandbox</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external-control">External control</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Agent permission boundary" data-rule="An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Agent permission boundary</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Agent pre-execution hooks" data-rule="Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Agent pre-execution hooks</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="Advisory" data-status="Future control" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Branch protection</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
       </div>
     </div>

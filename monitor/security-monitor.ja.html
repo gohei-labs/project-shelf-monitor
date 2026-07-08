@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project rules</title>
+  <title>セキュリティモニター</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -101,62 +101,62 @@
 <body>
   <main>
     <nav class="topnav">
-      <a href="guardrail-monitor.html">Guardrails</a>
-      <a href="security-monitor.html">Security</a>
-      <a href="application-monitor.html">Development rules</a>
-      <a class="here" aria-current="page">Project rules</a>
-      <a href="application-requirements.html">Requirements</a>
-      <a href="application-features.html">Features</a>
-      <a href="application-architecture.html">Architecture</a>
-      <a href="reviews.html">Reviews</a>
+      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a class="here" aria-current="page">セキュリティ</a>
+      <a href="application-monitor.ja.html">開発ルール</a>
+      <a href="project-rules.ja.html">プロジェクトルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a href="application-features.ja.html">機能</a>
+      <a href="application-architecture.ja.html">アーキテクチャ</a>
+      <a href="reviews.ja.html">レビュー</a>
     </nav>
     <header class="pagehead">
-      <p class="eyebrow">Project rules</p>
-      <h1 class="hero">Project Rules</h1>
+      <p class="eyebrow">Security monitor</p>
+      <h1 class="hero">セキュリティモニター</h1>
     </header>
     <div class="layout">
     <div class="registry">
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="秘密情報管理" data-name="認証情報の持ち出し境界" data-rule="コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Dev Container build</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">認証情報の持ち出し境界</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Implementation component contract" data-rule="Implementation component directories must be declared with a stack and check command before product code is added." data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="秘密情報管理" data-name="秘密情報／トークン漏れスキャン" data-rule="差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。" data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="変更ファイルの内容と PR 本文を既知のトークン形状で走査。CI は GUARDRAIL_PULL_REQUEST_BODY 経由で PR 本文を渡す。git 失敗時は fail-closed。値は伏字化。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Implementation component contract</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">秘密情報／トークン漏れスキャン</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-pil="Guardrails" data-cat="ビルド・環境" data-name="エージェント実行サンドボックス" data-rule="エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。" data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="外部" data-status="外部統制" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Backend lint and tests</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">エージェント実行サンドボックス</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">外部</span><span class="cstatus status-external-control">外部統制</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="エージェント権限境界" data-rule="AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Frontend build</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">エージェント権限境界</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="Conditional gate" data-note="Runs only when docker is available.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="エージェント実行前フック" data-rule="決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Compose config validation</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">エージェント実行前フック</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Application monitoring" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="統制・ツール" data-name="ブランチ保護" data-rule="必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。" data-enf="" data-venue="方針" data-status="将来統制" data-note="現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Visualization</span>
-              <span class="cnm">Application monitor freshness</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+              <span class="ccat">ガードレール</span>
+              <span class="cnm">ブランチ保護</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
             </button>
       </div>
     </div>
-    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Control" data-l-note="Note">
-      <p class="mempty" id="mempty">Select a guardrail to see its rule and how it is enforced.</p>
+    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="強制元" data-l-venue="実行場所" data-l-status="分類" data-l-note="備考">
+      <p class="mempty" id="mempty">ガードレールを選ぶと、ルールと強制方法が右側に表示されます。</p>
       <span class="mbar" id="mbar"></span>
       <div class="mbody">
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>

@@ -131,6 +131,7 @@
     {
       "id": "agent-permission-boundary",
       "enabled": true,
+      "domain": "security",
       "category": "governance-meta",
       "title": { "en": "Agent permission boundary", "ja": "エージェント権限境界" },
       "rule": {
@@ -147,6 +148,7 @@
     {
       "id": "agent-execution-sandbox",
       "enabled": true,
+      "domain": "security",
       "category": "build-environment",
       "title": { "en": "Agent execution sandbox", "ja": "エージェント実行サンドボックス" },
       "rule": {
@@ -163,6 +165,7 @@
     {
       "id": "credential-exfiltration-boundary",
       "enabled": true,
+      "domain": "security",
       "category": "secrets",
       "title": { "en": "Credential exfiltration boundary", "ja": "認証情報の持ち出し境界" },
       "rule": {
@@ -179,6 +182,7 @@
     {
       "id": "agent-pre-execution-hooks",
       "enabled": true,
+      "domain": "security",
       "category": "governance-meta",
       "title": { "en": "Agent pre-execution hooks", "ja": "エージェント実行前フック" },
       "rule": {
@@ -471,6 +475,7 @@
     {
       "id": "secret-scan",
       "enabled": true,
+      "domain": "security",
       "category": "secrets",
       "title": { "en": "Secret / token leak scan", "ja": "秘密情報／トークン漏れスキャン" },
       "rule": {
@@ -542,6 +547,7 @@
     {
       "id": "branch-protection",
       "enabled": true,
+      "domain": "security",
       "category": "governance-meta",
       "title": { "en": "Branch protection", "ja": "ブランチ保護" },
       "rule": {

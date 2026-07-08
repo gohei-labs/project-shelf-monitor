@@ -102,6 +102,7 @@
   <main>
     <nav class="topnav">
       <a class="here" aria-current="page">ガードレール</a>
+      <a href="security-monitor.ja.html">セキュリティ</a>
       <a href="application-monitor.ja.html">開発ルール</a>
       <a href="project-rules.ja.html">プロジェクトルール</a>
       <a href="application-requirements.ja.html">要求</a>
@@ -134,24 +135,6 @@
               <span class="cnm">リポジトリ衛生</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="秘密情報管理" data-name="認証情報の持ち出し境界" data-rule="コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">認証情報の持ち出し境界</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="秘密情報管理" data-name="秘密情報／トークン漏れスキャン" data-rule="差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。" data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="変更ファイルの内容と PR 本文を既知のトークン形状で走査。CI は GUARDRAIL_PULL_REQUEST_BODY 経由で PR 本文を渡す。git 失敗時は fail-closed。値は伏字化。">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">秘密情報／トークン漏れスキャン</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-pil="Guardrails" data-cat="ビルド・環境" data-name="エージェント実行サンドボックス" data-rule="エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。" data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="外部" data-status="外部統制" data-note="">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">エージェント実行サンドボックス</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">外部</span><span class="cstatus status-external-control">外部統制</span></span>
-            </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="root hidden path 方針" data-rule="root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。" data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="project-specific control files は agent-context/ のような見える path を使う。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">ガードレール</span>
@@ -163,24 +146,6 @@
               <span class="ccat">ガードレール</span>
               <span class="cnm">ガードレール・レジストリ整合</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="エージェント権限境界" data-rule="AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">エージェント権限境界</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="エージェント実行前フック" data-rule="決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">エージェント実行前フック</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="統制・ツール" data-name="ブランチ保護" data-rule="必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。" data-enf="" data-venue="方針" data-status="将来統制" data-note="現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">ブランチ保護</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="二言語ドキュメント" data-name="二言語ドキュメント対" data-rule="docs/en と docs/ja が同じ相対 Markdown パス集合を持つ。" data-enf="scripts/guardrails/check-bilingual-doc-pairs.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
