@@ -261,23 +261,6 @@
       }
     },
     {
-      "id": "review-artifact-runtime-boundary",
-      "enabled": false,
-      "disabledReason": "Paused by review 0048: the owner found the Runtime Boundary Check unclear and removed it from the review template; re-enable if a runtime/tooling assumption mistake recurs.",
-      "category": "review-artifacts",
-      "title": { "en": "Review artifact runtime boundary", "ja": "レビュー成果物のランタイム境界" },
-      "rule": {
-        "en": "A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section.",
-        "ja": "ランタイムやツールに触れる変更済みレビュー成果物に、ランタイム境界チェックの節がある。"
-      },
-      "pillar": "visualization",
-      "status": "active",
-      "controlType": "hard-gate",
-      "runsAt": "both",
-      "scope": "generic",
-      "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-runtime-boundary.ps1", "wiredIn": ["scripts/check.ps1", ".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
-    },
-    {
       "id": "human-review-artifact",
       "enabled": true,
       "category": "review-artifacts",

@@ -206,12 +206,6 @@
               <span class="cnm">Browser-visible control surface</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
-            <button type="button" class="monitor-item disabled" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Review artifact runtime boundary" data-rule="A changed review artifact that mentions runtime or tooling carries a Runtime Boundary Check section." data-enf="scripts/guardrails/check-review-artifact-runtime-boundary.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Disabled: Paused by review 0048: the owner found the Runtime Boundary Check unclear and removed it from the review template; re-enable if a runtime/tooling assumption mistake recurs.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Visualization</span>
-              <span class="cnm">Review artifact runtime boundary</span>
-              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Disabled</span><span class="cstatus status-hard-gate">Hard gate</span></span>
-            </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="Review artifacts" data-name="Human review artifact link" data-rule="PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact." data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Visualization</span>
