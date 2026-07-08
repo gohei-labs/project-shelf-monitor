@@ -453,7 +453,24 @@
       "runsAt": "ci",
       "scope": "generic",
       "enforcedBy": { "script": "scripts/guardrails/check-ai-review-record.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" },
-      "note": { "en": "Guardrail tooling is deliberately NOT exempt: control code is exactly what needs independent eyes. Docs-only PRs are exempt.", "ja": "ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。" }
+      "note": { "en": "Guardrail tooling is deliberately NOT exempt: control code is exactly what needs independent eyes. Docs-only PRs are exempt. Disabling this entry also disables independent-ai-review, which runs inside this gate.", "ja": "ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。このエントリを無効化すると、このゲート内で動く independent-ai-review も無効になる。" }
+    },
+    {
+      "id": "independent-ai-review",
+      "enabled": true,
+      "category": "decision-records",
+      "title": { "en": "Independent AI review", "ja": "独立 AI レビュー" },
+      "rule": {
+        "en": "The AI Review Record must establish independence: the same record section declares BOTH the authoring context and the reviewing context, and they differ - the context that wrote a change may not review its own diff. Declared identities are structured attestation in the audit record, not cryptographic proof.",
+        "ja": "AI レビュー記録は独立性を立証しなければならない: 同一の記録セクションに作成コンテキストとレビューコンテキストの【両方】を宣言し、両者が異なること。変更を書いたコンテキストは自分の差分をレビューできない。宣言された識別子は監査記録上の構造化された表明であり、暗号学的証明ではない。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-ai-review-record.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" },
+      "note": { "en": "Enforced inside the ai-review-record gate on the record section that passes the freshness check. Disabling this entry relaxes independence while keeping the record requirement.", "ja": "鮮度チェックを通過した記録セクションに対して ai-review-record ゲート内で強制する。このエントリを無効化すると、記録要求は保ったまま独立性のみ緩和される。" }
     },
     {
       "id": "spec-before-implementation",
