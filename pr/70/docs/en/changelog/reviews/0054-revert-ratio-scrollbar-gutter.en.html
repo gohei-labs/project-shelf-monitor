@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0054: Revert the ratio; stabilize the scrollbar gutter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.6rem; line-height:1.08; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"\2014"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0054</span><span><b>Draft</b></span><span><b>2026-06-18</b></span></p>
+      <h1>Revert the ratio; stabilize the scrollbar gutter</h1>
+      <p class="lead">This review asks for approval to <b>revert the narrow-list / wide-card ratio (review 0053) back to the original layout, and to stop the page from shifting sideways depending on whether a scrollbar is present</b>.</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>Revert the list / detail ratio from review 0053.</b> The non-review pages (guardrail, development rules, requirements, features) go back to the original master-detail proportion: a wide list on the left + a fixed 384px detail card on the right. The flipped narrow-list / wide-card felt off to the owner. The 1440px content width (review 0052) is kept, and the list rows are restored to their fuller form (the venue, components, and priority are back in the row).</li>
+        <li><b>Stabilize the scrollbar gutter.</b> Add <code>scrollbar-gutter: stable</code> to the page root on every monitor page, so a page that has a vertical scrollbar (e.g. the guardrail monitor, many items) and a page that does not (e.g. development rules, few items) keep their centered content at the same horizontal position. Previously the content shifted left/right between pages.</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <table>
+        <thead><tr><th>Changed file</th><th>What changed</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/generate/build-guardrail-monitor.ps1</code></td><td>Reverted <code>.layout</code> and row grid to the original; restored the venue in the row; added <code>scrollbar-gutter: stable</code>.</td></tr>
+          <tr><td><code>scripts/generate/build-application-monitor.ps1</code></td><td>Same revert (layout, row grid, foot text restored); added <code>scrollbar-gutter: stable</code>.</td></tr>
+          <tr><td><code>scripts/generate/build-reviews-page.ps1</code></td><td>Added <code>scrollbar-gutter: stable</code> (layout otherwise unchanged).</td></tr>
+          <tr><td><code>monitor/*.html</code></td><td>Regenerated all pages in both languages.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>Low; presentation only. <code>scrollbar-gutter</code> is supported in current Chrome, Edge, Firefox, and Safari 16+; older engines simply ignore it and keep the previous slight shift, so there is no hard breakage. Verified: with the gutter reserved, the centered content sits at the same left offset on a page with a scrollbar and a page without one.</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>This supersedes the ratio decision in review 0053; the rest of 0050-0052 stands.</li>
+        <li>The reviews layout (narrow list + wide reading pane) is unchanged.</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>Did this artifact use industry-standard terms, and map any ad hoc wording to those terms?</p>
+        <table>
+          <thead><tr><th>Wording in this artifact</th><th>Standard term / meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Scrollbar gutter</td><td><code>scrollbar-gutter</code>: the space a layout reserves for a scrollbar (CSS Overflow Module).</td></tr>
+            <tr><td>Page shifting sideways</td><td>Layout shift: content jumping position between states (here, scrollbar present vs absent).</td></tr>
+            <tr><td>Revert</td><td>Roll back a prior change to its earlier state.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>The scrollbar fix relies on a documented CSS property; the rest follows the project's own records.</p>
+        <table>
+          <thead><tr><th>Primary source consulted</th><th>What it supports</th></tr></thead>
+          <tbody>
+            <tr><td>MDN <code>scrollbar-gutter</code>: https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter</td><td>That <code>stable</code> reserves scrollbar space and prevents the layout shift, plus its browser support.</td></tr>
+            <tr><td>Review 0053 (list / detail ratio)</td><td>The ratio decision this review reverts.</td></tr>
+            <tr><td>Review 0050 / 0052 (monitor unification + width)</td><td>The layout and width this returns to.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf &middot; owner-facing review artifact</p>
+  </main>
+</body>
+</html>
