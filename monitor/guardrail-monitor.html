@@ -134,6 +134,12 @@
               <span class="cnm">Repository hygiene</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Credential exfiltration boundary" data-rule="The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes)." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Guardrails</span>
+              <span class="cnm">Credential exfiltration boundary</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">Guardrails</span>

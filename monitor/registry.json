@@ -145,6 +145,22 @@
       "enforcedBy": { "script": "scripts/guardrails/check-agent-policy.ps1", "wiredIn": ["scripts/check.ps1"] }
     },
     {
+      "id": "credential-exfiltration-boundary",
+      "enabled": true,
+      "category": "secrets",
+      "title": { "en": "Credential exfiltration boundary", "ja": "認証情報の持ち出し境界" },
+      "rule": {
+        "en": "The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes).",
+        "ja": "コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-agent-policy.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
       "id": "agent-pre-execution-hooks",
       "enabled": true,
       "category": "governance-meta",
