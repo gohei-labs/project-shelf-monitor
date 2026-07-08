@@ -262,6 +262,22 @@
       "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-terminology.ps1", "wiredIn": [".github/workflows/ci.yml"], "ciJob": "human-review-artifact" }
     },
     {
+      "id": "review-artifact-placeholders",
+      "enabled": true,
+      "category": "review-artifacts",
+      "title": { "en": "Review artifact placeholder residue", "ja": "レビュー成果物のプレースホルダー残存" },
+      "rule": {
+        "en": "No review artifact keeps the template's placeholder title, number placeholder, or usage comment; every title carries the artifact's own number.",
+        "ja": "レビュー成果物にテンプレートのプレースホルダー題名・番号プレースホルダー・使い方コメントが残っておらず、全ての題名に資料自身の番号が入っている。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": { "script": "scripts/guardrails/check-review-artifact-placeholders.ps1", "wiredIn": ["scripts/check.ps1"] }
+    },
+    {
       "id": "review-artifact-references",
       "enabled": true,
       "category": "review-artifacts",
