@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Shelf Review 0002 - Development Environment</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #5b6578;
+      --line: #d9dfeb;
+      --blue: #205ec2;
+      --green: #0d7660;
+      --amber: #9a5b00;
+      --red: #b42318;
+      --soft-blue: #eaf1ff;
+      --soft-green: #e8f6f1;
+      --soft-amber: #fff3df;
+      --soft-red: #fdecea;
+      --soft-gray: #eef1f5;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 20px; }
+    h1 { margin: 8px 0; font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.15; letter-spacing: 0; }
+    h2 { margin: 0 0 12px; font-size: 1.12rem; letter-spacing: 0; }
+    h3 { margin: 0 0 8px; font-size: 0.98rem; letter-spacing: 0; }
+    p { margin: 0 0 12px; }
+    ul { margin: 0; padding-left: 1.1rem; }
+    li { margin: 4px 0; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+    a { color: var(--blue); }
+    section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px; margin: 16px 0; }
+    .meta { color: var(--muted); font-size: 0.94rem; }
+    .label {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin: 0 6px 6px 0;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .recommended { color: var(--green); background: var(--soft-green); }
+    .decision { color: var(--blue); background: var(--soft-blue); }
+    .risk { color: var(--red); background: var(--soft-red); }
+    .deferred { color: var(--amber); background: var(--soft-amber); }
+    .rejected { color: var(--muted); background: var(--soft-gray); }
+    .approval-panel { border: 2px solid var(--blue); background: #fbfdff; }
+    .approval-grid, .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .approval-card, .card { display: grid; gap: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #ffffff; }
+    .approval-id {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 6px;
+      padding: 2px 8px;
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+    .flow { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 10px; }
+    .node { min-height: 112px; border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcff; }
+    .node strong { display: block; margin-bottom: 6px; }
+    .node span { display: block; color: var(--muted); font-size: 0.88rem; }
+    table { width: 100%; border-collapse: collapse; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #ffffff; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: #eef2f8; }
+    tr:last-child td { border-bottom: 0; }
+    @media (max-width: 820px) { .flow { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <span class="label decision">Review 0002</span>
+      <span class="label recommended">Recommended</span>
+      <span class="label deferred">Owner Approval Needed</span>
+      <h1>開発環境を「エージェントが再現できる箱」にする</h1>
+      <p class="meta">Project Shelf owner review artifact. Status: Draft. Date: 2026-06-09.</p>
+    </header>
+
+    <section class="approval-panel">
+      <span class="label deferred">Please Decide Here</span>
+      <h2>この資料で承認してほしいこと</h2>
+      <p>このセクションだけが承認対象です。下の比較表や図は、この判断をするための補足資料です。</p>
+      <p>承認する場合は「D1からD6までOK」。違和感がある場合は、該当IDを指定して差し戻してください。</p>
+
+      <div class="approval-grid">
+        <div class="approval-card">
+          <span class="approval-id">D1</span>
+          <strong>標準開発環境</strong>
+          <p>標準は <code>Dev Container + Docker Compose</code> にする。</p>
+        </div>
+        <div class="approval-card">
+          <span class="approval-id">D2</span>
+          <strong>ローカル前提</strong>
+          <p>Windowsでは Docker Desktop + WSL2 を推奨入口にする。Windowsネイティブ環境は補助扱いにする。</p>
+        </div>
+        <div class="approval-card">
+          <span class="approval-id">D3</span>
+          <strong>GitHub上の共通環境</strong>
+          <p>GitHub Codespacesでも同じ <code>.devcontainer</code> を使えるようにする。</p>
+        </div>
+        <div class="approval-card">
+          <span class="approval-id">D4</span>
+          <strong>AIエージェント環境</strong>
+          <p>GitHub Copilot coding agent用に <code>.github/workflows/copilot-setup-steps.yml</code> を用意する。</p>
+        </div>
+        <div class="approval-card">
+          <span class="approval-id">D5</span>
+          <strong>共通コマンド</strong>
+          <p>人間、CI、AIエージェントは <code>scripts/bootstrap</code> と <code>scripts/check</code> を使う。</p>
+        </div>
+        <div class="approval-card">
+          <span class="approval-id">D6</span>
+          <strong>ツール方針</strong>
+          <p>Pythonは <code>uv</code>、frontendはまず <code>pnpm</code> を基準にする。Bunは後で再検討できる高速化候補にする。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <span class="label rejected">Explanation Starts Here</span>
+      <h2>ここから下は判断材料です</h2>
+      <p>目的は「このPCでたまたま動く」ではなく、「別のAIエージェントが同じ手順で失敗少なく開発できる」状態を作ることです。</p>
+    </section>
+
+    <section>
+      <h2>Recommendation</h2>
+      <p>Project Shelf の標準開発環境は <strong>Dev Container + Docker Compose</strong> にする。Composeはアプリ構成を固定し、Dev Containerは開発者/エージェントが入る作業環境を固定します。</p>
+      <p>GitHub Codespaces はこのDev Container設定を使ってクラウド上に同じ開発環境を作れます。Copilot coding agent は専用のsetup workflowで依存関係を事前準備します。</p>
+    </section>
+
+    <section>
+      <h2>Environment Model</h2>
+      <div class="flow" aria-label="Development environment flow">
+        <div class="node"><strong>Human</strong><span>VS Code</span><span>Dev Container</span></div>
+        <div class="node"><strong>AI Agent</strong><span>same scripts</span><span>same checks</span></div>
+        <div class="node"><strong>Dev Container</strong><span>Python, uv</span><span>Node, pnpm</span></div>
+        <div class="node"><strong>Docker Compose</strong><span>api</span><span>web</span></div>
+        <div class="node"><strong>Host Shelf</strong><span><code>H:\ProjectShelf</code></span><span>mounted as <code>/shelf</code></span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Options Considered</h2>
+      <table>
+        <thead>
+          <tr><th>Option</th><th>Status</th><th>Reason</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Windows native setup</td>
+            <td><span class="label rejected">Rejected</span></td>
+            <td>Fast for one PC, but too dependent on local PATH, installed tools, and hidden machine state.</td>
+          </tr>
+          <tr>
+            <td>Docker Compose only</td>
+            <td><span class="label deferred">Partial</span></td>
+            <td>Good for services, but does not fully define the developer/agent shell environment.</td>
+          </tr>
+          <tr>
+            <td>Dev Container + Docker Compose</td>
+            <td><span class="label recommended">Recommended</span></td>
+            <td>Defines both services and the actual coding environment. Best fit for agent reproducibility.</td>
+          </tr>
+          <tr>
+            <td>GitHub Codespaces</td>
+            <td><span class="label recommended">Companion</span></td>
+            <td>Uses the same dev container config for a GitHub-hosted environment.</td>
+          </tr>
+          <tr>
+            <td>Copilot setup steps only</td>
+            <td><span class="label deferred">Companion</span></td>
+            <td>Useful for Copilot coding agent, but should not be the only local development definition.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Agent Rules</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Allowed</h3>
+          <ul>
+            <li>Run <code>scripts/bootstrap</code>.</li>
+            <li>Run <code>scripts/check</code>.</li>
+            <li>Use Docker Compose services defined in the repo.</li>
+            <li>Update dev environment files through PR review.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Not Allowed</h3>
+          <ul>
+            <li>Rely on Codex-bundled Python or Node as the project environment.</li>
+            <li>Install random global tools without documenting them.</li>
+            <li>Invent local-only setup steps in chat.</li>
+            <li>Change dependency managers without an ADR or review artifact.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Shelf Mount Rule</h2>
+      <p>Host path <code>H:\ProjectShelf</code> should be mounted into containers as <code>/shelf</code>. The application should use <code>MANAGED_ROOT=/shelf</code> inside containers.</p>
+      <p>Phase 1 should mount it read-only. Write access requires a later review because it changes data safety risk.</p>
+    </section>
+
+    <section>
+      <h2>What Will Be Built After Approval</h2>
+      <ul>
+        <li><code>.devcontainer/devcontainer.json</code></li>
+        <li><code>.devcontainer/Dockerfile</code></li>
+        <li><code>compose.yaml</code></li>
+        <li><code>scripts/bootstrap.ps1</code> and/or cross-platform shell equivalent</li>
+        <li><code>scripts/check.ps1</code> and/or cross-platform shell equivalent</li>
+        <li><code>.github/workflows/ci.yml</code></li>
+        <li><code>.github/workflows/copilot-setup-steps.yml</code></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://docs.github.com/codespaces/setting-up-your-codespace/configuring-codespaces-for-your-project">GitHub Codespaces dev container docs</a></li>
+        <li><a href="https://docs.docker.com/compose/compose-file/">Docker Compose file reference</a></li>
+        <li><a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/customize-the-agent-environment">GitHub Copilot coding agent setup docs</a></li>
+        <li><a href="https://nodejs.org/download/release/v20.12.2/docs/api/corepack.html">Node.js Corepack docs</a></li>
+      </ul>
+    </section>
+  <section data-guardrail="standard-terminology">
+  <h2>Terminology Check</h2>
+  <p>This migrated review artifact keeps its original wording. Any future substantive edit should use standard documentation and engineering terminology.</p>
+</section>
+<section data-guardrail="runtime-boundary">
+  <h2>Runtime Boundary Check</h2>
+  <p>This review artifact migration only changes documentation location and guardrail coverage. It does not change runtime services, storage, credentials, host setup, or product data.</p>
+</section>
+<section data-guardrail="primary-references">
+  <h2>References</h2>
+  <p>References: Not applicable. This is a path migration of an existing review artifact.</p>
+</section>
+</main>
+</body>
+</html>
