@@ -106,7 +106,6 @@
     <nav class="topnav">
       <a href="guardrail-monitor.ja.html">ルール</a>
       <a href="security-monitor.ja.html">セキュリティ</a>
-      <a href="application-monitor.ja.html">開発ルール</a>
       <a class="here" aria-current="page">プロジェクトルール</a>
       <a href="application-requirements.ja.html">要求</a>
       <a href="application-features.ja.html">機能</a>
@@ -143,7 +142,7 @@
       </div>
       <h3 class="cathead">アプリケーション監視</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="アプリケーション監視" data-code="APP-01" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="アプリケーション監視" data-code="APP-01" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">APP-01</span>
               <span class="cnm">アプリケーションモニター鮮度</span>
@@ -164,6 +163,33 @@
               <span class="ccat ccode">ENV-05</span>
               <span class="cnm">フロントエンドのビルド</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
+            </button>
+      </div>
+      <h3 class="cathead">アプリケーションルール</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="アプリケーションルール" data-code="PROJ-01" data-name="Phase 1 は読み取り専用" data-rule="アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。" data-enf="" data-venue="名目" data-status="作業合意" data-note="製品判断。最初のコンポーネントが出来た時点でテスト可能になる。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-01</span>
+              <span class="cnm">Phase 1 は読み取り専用</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-working-agreement">作業合意</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="アプリケーションルール" data-code="PROJ-02" data-name="managed-root パス境界" data-rule="アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。" data-enf="" data-venue="名目" data-status="将来統制" data-note="最初のコンポーネントの境界テストと同時にハードゲート化する（要求 REQ-002）。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-02</span>
+              <span class="cnm">managed-root パス境界</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-future-control">将来統制</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="アプリケーションルール" data-code="PROJ-03" data-name="構造化された操作ログ" data-rule="アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。" data-enf="" data-venue="名目" data-status="将来統制" data-note="コアのログ規則のプロジェクト適用。ログ検証テストが出来た時点でゲート化する。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-03</span>
+              <span class="cnm">構造化された操作ログ</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-future-control">将来統制</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="アプリケーションルール" data-code="PROJ-04" data-name="アーキテクチャ変更は記録で決める" data-rule="アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。" data-enf="" data-venue="名目" data-status="作業合意" data-note="spec-before-implementation のアプリ版。要求 ID への紐付けを担う。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-04</span>
+              <span class="cnm">アーキテクチャ変更は記録で決める</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-working-agreement">作業合意</span></span>
             </button>
       </div>
     </div>

@@ -106,7 +106,6 @@
     <nav class="topnav">
       <a href="guardrail-monitor.html">Rules</a>
       <a href="security-monitor.html">Security</a>
-      <a href="application-monitor.html">Development rules</a>
       <a class="here" aria-current="page">Project rules</a>
       <a href="application-requirements.html">Requirements</a>
       <a href="application-features.html">Features</a>
@@ -143,7 +142,7 @@
       </div>
       <h3 class="cathead">Application monitoring</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Application monitoring" data-code="APP-01" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Application monitoring" data-code="APP-01" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">APP-01</span>
               <span class="cnm">Application monitor freshness</span>
@@ -164,6 +163,33 @@
               <span class="ccat ccode">ENV-05</span>
               <span class="cnm">Frontend build</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
+            </button>
+      </div>
+      <h3 class="cathead">Application rules</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="Application rules" data-code="PROJ-01" data-name="Phase 1 is read-only" data-rule="The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="Product decision. Becomes testable once the first component exists.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-01</span>
+              <span class="cnm">Phase 1 is read-only</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="Application rules" data-code="PROJ-02" data-name="Managed-root path boundary" data-rule="Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests." data-enf="" data-venue="Honor" data-status="Future control" data-note="Becomes a hard gate with the first component's boundary tests (requirement REQ-002).">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-02</span>
+              <span class="cnm">Managed-root path boundary</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-future-control">Future control</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="Application rules" data-code="PROJ-03" data-name="Structured operation logging" data-rule="Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events." data-enf="" data-venue="Honor" data-status="Future control" data-note="Project application of the core logging rules; gated once log-assertion tests exist.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-03</span>
+              <span class="cnm">Structured operation logging</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-future-control">Future control</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="Application rules" data-code="PROJ-04" data-name="Architecture changes decided by record" data-rule="A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="Application-level counterpart of spec-before-implementation, tied to the requirement IDs.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">PROJ-04</span>
+              <span class="cnm">Architecture changes decided by record</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
             </button>
       </div>
     </div>

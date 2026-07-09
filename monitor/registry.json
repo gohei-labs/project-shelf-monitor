@@ -71,6 +71,11 @@
       "en": "Working agreements",
       "ja": "申し合わせ",
       "code": "WA"
+    },
+    "application-rules": {
+      "en": "Application rules",
+      "ja": "アプリケーションルール",
+      "code": "PROJ"
     }
   },
   "controlTypes": {
@@ -450,8 +455,8 @@
         "ja": "アプリケーションモニター鮮度"
       },
       "rule": {
-        "en": "The application monitor is generated from product/application-monitor.json and separates application development rules, requirements, features, and architecture pages.",
-        "ja": "アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、機能、アーキテクチャをページ分割する。"
+        "en": "The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages.",
+        "ja": "アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。"
       },
       "pillar": "visualization",
       "status": "active",
@@ -467,6 +472,106 @@
       "note": {
         "en": "This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.",
         "ja": "application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。"
+      }
+    },
+    {
+      "id": "app-phase1-read-only",
+      "code": "PROJ-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Phase 1 is read-only",
+        "ja": "Phase 1 は読み取り専用"
+      },
+      "rule": {
+        "en": "The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first.",
+        "ja": "アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Product decision. Becomes testable once the first component exists.",
+        "ja": "製品判断。最初のコンポーネントが出来た時点でテスト可能になる。"
+      }
+    },
+    {
+      "id": "app-managed-root-boundary",
+      "code": "PROJ-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Managed-root path boundary",
+        "ja": "managed-root パス境界"
+      },
+      "rule": {
+        "en": "Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests.",
+        "ja": "アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Becomes a hard gate with the first component's boundary tests (requirement REQ-002).",
+        "ja": "最初のコンポーネントの境界テストと同時にハードゲート化する（要求 REQ-002）。"
+      }
+    },
+    {
+      "id": "app-operation-logging",
+      "code": "PROJ-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Structured operation logging",
+        "ja": "構造化された操作ログ"
+      },
+      "rule": {
+        "en": "Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events.",
+        "ja": "アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Project application of the core logging rules; gated once log-assertion tests exist.",
+        "ja": "コアのログ規則のプロジェクト適用。ログ検証テストが出来た時点でゲート化する。"
+      }
+    },
+    {
+      "id": "app-architecture-by-record",
+      "code": "PROJ-04",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Architecture changes decided by record",
+        "ja": "アーキテクチャ変更は記録で決める"
+      },
+      "rule": {
+        "en": "A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation.",
+        "ja": "アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Application-level counterpart of spec-before-implementation, tied to the requirement IDs.",
+        "ja": "spec-before-implementation のアプリ版。要求 ID への紐付けを担う。"
       }
     },
     {
