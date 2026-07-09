@@ -37,7 +37,7 @@
     .hero { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:700; font-size:1.84rem; line-height:1.12; letter-spacing:-.01em; margin:6px 0 0; }
     .registry { margin:0; min-width:0; }
     .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
-    .deckhead { font-family:var(--display,inherit); font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:26px 0 8px; } .deckhead:first-of-type { margin-top:0; }
+    .deckhead { font-family:"Space Grotesk", system-ui, sans-serif; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:26px 0 8px; } .deckhead:first-of-type { margin-top:0; }
     .monitor-item { position:relative; display:grid; grid-template-columns:minmax(120px,170px) 1fr minmax(160px,230px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
     .monitor-item:first-child { border-top:0; }
     .monitor-item:hover { background:var(--panel-soft); }
@@ -143,7 +143,7 @@
               <span class="cnm">root hidden path 方針</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="ガードレール・レジストリ整合" data-rule="全ての active ガードレールが実在・配線済みのゲートを指し、ガードレールモニターがレジストリと一致している。" data-enf="scripts/guardrails/check-registry.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="統制・ツール" data-name="ガードレール・レジストリ整合" data-rule="全ての active ガードレールが実在・配線済みのゲートを指し、ルールモニターがレジストリと一致している。" data-enf="scripts/guardrails/check-registry.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">ガードレール</span>
               <span class="cnm">ガードレール・レジストリ整合</span>
@@ -224,7 +224,7 @@
       </div>
       <h2 class="deckhead">申し合わせ・予定・外部</h2>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Visualization" data-cat="ドキュメントポータル" data-name="ブラウザで見える統制面" data-rule="現在の作業状態を、LLM に尋ねるのではなくブラウザで確認できる。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（LLM-GR-004）。ガードレールモニターがその第一歩。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-pil="Visualization" data-cat="ドキュメントポータル" data-name="ブラウザで見える統制面" data-rule="現在の作業状態を、LLM に尋ねるのではなくブラウザで確認できる。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（LLM-GR-004）。ルールモニターがその第一歩。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat">可視化</span>
               <span class="cnm">ブラウザで見える統制面</span>
