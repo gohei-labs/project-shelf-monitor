@@ -18,20 +18,20 @@
   },
   "categories": {
     "encoding-hygiene": {
-      "en": "Encoding & hygiene",
-      "ja": "エンコーディング・衛生"
+      "en": "File conventions",
+      "ja": "ファイル規約"
     },
     "secrets": {
       "en": "Secret management",
-      "ja": "秘密情報管理"
+      "ja": "機密情報管理"
     },
     "build-environment": {
       "en": "Build & environment",
-      "ja": "ビルド・環境"
+      "ja": "ビルド・開発環境"
     },
     "governance-meta": {
-      "en": "Governance & tooling",
-      "ja": "統制・ツール"
+      "en": "Governance",
+      "ja": "ガバナンス"
     },
     "bilingual-docs": {
       "en": "Bilingual docs",
@@ -47,11 +47,11 @@
     },
     "review-artifacts": {
       "en": "Review artifacts",
-      "ja": "レビュー成果物"
+      "ja": "レビュー資料"
     },
     "agent-context": {
       "en": "Agent context",
-      "ja": "エージェント文脈"
+      "ja": "エージェントコンテキスト"
     },
     "decision-records": {
       "en": "Decision records",
@@ -59,7 +59,7 @@
     },
     "working-agreements": {
       "en": "Working agreements",
-      "ja": "作業の約束事"
+      "ja": "申し合わせ"
     }
   },
   "controlTypes": {

@@ -119,33 +119,33 @@
     <div class="registry">
       <h2 class="deckhead">ガードレール（強制ゲート）</h2>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="エンコーディング・衛生" data-name="テキストエンコーディング" data-rule="追跡対象のテキストは全て UTF-8（BOM なし）で、妥当かつ文字化けマーカーが無い。" data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ファイル規約" data-name="テキストエンコーディング" data-rule="追跡対象のテキストは全て UTF-8（BOM なし）で、妥当かつ文字化けマーカーが無い。" data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">エンコーディング・衛生</span>
+              <span class="ccat">ファイル規約</span>
               <span class="cnm">テキストエンコーディング</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="エンコーディング・衛生" data-name="ドキュメント命名" data-rule="ドキュメントのファイル名は親フォルダ名を繰り返さない。" data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ファイル規約" data-name="ドキュメント命名" data-rule="ドキュメントのファイル名は親フォルダ名を繰り返さない。" data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">エンコーディング・衛生</span>
+              <span class="ccat">ファイル規約</span>
               <span class="cnm">ドキュメント命名</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="エンコーディング・衛生" data-name="リポジトリ衛生" data-rule="差分に行末空白や衝突マーカーが無い。" data-enf="git diff --check" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ファイル規約" data-name="リポジトリ衛生" data-rule="差分に行末空白や衝突マーカーが無い。" data-enf="git diff --check" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">エンコーディング・衛生</span>
+              <span class="ccat">ファイル規約</span>
               <span class="cnm">リポジトリ衛生</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="統制・ツール" data-name="root hidden path 方針" data-rule="root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。" data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="project-specific control files は agent-context/ のような見える path を使う。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-name="root hidden path 方針" data-rule="root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。" data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="project-specific control files は agent-context/ のような見える path を使う。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">統制・ツール</span>
+              <span class="ccat">ガバナンス</span>
               <span class="cnm">root hidden path 方針</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="統制・ツール" data-name="ガードレール・レジストリ整合" data-rule="全ての active ガードレールが実在・配線済みのゲートを指し、ルールモニターがレジストリと一致している。" data-enf="scripts/guardrails/check-registry.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-name="ガードレール・レジストリ整合" data-rule="全ての active ガードレールが実在・配線済みのゲートを指し、ルールモニターがレジストリと一致している。" data-enf="scripts/guardrails/check-registry.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">統制・ツール</span>
+              <span class="ccat">ガバナンス</span>
               <span class="cnm">ガードレール・レジストリ整合</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
@@ -167,39 +167,39 @@
               <span class="cnm">ドキュメント言語内容</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー成果物" data-name="人間レビュー成果物のリンク" data-rule="承認を求める／高リスクな統制ファイルに触れる PR は、ブラウザで読めるレビュー成果物をリンクする。" data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー資料" data-name="人間レビュー成果物のリンク" data-rule="承認を求める／高リスクな統制ファイルに触れる PR は、ブラウザで読めるレビュー成果物をリンクする。" data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">レビュー成果物</span>
+              <span class="ccat">レビュー資料</span>
               <span class="cnm">人間レビュー成果物のリンク</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー成果物" data-name="レビュー成果物の用語チェック" data-rule="変更済みレビュー成果物に、見える形の用語チェックの節がある。" data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー資料" data-name="レビュー成果物の用語チェック" data-rule="変更済みレビュー成果物に、見える形の用語チェックの節がある。" data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">レビュー成果物</span>
+              <span class="ccat">レビュー資料</span>
               <span class="cnm">レビュー成果物の用語チェック</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー成果物" data-name="レビュー成果物のプレースホルダー残存" data-rule="レビュー成果物にテンプレートのプレースホルダー題名・番号プレースホルダー・使い方コメントが残っておらず、全ての題名に資料自身の番号が入っている。" data-enf="scripts/guardrails/check-review-artifact-placeholders.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー資料" data-name="レビュー成果物のプレースホルダー残存" data-rule="レビュー成果物にテンプレートのプレースホルダー題名・番号プレースホルダー・使い方コメントが残っておらず、全ての題名に資料自身の番号が入っている。" data-enf="scripts/guardrails/check-review-artifact-placeholders.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">レビュー成果物</span>
+              <span class="ccat">レビュー資料</span>
               <span class="cnm">レビュー成果物のプレースホルダー残存</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー成果物" data-name="レビュー成果物の参考情報" data-rule="変更済みレビュー成果物に、各情報源を説明する参考情報／一次情報の節がある。" data-enf="scripts/guardrails/check-review-artifact-references.ps1" data-venue="CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー資料" data-name="レビュー成果物の参考情報" data-rule="変更済みレビュー成果物に、各情報源を説明する参考情報／一次情報の節がある。" data-enf="scripts/guardrails/check-review-artifact-references.ps1" data-venue="CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">レビュー成果物</span>
+              <span class="ccat">レビュー資料</span>
               <span class="cnm">レビュー成果物の参考情報</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="エージェント文脈" data-name="エージェント・コアコンテキスト manifest" data-rule="コアコンテキスト manifest の必読パスが全て実在し、重複が無い。" data-enf="scripts/guardrails/check-agent-core-context.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="エージェントコンテキスト" data-name="エージェント・コアコンテキスト manifest" data-rule="コアコンテキスト manifest の必読パスが全て実在し、重複が無い。" data-enf="scripts/guardrails/check-agent-core-context.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">エージェント文脈</span>
+              <span class="ccat">エージェントコンテキスト</span>
               <span class="cnm">エージェント・コアコンテキスト manifest</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="エージェント文脈" data-name="コアコンテキストをセッション開始時に配達" data-rule="決定的な SessionStart フックが、全 alwaysRead ファイルの全文をエージェントのコンテキストへ注入する — 必読はエージェントの選択ではなく構造として成立する。readWhenRelevant はトリガー付きで一覧され、必要時に読む。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="ゲートはフックフラグの有効と追跡スクリプトの存在を検証する。配達自体は Claude Code ハーネスが行う。他ハーネスはエミッター追加まで manifest 依存のまま。注入コストは従順な読了と同等。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="エージェントコンテキスト" data-name="コアコンテキストをセッション開始時に配達" data-rule="決定的な SessionStart フックが、全 alwaysRead ファイルの全文をエージェントのコンテキストへ注入する — 必読はエージェントの選択ではなく構造として成立する。readWhenRelevant はトリガー付きで一覧され、必要時に読む。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="ゲートはフックフラグの有効と追跡スクリプトの存在を検証する。配達自体は Claude Code ハーネスが行う。他ハーネスはエミッター追加まで manifest 依存のまま。注入コストは従順な読了と同等。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">エージェント文脈</span>
+              <span class="ccat">エージェントコンテキスト</span>
               <span class="cnm">コアコンテキストをセッション開始時に配達</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
@@ -230,21 +230,21 @@
               <span class="cnm">ブラウザで見える統制面</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-working-agreement">作業合意</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="作業の約束事" data-name="明示的な省略" data-rule="部分的な内容は部分的と明記し、不確実性を隠さない。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（LLM-GR-002）。名目のみ。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="申し合わせ" data-name="明示的な省略" data-rule="部分的な内容は部分的と明記し、不確実性を隠さない。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（LLM-GR-002）。名目のみ。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">作業の約束事</span>
+              <span class="ccat">申し合わせ</span>
               <span class="cnm">明示的な省略</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-working-agreement">作業合意</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="作業の約束事" data-name="成果物の目的分離" data-rule="承認依頼・再利用文書・実装メモ・背景説明は分離するか、目的をラベルで明示する。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（旧 LLM-GR-003・提案中だったもの）。名目のみ。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="申し合わせ" data-name="成果物の目的分離" data-rule="承認依頼・再利用文書・実装メモ・背景説明は分離するか、目的をラベルで明示する。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（旧 LLM-GR-003・提案中だったもの）。名目のみ。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">作業の約束事</span>
+              <span class="ccat">申し合わせ</span>
               <span class="cnm">成果物の目的分離</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-working-agreement">作業合意</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="作業の約束事" data-name="Issue の独断作成の禁止" data-rule="オーナーの確認なしに GitHub Issue を作らない。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（LLM-GR-005）。名目のみ。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="申し合わせ" data-name="Issue の独断作成の禁止" data-rule="オーナーの確認なしに GitHub Issue を作らない。" data-enf="" data-venue="方針" data-status="作業合意" data-note="方針（LLM-GR-005）。名目のみ。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">作業の約束事</span>
+              <span class="ccat">申し合わせ</span>
               <span class="cnm">Issue の独断作成の禁止</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-working-agreement">作業合意</span></span>
             </button>

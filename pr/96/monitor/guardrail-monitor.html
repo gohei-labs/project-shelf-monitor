@@ -119,33 +119,33 @@
     <div class="registry">
       <h2 class="deckhead">Guardrails - enforced gates</h2>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Encoding &amp; hygiene" data-name="Text encoding" data-rule="All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers." data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="File conventions" data-name="Text encoding" data-rule="All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers." data-enf="scripts/guardrails/check-text-encoding.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Encoding &amp; hygiene</span>
+              <span class="ccat">File conventions</span>
               <span class="cnm">Text encoding</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Encoding &amp; hygiene" data-name="Document naming" data-rule="A documentation file name must not repeat its parent folder name." data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="File conventions" data-name="Document naming" data-rule="A documentation file name must not repeat its parent folder name." data-enf="scripts/guardrails/check-doc-naming.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Encoding &amp; hygiene</span>
+              <span class="ccat">File conventions</span>
               <span class="cnm">Document naming</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Encoding &amp; hygiene" data-name="Repository hygiene" data-rule="The diff has no trailing whitespace or conflict markers." data-enf="git diff --check" data-venue="Local + CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="File conventions" data-name="Repository hygiene" data-rule="The diff has no trailing whitespace or conflict markers." data-enf="git diff --check" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Encoding &amp; hygiene</span>
+              <span class="ccat">File conventions</span>
               <span class="cnm">Repository hygiene</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance &amp; tooling" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Project-specific control files must use visible paths such as agent-context/.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Project-specific control files must use visible paths such as agent-context/.">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Governance &amp; tooling</span>
+              <span class="ccat">Governance</span>
               <span class="cnm">Root hidden path policy</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance &amp; tooling" data-name="Guardrail registry integrity" data-rule="Every active guardrail names a real, wired gate, and the rule monitor is up to date with this registry." data-enf="scripts/guardrails/check-registry.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-name="Guardrail registry integrity" data-rule="Every active guardrail names a real, wired gate, and the rule monitor is up to date with this registry." data-enf="scripts/guardrails/check-registry.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Governance &amp; tooling</span>
+              <span class="ccat">Governance</span>
               <span class="cnm">Guardrail registry integrity</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
