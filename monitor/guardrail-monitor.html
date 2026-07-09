@@ -140,6 +140,27 @@
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
       </div>
+      <h3 class="cathead">Build &amp; environment</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Build &amp; environment" data-code="ENV-02" data-name="Dev Container build" data-rule="The reproducible Dev Container builds and passes the Bash check suite." data-enf="CI job: devcontainer" data-venue="CI" data-status="Hard gate" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-02</span>
+              <span class="cnm">Dev Container build</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Build &amp; environment" data-code="ENV-03" data-name="Implementation component contract" data-rule="Implementation component directories must be declared with a stack and check command before product code is added." data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-03</span>
+              <span class="cnm">Implementation component contract</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="Build &amp; environment" data-code="ENV-06" data-name="Compose config validation" data-rule="The Docker Compose configuration validates." data-enf="docker compose config --quiet" data-venue="Conditional" data-status="Conditional gate" data-note="Runs only when docker is available.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-06</span>
+              <span class="cnm">Compose config validation</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
+            </button>
+      </div>
       <h3 class="cathead">Governance</h3>
       <div class="deck">
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-code="GOV-01" data-name="Root hidden path policy" data-rule="Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files." data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Project-specific control files must use visible paths such as agent-context/.">

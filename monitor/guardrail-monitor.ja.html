@@ -140,6 +140,27 @@
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
       </div>
+      <h3 class="cathead">ビルド・開発環境</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ビルド・開発環境" data-code="ENV-02" data-name="Dev Container のビルド" data-rule="再現可能な Dev Container がビルドでき、Bash チェック一式が通る。" data-enf="CI job: devcontainer" data-venue="CI" data-status="強制ゲート" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-02</span>
+              <span class="cnm">Dev Container のビルド</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ビルド・開発環境" data-code="ENV-03" data-name="実装コンポーネント契約" data-rule="実装コンポーネントのディレクトリを追加する前に、stack と check command を宣言する。" data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="stack-neutral なゲート。apps/api が Python を意味する、apps/web が pnpm を意味する、という推測を避け、実装コンポーネントには明示的な test/build 契約を求める。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-03</span>
+              <span class="cnm">実装コンポーネント契約</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="ビルド・開発環境" data-code="ENV-06" data-name="Compose 設定の検証" data-rule="Docker Compose 設定が検証できる。" data-enf="docker compose config --quiet" data-venue="条件付き" data-status="条件付きゲート" data-note="docker がある時だけ実行。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-06</span>
+              <span class="cnm">Compose 設定の検証</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">条件付き</span><span class="cstatus status-conditional-gate">条件付きゲート</span></span>
+            </button>
+      </div>
       <h3 class="cathead">ガバナンス</h3>
       <div class="deck">
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-01" data-name="root hidden path 方針" data-rule="root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。" data-enf="scripts/guardrails/check-root-hidden-paths.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="project-specific control files は agent-context/ のような見える path を使う。">

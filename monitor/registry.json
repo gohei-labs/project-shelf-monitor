@@ -470,8 +470,8 @@
         ]
       },
       "note": {
-        "en": "This is the application development monitor. It tracks application-specific development rules separately from requirements, features, and architecture assumptions.",
-        "ja": "application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。"
+        "en": "The application monitor presents product requirements, features, and architecture as separate pages, generated from product/application-monitor.json. Application development rules are not tracked here; they live in the registry and appear on the Project rules view.",
+        "ja": "アプリケーションモニターは product/application-monitor.json から生成し、製品の要求・機能・アーキテクチャをページ分割して表示する。アプリ開発ルールはここでは追跡せず、レジストリが保持して Project rules ビューに表示する。"
       }
     },
     {
@@ -699,7 +699,7 @@
       "status": "active",
       "controlType": "hard-gate",
       "runsAt": "ci",
-      "scope": "product",
+      "scope": "generic",
       "enforcedBy": {
         "ciJob": "devcontainer",
         "wiredIn": [
@@ -725,7 +725,7 @@
       "status": "active",
       "controlType": "hard-gate",
       "runsAt": "both",
-      "scope": "product",
+      "scope": "generic",
       "enforcedBy": {
         "script": "scripts/guardrails/check-component-contract.ps1",
         "wiredIn": [
@@ -805,7 +805,7 @@
       "status": "conditional",
       "controlType": "conditional-gate",
       "runsAt": "conditional",
-      "scope": "product",
+      "scope": "generic",
       "enforcedBy": {
         "inline": "docker compose config --quiet",
         "marker": "docker compose config",
