@@ -1,0 +1,1099 @@
+{
+  "schemaVersion": 1,
+  "title": "Rule registry",
+  "description": "Authoritative list of the rules in effect; entries whose gate is wired are the guardrails. The rule monitor pages (monitor/guardrail-monitor.html and guardrail-monitor.ja.html) are generated from this file; do not edit monitor output by hand. scripts/guardrails/check-registry.ps1 verifies that every active guardrail names a real, wired gate, that each rule has both languages, and that the monitor output is up to date.",
+  "pillars": {
+    "guardrails": {
+      "en": "Guardrails",
+      "ja": "ガードレール"
+    },
+    "visualization": {
+      "en": "Visualization",
+      "ja": "可視化"
+    },
+    "human-orchestration": {
+      "en": "Human orchestration",
+      "ja": "人間オーケストレーション"
+    }
+  },
+  "categories": {
+    "encoding-hygiene": {
+      "en": "File conventions",
+      "ja": "ファイル規約",
+      "code": "FILE"
+    },
+    "secrets": {
+      "en": "Secret management",
+      "ja": "機密情報管理",
+      "code": "SEC"
+    },
+    "build-environment": {
+      "en": "Build & environment",
+      "ja": "ビルド・開発環境",
+      "code": "ENV"
+    },
+    "governance-meta": {
+      "en": "Governance",
+      "ja": "ガバナンス",
+      "code": "GOV"
+    },
+    "bilingual-docs": {
+      "en": "Bilingual docs",
+      "ja": "二言語ドキュメント",
+      "code": "DOC"
+    },
+    "docs-portal": {
+      "en": "Docs portal",
+      "ja": "ドキュメントポータル",
+      "code": "PORTAL"
+    },
+    "application-monitoring": {
+      "en": "Application monitoring",
+      "ja": "アプリケーション監視",
+      "code": "APP"
+    },
+    "review-artifacts": {
+      "en": "Review artifacts",
+      "ja": "レビュー資料",
+      "code": "REV"
+    },
+    "agent-context": {
+      "en": "Agent context",
+      "ja": "エージェントコンテキスト",
+      "code": "CTX"
+    },
+    "decision-records": {
+      "en": "Decision records",
+      "ja": "決定記録",
+      "code": "DEC"
+    },
+    "working-agreements": {
+      "en": "Working agreements",
+      "ja": "申し合わせ",
+      "code": "WA"
+    },
+    "application-rules": {
+      "en": "Application rules",
+      "ja": "アプリケーションルール",
+      "code": "PROJ"
+    }
+  },
+  "controlTypes": {
+    "hard-gate": {
+      "en": "Hard gate",
+      "ja": "強制ゲート"
+    },
+    "conditional-gate": {
+      "en": "Conditional gate",
+      "ja": "条件付きゲート"
+    },
+    "external-control": {
+      "en": "External control",
+      "ja": "外部統制"
+    },
+    "working-agreement": {
+      "en": "Working agreement",
+      "ja": "作業合意"
+    },
+    "future-control": {
+      "en": "Future control",
+      "ja": "将来統制"
+    }
+  },
+  "guardrails": [
+    {
+      "id": "text-encoding",
+      "code": "FILE-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "encoding-hygiene",
+      "title": {
+        "en": "Text encoding",
+        "ja": "テキストエンコーディング"
+      },
+      "rule": {
+        "en": "All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers.",
+        "ja": "追跡対象のテキストは全て UTF-8（BOM なし）で、妥当かつ文字化けマーカーが無い。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-text-encoding.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "doc-naming",
+      "code": "FILE-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "encoding-hygiene",
+      "title": {
+        "en": "Document naming",
+        "ja": "ドキュメント命名"
+      },
+      "rule": {
+        "en": "A documentation file name must not repeat its parent folder name.",
+        "ja": "ドキュメントのファイル名は親フォルダ名を繰り返さない。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-doc-naming.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "repo-hygiene",
+      "code": "FILE-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "encoding-hygiene",
+      "title": {
+        "en": "Repository hygiene",
+        "ja": "リポジトリ衛生"
+      },
+      "rule": {
+        "en": "The diff has no trailing whitespace or conflict markers.",
+        "ja": "差分に行末空白や衝突マーカーが無い。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "inline": "git diff --check",
+        "marker": "git diff --check",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "root-hidden-paths",
+      "code": "GOV-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "governance-meta",
+      "title": {
+        "en": "Root hidden path policy",
+        "ja": "root hidden path 方針"
+      },
+      "rule": {
+        "en": "Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files.",
+        "ja": "root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-root-hidden-paths.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "Project-specific control files must use visible paths such as agent-context/.",
+        "ja": "project-specific control files は agent-context/ のような見える path を使う。"
+      }
+    },
+    {
+      "id": "agent-core-context",
+      "code": "CTX-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "agent-context",
+      "title": {
+        "en": "Agent core-context manifest",
+        "ja": "エージェント・コアコンテキスト manifest"
+      },
+      "rule": {
+        "en": "Every required-reading path in the core-context manifest exists and is unique.",
+        "ja": "コアコンテキスト manifest の必読パスが全て実在し、重複が無い。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-agent-core-context.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "guardrail-registry",
+      "code": "GOV-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "governance-meta",
+      "title": {
+        "en": "Guardrail registry integrity",
+        "ja": "ガードレール・レジストリ整合"
+      },
+      "rule": {
+        "en": "Every active guardrail names a real, wired gate, and the rule monitor is up to date with this registry.",
+        "ja": "全ての active ガードレールが実在・配線済みのゲートを指し、ルールモニターがレジストリと一致している。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-registry.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "agent-permission-boundary",
+      "code": "GOV-03",
+      "enabled": true,
+      "domain": "security",
+      "category": "governance-meta",
+      "title": {
+        "en": "Agent permission boundary",
+        "ja": "エージェント権限境界"
+      },
+      "rule": {
+        "en": "An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy.",
+        "ja": "AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-agent-policy.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "agent-execution-sandbox",
+      "code": "ENV-01",
+      "enabled": true,
+      "domain": "security",
+      "category": "build-environment",
+      "title": {
+        "en": "Agent execution sandbox",
+        "ja": "エージェント実行サンドボックス"
+      },
+      "rule": {
+        "en": "Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow.",
+        "ja": "エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。"
+      },
+      "pillar": "guardrails",
+      "status": "external",
+      "controlType": "external-control",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-sandbox-config.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "credential-exfiltration-boundary",
+      "code": "SEC-01",
+      "enabled": true,
+      "domain": "security",
+      "category": "secrets",
+      "title": {
+        "en": "Credential exfiltration boundary",
+        "ja": "認証情報の持ち出し境界"
+      },
+      "rule": {
+        "en": "The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes).",
+        "ja": "コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-agent-policy.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "agent-pre-execution-hooks",
+      "code": "GOV-04",
+      "enabled": true,
+      "domain": "security",
+      "category": "governance-meta",
+      "title": {
+        "en": "Agent pre-execution hooks",
+        "ja": "エージェント実行前フック"
+      },
+      "rule": {
+        "en": "Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled.",
+        "ja": "決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-agent-policy.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "bilingual-doc-pairs",
+      "code": "DOC-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "bilingual-docs",
+      "title": {
+        "en": "Bilingual document pairs",
+        "ja": "二言語ドキュメント対"
+      },
+      "rule": {
+        "en": "docs/en and docs/ja hold the same set of relative Markdown paths.",
+        "ja": "docs/en と docs/ja が同じ相対 Markdown パス集合を持つ。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "bilingual",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-bilingual-doc-pairs.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "doc-language-roots",
+      "code": "DOC-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "bilingual-docs",
+      "title": {
+        "en": "Documentation language roots",
+        "ja": "ドキュメント言語ルート"
+      },
+      "rule": {
+        "en": "All Markdown lives under a configured language root.",
+        "ja": "全ての Markdown が設定された言語ルート配下にある。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "bilingual",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-doc-language-roots.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "doc-language-content",
+      "code": "DOC-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "bilingual-docs",
+      "title": {
+        "en": "Documentation language content",
+        "ja": "ドキュメント言語内容"
+      },
+      "rule": {
+        "en": "Each language tree actually contains that language; no untranslated copy is left behind.",
+        "ja": "各言語ツリーが実際にその言語で書かれている（未翻訳の写しが残っていない）。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "bilingual",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-doc-language-content.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "application-monitor",
+      "code": "APP-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-monitoring",
+      "title": {
+        "en": "Application monitor freshness",
+        "ja": "アプリケーションモニター鮮度"
+      },
+      "rule": {
+        "en": "The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages.",
+        "ja": "アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "product",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-application-monitor.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "The application monitor presents product requirements, features, and architecture as separate pages, generated from product/application-monitor.json. Application development rules are not tracked here; they live in the registry and appear on the Project rules view.",
+        "ja": "アプリケーションモニターは product/application-monitor.json から生成し、製品の要求・機能・アーキテクチャをページ分割して表示する。アプリ開発ルールはここでは追跡せず、レジストリが保持して Project rules ビューに表示する。"
+      }
+    },
+    {
+      "id": "app-phase1-read-only",
+      "code": "PROJ-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Phase 1 is read-only",
+        "ja": "Phase 1 は読み取り専用"
+      },
+      "rule": {
+        "en": "The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first.",
+        "ja": "アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Product decision. Becomes testable once the first component exists.",
+        "ja": "製品判断。最初のコンポーネントが出来た時点でテスト可能になる。"
+      }
+    },
+    {
+      "id": "app-managed-root-boundary",
+      "code": "PROJ-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Managed-root path boundary",
+        "ja": "managed-root パス境界"
+      },
+      "rule": {
+        "en": "Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests.",
+        "ja": "アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Becomes a hard gate with the first component's boundary tests (requirement REQ-002).",
+        "ja": "最初のコンポーネントの境界テストと同時にハードゲート化する（要求 REQ-002）。"
+      }
+    },
+    {
+      "id": "app-operation-logging",
+      "code": "PROJ-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Structured operation logging",
+        "ja": "構造化された操作ログ"
+      },
+      "rule": {
+        "en": "Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events.",
+        "ja": "アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Project application of the core logging rules; gated once log-assertion tests exist.",
+        "ja": "コアのログ規則のプロジェクト適用。ログ検証テストが出来た時点でゲート化する。"
+      }
+    },
+    {
+      "id": "app-architecture-by-record",
+      "code": "PROJ-04",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "application-rules",
+      "title": {
+        "en": "Architecture changes decided by record",
+        "ja": "アーキテクチャ変更は記録で決める"
+      },
+      "rule": {
+        "en": "A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation.",
+        "ja": "アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "honor",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "Application-level counterpart of spec-before-implementation, tied to the requirement IDs.",
+        "ja": "spec-before-implementation のアプリ版。要求 ID への紐付けを担う。"
+      }
+    },
+    {
+      "id": "human-review-artifact",
+      "code": "REV-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "review-artifacts",
+      "title": {
+        "en": "Human review artifact link",
+        "ja": "人間レビュー成果物のリンク"
+      },
+      "rule": {
+        "en": "PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact.",
+        "ja": "承認を求める／高リスクな統制ファイルに触れる PR は、ブラウザで読めるレビュー成果物をリンクする。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-human-review-artifact.ps1",
+        "wiredIn": [
+          ".github/workflows/ci.yml"
+        ],
+        "ciJob": "human-review-artifact"
+      }
+    },
+    {
+      "id": "review-artifact-terminology",
+      "code": "REV-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "review-artifacts",
+      "title": {
+        "en": "Review artifact terminology",
+        "ja": "レビュー成果物の用語チェック"
+      },
+      "rule": {
+        "en": "Changed review artifacts carry a visible Terminology Check section.",
+        "ja": "変更済みレビュー成果物に、見える形の用語チェックの節がある。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-review-artifact-terminology.ps1",
+        "wiredIn": [
+          ".github/workflows/ci.yml"
+        ],
+        "ciJob": "human-review-artifact"
+      }
+    },
+    {
+      "id": "review-artifact-placeholders",
+      "code": "REV-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "review-artifacts",
+      "title": {
+        "en": "Review artifact placeholder residue",
+        "ja": "レビュー成果物のプレースホルダー残存"
+      },
+      "rule": {
+        "en": "No review artifact keeps the template's placeholder title, number placeholder, or usage comment; every title carries the artifact's own number.",
+        "ja": "レビュー成果物にテンプレートのプレースホルダー題名・番号プレースホルダー・使い方コメントが残っておらず、全ての題名に資料自身の番号が入っている。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-review-artifact-placeholders.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      }
+    },
+    {
+      "id": "review-artifact-references",
+      "code": "REV-04",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "review-artifacts",
+      "title": {
+        "en": "Review artifact references",
+        "ja": "レビュー成果物の参考情報"
+      },
+      "rule": {
+        "en": "Changed review artifacts carry a References / primary-sources section that explains each source.",
+        "ja": "変更済みレビュー成果物に、各情報源を説明する参考情報／一次情報の節がある。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-review-artifact-references.ps1",
+        "wiredIn": [
+          ".github/workflows/ci.yml"
+        ],
+        "ciJob": "human-review-artifact"
+      }
+    },
+    {
+      "id": "devcontainer-build",
+      "code": "ENV-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "build-environment",
+      "title": {
+        "en": "Dev Container build",
+        "ja": "Dev Container のビルド"
+      },
+      "rule": {
+        "en": "The reproducible Dev Container builds and passes the Bash check suite.",
+        "ja": "再現可能な Dev Container がビルドでき、Bash チェック一式が通る。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": {
+        "ciJob": "devcontainer",
+        "wiredIn": [
+          ".github/workflows/ci.yml"
+        ]
+      }
+    },
+    {
+      "id": "component-contract",
+      "code": "ENV-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "build-environment",
+      "title": {
+        "en": "Implementation component contract",
+        "ja": "実装コンポーネント契約"
+      },
+      "rule": {
+        "en": "Implementation component directories must be declared with a stack and check command before product code is added.",
+        "ja": "実装コンポーネントのディレクトリを追加する前に、stack と check command を宣言する。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-component-contract.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "This is stack-neutral. It prevents apps/api from implying Python, apps/web from implying pnpm, or any product component from appearing without an explicit test/build contract.",
+        "ja": "stack-neutral なゲート。apps/api が Python を意味する、apps/web が pnpm を意味する、という推測を避け、実装コンポーネントには明示的な test/build 契約を求める。"
+      }
+    },
+    {
+      "id": "backend-checks",
+      "code": "ENV-04",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "build-environment",
+      "title": {
+        "en": "Backend lint and tests",
+        "ja": "バックエンドの lint とテスト"
+      },
+      "rule": {
+        "en": "Backend lint and tests pass.",
+        "ja": "バックエンドの lint とテストが通る。"
+      },
+      "pillar": "guardrails",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "advisory",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.",
+        "ja": "backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
+      }
+    },
+    {
+      "id": "frontend-build",
+      "code": "ENV-05",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "build-environment",
+      "title": {
+        "en": "Frontend build",
+        "ja": "フロントエンドのビルド"
+      },
+      "rule": {
+        "en": "The frontend installs with a frozen lockfile and builds.",
+        "ja": "フロントエンドが lockfile 固定で install してビルドできる。"
+      },
+      "pillar": "guardrails",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "advisory",
+      "scope": "product",
+      "enforcedBy": null,
+      "note": {
+        "en": "No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.",
+        "ja": "frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
+      }
+    },
+    {
+      "id": "compose-config",
+      "code": "ENV-06",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "build-environment",
+      "title": {
+        "en": "Compose config validation",
+        "ja": "Compose 設定の検証"
+      },
+      "rule": {
+        "en": "The Docker Compose configuration validates.",
+        "ja": "Docker Compose 設定が検証できる。"
+      },
+      "pillar": "guardrails",
+      "status": "conditional",
+      "controlType": "conditional-gate",
+      "runsAt": "conditional",
+      "scope": "generic",
+      "enforcedBy": {
+        "inline": "docker compose config --quiet",
+        "marker": "docker compose config",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "Runs only when docker is available.",
+        "ja": "docker がある時だけ実行。"
+      }
+    },
+    {
+      "id": "core-context-reading",
+      "code": "CTX-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "agent-context",
+      "title": {
+        "en": "Core context delivered at session start",
+        "ja": "コアコンテキストをセッション開始時に配達"
+      },
+      "rule": {
+        "en": "The full content of every alwaysRead file is injected into the agent's context by a deterministic SessionStart hook - required reading happens by construction, not by the agent's choice. readWhenRelevant entries are listed with their triggers for on-demand reading.",
+        "ja": "決定的な SessionStart フックが、全 alwaysRead ファイルの全文をエージェントのコンテキストへ注入する — 必読はエージェントの選択ではなく構造として成立する。readWhenRelevant はトリガー付きで一覧され、必要時に読む。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-agent-policy.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "The gate verifies the hook flag stays on and the tracked hook script exists; delivery itself is the Claude Code harness. Other harnesses still rely on the manifest until their emitters land. Injection costs the same tokens obedient reading would.",
+        "ja": "ゲートはフックフラグの有効と追跡スクリプトの存在を検証する。配達自体は Claude Code ハーネスが行う。他ハーネスはエミッター追加まで manifest 依存のまま。注入コストは従順な読了と同等。"
+      }
+    },
+    {
+      "id": "ai-review-record",
+      "code": "DEC-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "decision-records",
+      "title": {
+        "en": "AI review record",
+        "ja": "AI レビュー記録"
+      },
+      "rule": {
+        "en": "A PR that changes implementation or control files must carry an AI Review Record (PR body or comment) that states its findings and cites the PR's CURRENT head commit - a record for an older commit fails until the review is re-run on the final code.",
+        "ja": "実装ファイルまたは統制ファイルを変更する PR は、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-ai-review-record.ps1",
+        "wiredIn": [
+          ".github/workflows/ci.yml"
+        ],
+        "ciJob": "human-review-artifact"
+      },
+      "note": {
+        "en": "Guardrail tooling is deliberately NOT exempt: control code is exactly what needs independent eyes. Docs-only PRs are exempt. Disabling this entry also disables independent-ai-review, which runs inside this gate.",
+        "ja": "ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。このエントリを無効化すると、このゲート内で動く independent-ai-review も無効になる。"
+      }
+    },
+    {
+      "id": "independent-ai-review",
+      "code": "DEC-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "decision-records",
+      "title": {
+        "en": "Independent AI review",
+        "ja": "独立 AI レビュー"
+      },
+      "rule": {
+        "en": "The AI Review Record must establish independence: the same record section declares BOTH the authoring context and the reviewing context, and they differ - the context that wrote a change may not review its own diff. Declared identities are structured attestation in the audit record, not cryptographic proof.",
+        "ja": "AI レビュー記録は独立性を立証しなければならない: 同一の記録セクションに作成コンテキストとレビューコンテキストの【両方】を宣言し、両者が異なること。変更を書いたコンテキストは自分の差分をレビューできない。宣言された識別子は監査記録上の構造化された表明であり、暗号学的証明ではない。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "ci",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-ai-review-record.ps1",
+        "wiredIn": [
+          ".github/workflows/ci.yml"
+        ],
+        "ciJob": "human-review-artifact"
+      },
+      "note": {
+        "en": "Enforced inside the ai-review-record gate on the record section that passes the freshness check. Disabling this entry relaxes independence while keeping the record requirement.",
+        "ja": "鮮度チェックを通過した記録セクションに対して ai-review-record ゲート内で強制する。このエントリを無効化すると、記録要求は保ったまま独立性のみ緩和される。"
+      }
+    },
+    {
+      "id": "spec-before-implementation",
+      "code": "DEC-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "decision-records",
+      "title": {
+        "en": "Decision before implementation",
+        "ja": "実装前の決定"
+      },
+      "rule": {
+        "en": "Implementation PRs link a prior decision or spec record.",
+        "ja": "実装 PR は事前の決定／仕様記録をリンクする。"
+      },
+      "pillar": "human-orchestration",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-spec-before-impl.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "Implementation code (apps/, src/, scripts/, etc.; guardrail tooling excluded) must ship a numbered decision or change record. Fails closed on git errors.",
+        "ja": "実装コード（apps/、src/、scripts/ 等。ガードレールツールは除外）の変更には番号付きの決定／変更記録が必要。git 失敗時は fail-closed。"
+      }
+    },
+    {
+      "id": "secret-scan",
+      "code": "SEC-02",
+      "enabled": true,
+      "domain": "security",
+      "category": "secrets",
+      "title": {
+        "en": "Secret / token leak scan",
+        "ja": "秘密情報／トークン漏れスキャン"
+      },
+      "rule": {
+        "en": "No token-shaped secrets appear in diffs, PR bodies, or review artifacts.",
+        "ja": "差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。"
+      },
+      "pillar": "guardrails",
+      "status": "active",
+      "controlType": "hard-gate",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-secret-leak.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.",
+        "ja": "変更ファイルの内容と PR 本文を既知のトークン形状で走査。CI は GUARDRAIL_PULL_REQUEST_BODY 経由で PR 本文を渡す。git 失敗時は fail-closed。値は伏字化。"
+      }
+    },
+    {
+      "id": "explicit-omissions",
+      "code": "WA-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "working-agreements",
+      "title": {
+        "en": "Explicit omissions",
+        "ja": "明示的な省略"
+      },
+      "rule": {
+        "en": "Partial content is labeled partial; uncertainty is surfaced, not hidden.",
+        "ja": "部分的な内容は部分的と明記し、不確実性を隠さない。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": {
+        "en": "Policy (LLM-GR-002); honor-system.",
+        "ja": "方針（LLM-GR-002）。名目のみ。"
+      }
+    },
+    {
+      "id": "artifact-purpose-separation",
+      "code": "WA-02",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "working-agreements",
+      "title": {
+        "en": "Separate artifact purposes",
+        "ja": "成果物の目的分離"
+      },
+      "rule": {
+        "en": "Approval requests, reusable documentation, implementation notes, and background are separated or labeled by purpose.",
+        "ja": "承認依頼・再利用文書・実装メモ・背景説明は分離するか、目的をラベルで明示する。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": {
+        "en": "Policy (was LLM-GR-003, proposed); honor-system.",
+        "ja": "方針（旧 LLM-GR-003・提案中だったもの）。名目のみ。"
+      }
+    },
+    {
+      "id": "browser-control-surface",
+      "code": "PORTAL-01",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "docs-portal",
+      "title": {
+        "en": "Browser-visible control surface",
+        "ja": "ブラウザで見える統制面"
+      },
+      "rule": {
+        "en": "Current work state is inspectable in a browser, not only by asking the LLM.",
+        "ja": "現在の作業状態を、LLM に尋ねるのではなくブラウザで確認できる。"
+      },
+      "pillar": "visualization",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": {
+        "en": "Policy (LLM-GR-004). The rule monitor is a first step toward it.",
+        "ja": "方針（LLM-GR-004）。ルールモニターがその第一歩。"
+      }
+    },
+    {
+      "id": "no-unilateral-issues",
+      "code": "WA-03",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "working-agreements",
+      "title": {
+        "en": "No unilateral issue creation",
+        "ja": "Issue の独断作成の禁止"
+      },
+      "rule": {
+        "en": "Do not open GitHub issues without owner confirmation.",
+        "ja": "オーナーの確認なしに GitHub Issue を作らない。"
+      },
+      "pillar": "human-orchestration",
+      "status": "advisory",
+      "controlType": "working-agreement",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": {
+        "en": "Policy (LLM-GR-005); honor-system.",
+        "ja": "方針（LLM-GR-005）。名目のみ。"
+      }
+    },
+    {
+      "id": "branch-protection",
+      "code": "GOV-05",
+      "enabled": true,
+      "domain": "security",
+      "category": "governance-meta",
+      "title": {
+        "en": "Branch protection",
+        "ja": "ブランチ保護"
+      },
+      "rule": {
+        "en": "Required status checks; no direct push or force-push to the default branch.",
+        "ja": "必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。"
+      },
+      "pillar": "guardrails",
+      "status": "advisory",
+      "controlType": "future-control",
+      "runsAt": "advisory",
+      "scope": "generic",
+      "enforcedBy": null,
+      "note": {
+        "en": "Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.",
+        "ja": "現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。"
+      }
+    }
+  ]
+}
