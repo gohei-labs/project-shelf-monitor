@@ -90,13 +90,15 @@
           <tr><td><code>scripts/generate/build-guardrail-monitor.ps1</code></td><td>表題・ラベル、ビューごとの 2 グループ表示（グループ見出し付き）、中立化した空表示・詳細の文言。</td></tr>
           <tr><td><code>monitor/*.html</code></td><td>更新後のジェネレータから再生成。</td></tr>
           <tr><td>ルール文書（onboarding・documentation-system・handoff brief・agent-policy・application-monitoring。日英）</td><td>散文の呼称を「ガードレールモニター」→「ルールモニター」。ファイルパスは不変。</td></tr>
+          <tr><td><code>scripts/generate/build-reviews-page.ps1</code>・<code>build-application-monitor.ps1</code>・<code>build-pages-site.ps1</code></td><td>共有ナビラベル「ガードレール」→「ルール」と公開サイト入口の表題・リンク。全ページで語彙を一貫させるため。</td></tr>
+          <tr><td><code>monitor/registry.json</code></td><td>散文 3 箇所のみ（ページ名に言及する rule 文・note・description）。ゲート・status・controlType のデータは不変。</td></tr>
         </tbody>
       </table>
     </section>
     <section>
       <p class="kicker">リスク</p>
       <div class="risk">
-        <p>表示のみの変更：ゲート挙動・台帳データ・URL は変わらない。再生成ページは registry ゲートが同期を検証し、グループ分けは詳細チップが既に使っている controlType と同じフィールドから導出する — 新しいデータはなく、2 つの見え方が食い違うことはない。</p>
+        <p>表示のみの変更：ゲート挙動、台帳のゲート／status／controlType データ、URL は変わらない（ページ名に言及する台帳の散文 3 箇所は改称）。再生成ページは registry ゲートが同期を検証し、グループ分けは詳細チップが既に使っている controlType と同じフィールドから導出する — 新しいデータはなく、2 つの見え方が食い違うことはない。</p>
       </div>
     </section>
     <section>
