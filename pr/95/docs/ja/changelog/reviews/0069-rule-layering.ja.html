@@ -77,7 +77,7 @@
       <p class="kicker">承認をお願いする事項</p>
       <ol class="asks">
         <li>3 層：コア（全プロジェクト・技術非依存）、スタック（技術スタック単位で一度書いて再利用）、プロジェクト（薄い層：宣言＋真に固有のルール）。層は台帳の既存 <code>scope</code> フィールドから導出する。前例：NIST の baseline / overlay / tailoring。</li>
-        <li>宣言による有効化：プロジェクトは <code>project-components.json</code> でスタックを宣言して、そのスタックのルールを採用する。条件付きゲート backend-checks / frontend-build が受け皿。前例：GitHub reusable workflows・rulesets、ESLint shareable configs、Backstage templates、golden path / paved road。</li>
+        <li>宣言による有効化：プロジェクトは <code>project-components.json</code> でスタックを宣言して、そのスタックのルールを採用する。future-control の backend-checks / frontend-build が受け皿（現在は advisory。コンポーネント宣言後にスタック条件付きゲートになる）。前例：GitHub reusable workflows・rulesets、ESLint shareable configs、Backstage templates、golden path / paved road。</li>
         <li>例外モデル：下位層は明示的で追跡される exemption（category は Waiver または Mitigated、expiresOn、requestedBy / approvedBy）を追加できるだけで、上位層のルールを緩和できない — Azure の explicit-deny 方式を採用し、GCP 型の子による上書きは明示的に不採用。</li>
       </ol>
     </section>
@@ -127,7 +127,7 @@
           <thead><tr><th>参照した一次情報</th><th>裏付ける内容</th></tr></thead>
           <tbody>
             <tr><td><a href="https://csrc.nist.gov/pubs/sp/800/53/b/upd1/final">NIST SP 800-53B</a></td><td>baseline・overlay（技術／コミュニティ単位で一度書く）・tailoring — 3 層の対応物。</td></tr>
-            <tr><td><a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/exemption-structure">Azure Policy exemption structure</a> / <a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/effect-basics">effect basics</a></td><td>下位層で宣言される追跡された exemption（Waiver / Mitigated、expiresOn）。explicit-deny — 下位スコープは緩和できない。</td></tr>
+            <tr><td><a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/exemption-structure">Azure Policy exemption structure</a> / <a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/effect-basics">effect basics</a></td><td>下位層で宣言される追跡された exemption（Waiver / Mitigated、expiresOn）。累積的で最も制限的な重ね合わせ。「explicit deny system」の逐語文は <a href="https://learn.microsoft.com/en-us/azure/governance/policy/overview">Azure Policy overview</a> から引用。</td></tr>
             <tr><td><a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy">GCP Organization Policy hierarchy</a></td><td>不採用とした代替案：子ポリシーが既定で親を上書きする方式。</td></tr>
             <tr><td><a href="https://engineering.atspotify.com/2020/08/how-we-use-golden-paths-to-solve-fragmentation-in-our-software-ecosystem">Spotify golden paths</a> / <a href="https://netflixtechblog.com/full-cycle-developers-at-netflix-a08c31f83249">Netflix paved road</a> / <a href="https://backstage.io/docs/features/software-templates/">Backstage templates</a></td><td>スタック層の語彙：中央で専門家が所有する opinionated なスタック定義と、任意／宣言による採用。</td></tr>
             <tr><td><a href="https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows">GitHub reusable workflows</a> / <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets">rulesets</a> / <a href="https://eslint.org/docs/latest/extend/shareable-configs">ESLint shareable configs</a></td><td>中央定義ルールへの宣言的 opt-in が確立された実践であること。</td></tr>
