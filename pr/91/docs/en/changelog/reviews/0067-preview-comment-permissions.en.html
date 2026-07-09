@@ -79,6 +79,7 @@
       <ol class="asks">
         <li>Raise the Monitor Preview workflow token from <code>pull-requests: read</code> to <code>pull-requests: write</code>. Commenting on a pull request via the issues API requires this; <code>issues: write</code> alone is not enough, which is why every recent PR was missing its preview-link comment (403, swallowed).</li>
         <li>Treat the preview-link comment as an owner-facing control: if creating or updating the comment fails, the step now prints the preview URL to the log and fails, so the regression can never be silent again.</li>
+        <li>Remove the unused <code>issues: write</code> grant from the same permissions block. The workflow's only issues-API calls target a pull request, which the pull-requests permission governs — proven by the 403 that occurred while <code>issues: write</code> was present (owner principle: delete what is unnecessary).</li>
       </ol>
     </section>
 
@@ -88,7 +89,7 @@
       <table>
         <thead><tr><th>Changed file</th><th>What changed</th></tr></thead>
         <tbody>
-          <tr><td><code>.github/workflows/monitor-preview.yml</code></td><td>Permissions: <code>pull-requests: read</code> → <code>write</code> (with a comment explaining why). The comment step's <code>catch</code> no longer downgrades failure to a warning; it logs the preview URL and exits 1.</td></tr>
+          <tr><td><code>.github/workflows/monitor-preview.yml</code></td><td>Permissions: <code>pull-requests: read</code> → <code>write</code>, and the unused <code>issues: write</code> removed (with a comment explaining both). The comment step's <code>catch</code> no longer downgrades failure to a warning; it logs the preview URL and exits 1.</td></tr>
         </tbody>
       </table>
     </section>

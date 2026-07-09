@@ -79,6 +79,7 @@
       <ol class="asks">
         <li>Monitor Preview ワークフローのトークンを <code>pull-requests: read</code> から <code>pull-requests: write</code> に引き上げる。issues API 経由でプルリクエストにコメントするにはこの権限が必要で、<code>issues: write</code> だけでは足りない。これが最近の全 PR でプレビューリンクのコメントが欠けていた原因（403 が握りつぶされていた）。</li>
         <li>プレビューリンクのコメントをオーナー向けの制御手段として扱う：コメントの作成・更新に失敗した場合、ステップはプレビュー URL をログに出力したうえで fail する。これにより同じ退行が二度とサイレントに起こらない。</li>
+        <li>同じ permissions ブロックから未使用の <code>issues: write</code> を削除する。このワークフローの issues API 呼び出しはすべてプルリクエスト向けで、pull-requests 権限が支配する — <code>issues: write</code> があっても 403 だった事実がその証明（オーナーの基準：不要になるものは消す）。</li>
       </ol>
     </section>
 
@@ -88,7 +89,7 @@
       <table>
         <thead><tr><th>変更ファイル</th><th>変更点</th></tr></thead>
         <tbody>
-          <tr><td><code>.github/workflows/monitor-preview.yml</code></td><td>権限を <code>pull-requests: read</code> から <code>write</code> へ（理由をコメントで明記）。コメントステップの <code>catch</code> は失敗を警告に格下げせず、プレビュー URL をログに出して exit 1 する。</td></tr>
+          <tr><td><code>.github/workflows/monitor-preview.yml</code></td><td>権限を <code>pull-requests: read</code> から <code>write</code> へ引き上げ、未使用の <code>issues: write</code> を削除（理由は両方ともコメントで明記）。コメントステップの <code>catch</code> は失敗を警告に格下げせず、プレビュー URL をログに出して exit 1 する。</td></tr>
         </tbody>
       </table>
     </section>
