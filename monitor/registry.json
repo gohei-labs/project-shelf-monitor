@@ -19,47 +19,58 @@
   "categories": {
     "encoding-hygiene": {
       "en": "File conventions",
-      "ja": "ファイル規約"
+      "ja": "ファイル規約",
+      "code": "FILE"
     },
     "secrets": {
       "en": "Secret management",
-      "ja": "機密情報管理"
+      "ja": "機密情報管理",
+      "code": "SEC"
     },
     "build-environment": {
       "en": "Build & environment",
-      "ja": "ビルド・開発環境"
+      "ja": "ビルド・開発環境",
+      "code": "ENV"
     },
     "governance-meta": {
       "en": "Governance",
-      "ja": "ガバナンス"
+      "ja": "ガバナンス",
+      "code": "GOV"
     },
     "bilingual-docs": {
       "en": "Bilingual docs",
-      "ja": "二言語ドキュメント"
+      "ja": "二言語ドキュメント",
+      "code": "DOC"
     },
     "docs-portal": {
       "en": "Docs portal",
-      "ja": "ドキュメントポータル"
+      "ja": "ドキュメントポータル",
+      "code": "PORTAL"
     },
     "application-monitoring": {
       "en": "Application monitoring",
-      "ja": "アプリケーション監視"
+      "ja": "アプリケーション監視",
+      "code": "APP"
     },
     "review-artifacts": {
       "en": "Review artifacts",
-      "ja": "レビュー資料"
+      "ja": "レビュー資料",
+      "code": "REV"
     },
     "agent-context": {
       "en": "Agent context",
-      "ja": "エージェントコンテキスト"
+      "ja": "エージェントコンテキスト",
+      "code": "CTX"
     },
     "decision-records": {
       "en": "Decision records",
-      "ja": "決定記録"
+      "ja": "決定記録",
+      "code": "DEC"
     },
     "working-agreements": {
       "en": "Working agreements",
-      "ja": "申し合わせ"
+      "ja": "申し合わせ",
+      "code": "WA"
     }
   },
   "controlTypes": {
@@ -87,6 +98,7 @@
   "guardrails": [
     {
       "id": "text-encoding",
+      "code": "FILE-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "encoding-hygiene",
@@ -112,6 +124,7 @@
     },
     {
       "id": "doc-naming",
+      "code": "FILE-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "encoding-hygiene",
@@ -137,6 +150,7 @@
     },
     {
       "id": "repo-hygiene",
+      "code": "FILE-03",
       "enabled": true,
       "domain": "process-quality",
       "category": "encoding-hygiene",
@@ -163,6 +177,7 @@
     },
     {
       "id": "root-hidden-paths",
+      "code": "GOV-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "governance-meta",
@@ -192,6 +207,7 @@
     },
     {
       "id": "agent-core-context",
+      "code": "CTX-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "agent-context",
@@ -217,6 +233,7 @@
     },
     {
       "id": "guardrail-registry",
+      "code": "GOV-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "governance-meta",
@@ -242,6 +259,7 @@
     },
     {
       "id": "agent-permission-boundary",
+      "code": "GOV-03",
       "enabled": true,
       "domain": "security",
       "category": "governance-meta",
@@ -267,6 +285,7 @@
     },
     {
       "id": "agent-execution-sandbox",
+      "code": "ENV-01",
       "enabled": true,
       "domain": "security",
       "category": "build-environment",
@@ -292,6 +311,7 @@
     },
     {
       "id": "credential-exfiltration-boundary",
+      "code": "SEC-01",
       "enabled": true,
       "domain": "security",
       "category": "secrets",
@@ -317,6 +337,7 @@
     },
     {
       "id": "agent-pre-execution-hooks",
+      "code": "GOV-04",
       "enabled": true,
       "domain": "security",
       "category": "governance-meta",
@@ -342,6 +363,7 @@
     },
     {
       "id": "bilingual-doc-pairs",
+      "code": "DOC-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "bilingual-docs",
@@ -367,6 +389,7 @@
     },
     {
       "id": "doc-language-roots",
+      "code": "DOC-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "bilingual-docs",
@@ -392,6 +415,7 @@
     },
     {
       "id": "doc-language-content",
+      "code": "DOC-03",
       "enabled": true,
       "domain": "process-quality",
       "category": "bilingual-docs",
@@ -417,6 +441,7 @@
     },
     {
       "id": "application-monitor",
+      "code": "APP-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "application-monitoring",
@@ -446,6 +471,7 @@
     },
     {
       "id": "human-review-artifact",
+      "code": "REV-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "review-artifacts",
@@ -472,6 +498,7 @@
     },
     {
       "id": "review-artifact-terminology",
+      "code": "REV-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "review-artifacts",
@@ -498,6 +525,7 @@
     },
     {
       "id": "review-artifact-placeholders",
+      "code": "REV-03",
       "enabled": true,
       "domain": "process-quality",
       "category": "review-artifacts",
@@ -523,6 +551,7 @@
     },
     {
       "id": "review-artifact-references",
+      "code": "REV-04",
       "enabled": true,
       "domain": "process-quality",
       "category": "review-artifacts",
@@ -549,6 +578,7 @@
     },
     {
       "id": "devcontainer-build",
+      "code": "ENV-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "build-environment",
@@ -574,6 +604,7 @@
     },
     {
       "id": "component-contract",
+      "code": "ENV-03",
       "enabled": true,
       "domain": "process-quality",
       "category": "build-environment",
@@ -603,6 +634,7 @@
     },
     {
       "id": "backend-checks",
+      "code": "ENV-04",
       "enabled": true,
       "domain": "process-quality",
       "category": "build-environment",
@@ -627,6 +659,7 @@
     },
     {
       "id": "frontend-build",
+      "code": "ENV-05",
       "enabled": true,
       "domain": "process-quality",
       "category": "build-environment",
@@ -651,6 +684,7 @@
     },
     {
       "id": "compose-config",
+      "code": "ENV-06",
       "enabled": true,
       "domain": "process-quality",
       "category": "build-environment",
@@ -681,6 +715,7 @@
     },
     {
       "id": "core-context-reading",
+      "code": "CTX-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "agent-context",
@@ -710,6 +745,7 @@
     },
     {
       "id": "ai-review-record",
+      "code": "DEC-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "decision-records",
@@ -740,6 +776,7 @@
     },
     {
       "id": "independent-ai-review",
+      "code": "DEC-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "decision-records",
@@ -770,6 +807,7 @@
     },
     {
       "id": "spec-before-implementation",
+      "code": "DEC-03",
       "enabled": true,
       "domain": "process-quality",
       "category": "decision-records",
@@ -799,6 +837,7 @@
     },
     {
       "id": "secret-scan",
+      "code": "SEC-02",
       "enabled": true,
       "domain": "security",
       "category": "secrets",
@@ -828,6 +867,7 @@
     },
     {
       "id": "explicit-omissions",
+      "code": "WA-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "working-agreements",
@@ -852,6 +892,7 @@
     },
     {
       "id": "artifact-purpose-separation",
+      "code": "WA-02",
       "enabled": true,
       "domain": "process-quality",
       "category": "working-agreements",
@@ -876,6 +917,7 @@
     },
     {
       "id": "browser-control-surface",
+      "code": "PORTAL-01",
       "enabled": true,
       "domain": "process-quality",
       "category": "docs-portal",
@@ -900,6 +942,7 @@
     },
     {
       "id": "no-unilateral-issues",
+      "code": "WA-03",
       "enabled": true,
       "domain": "process-quality",
       "category": "working-agreements",
@@ -924,6 +967,7 @@
     },
     {
       "id": "branch-protection",
+      "code": "GOV-05",
       "enabled": true,
       "domain": "security",
       "category": "governance-meta",
