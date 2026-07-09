@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "title": "Guardrail registry",
-  "description": "Authoritative list of the guardrails in effect. The guardrail monitor pages (monitor/guardrail-monitor.html and guardrail-monitor.ja.html) are generated from this file; do not edit monitor output by hand. scripts/guardrails/check-registry.ps1 verifies that every active guardrail names a real, wired gate, that each rule has both languages, and that the monitor output is up to date.",
+  "title": "Rule registry",
+  "description": "Authoritative list of the rules in effect; entries whose gate is wired are the guardrails. The guardrail monitor pages (monitor/guardrail-monitor.html and guardrail-monitor.ja.html) are generated from this file; do not edit monitor output by hand. scripts/guardrails/check-registry.ps1 verifies that every active guardrail names a real, wired gate, that each rule has both languages, and that the monitor output is up to date.",
   "pillars": {
     "guardrails": {
       "en": "Guardrails",
