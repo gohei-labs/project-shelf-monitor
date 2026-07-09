@@ -37,6 +37,7 @@
     .hero { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:700; font-size:1.84rem; line-height:1.12; letter-spacing:-.01em; margin:6px 0 0; }
     .registry { margin:0; min-width:0; }
     .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .deckhead { font-family:"Space Grotesk", system-ui, sans-serif; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:26px 0 8px; } .deckhead:first-of-type { margin-top:0; }
     .monitor-item { position:relative; display:grid; grid-template-columns:minmax(120px,170px) 1fr minmax(160px,230px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
     .monitor-item:first-child { border-top:0; }
     .monitor-item:hover { background:var(--panel-soft); }
@@ -101,7 +102,7 @@
 <body>
   <main>
     <nav class="topnav">
-      <a href="guardrail-monitor.ja.html">ガードレール</a>
+      <a href="guardrail-monitor.ja.html">ルール</a>
       <a href="security-monitor.ja.html">セキュリティ</a>
       <a href="application-monitor.ja.html">開発ルール</a>
       <a class="here" aria-current="page">プロジェクトルール</a>
@@ -116,47 +117,51 @@
     </header>
     <div class="layout">
     <div class="registry">
+      <h2 class="deckhead">ガードレール（強制ゲート）</h2>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="ビルド・環境" data-name="Dev Container のビルド" data-rule="再現可能な Dev Container がビルドでき、Bash チェック一式が通る。" data-enf="CI job: devcontainer" data-venue="CI" data-status="強制ゲート" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ビルド・開発環境" data-name="Dev Container のビルド" data-rule="再現可能な Dev Container がビルドでき、Bash チェック一式が通る。" data-enf="CI job: devcontainer" data-venue="CI" data-status="強制ゲート" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
+              <span class="ccat">ビルド・開発環境</span>
               <span class="cnm">Dev Container のビルド</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="ビルド・環境" data-name="実装コンポーネント契約" data-rule="実装コンポーネントのディレクトリを追加する前に、stack と check command を宣言する。" data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="stack-neutral なゲート。apps/api が Python を意味する、apps/web が pnpm を意味する、という推測を避け、実装コンポーネントには明示的な test/build 契約を求める。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ビルド・開発環境" data-name="実装コンポーネント契約" data-rule="実装コンポーネントのディレクトリを追加する前に、stack と check command を宣言する。" data-enf="scripts/guardrails/check-component-contract.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="stack-neutral なゲート。apps/api が Python を意味する、apps/web が pnpm を意味する、という推測を避け、実装コンポーネントには明示的な test/build 契約を求める。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
+              <span class="ccat">ビルド・開発環境</span>
               <span class="cnm">実装コンポーネント契約</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="ビルド・環境" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-enf="" data-venue="方針" data-status="将来統制" data-note="backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="ビルド・開発環境" data-name="Compose 設定の検証" data-rule="Docker Compose 設定が検証できる。" data-enf="docker compose config --quiet" data-venue="条件付き" data-status="条件付きゲート" data-note="docker がある時だけ実行。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">バックエンドの lint とテスト</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="ビルド・環境" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-enf="" data-venue="方針" data-status="将来統制" data-note="frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
-              <span class="cnm">フロントエンドのビルド</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-pil="Guardrails" data-cat="ビルド・環境" data-name="Compose 設定の検証" data-rule="Docker Compose 設定が検証できる。" data-enf="docker compose config --quiet" data-venue="条件付き" data-status="条件付きゲート" data-note="docker がある時だけ実行。">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">ガードレール</span>
+              <span class="ccat">ビルド・開発環境</span>
               <span class="cnm">Compose 設定の検証</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">条件付き</span><span class="cstatus status-conditional-gate">条件付きゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Visualization" data-cat="アプリケーション監視" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="アプリケーション監視" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリ開発ルール、要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="application development monitor。アプリ固有の開発ルールを、要求、機能、architecture assumptions と分けて追跡する。">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">可視化</span>
+              <span class="ccat">アプリケーション監視</span>
               <span class="cnm">アプリケーションモニター鮮度</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
       </div>
+      <h2 class="deckhead">申し合わせ・予定・外部</h2>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="ビルド・開発環境" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-enf="" data-venue="方針" data-status="将来統制" data-note="backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">ビルド・開発環境</span>
+              <span class="cnm">バックエンドの lint とテスト</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="ビルド・開発環境" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-enf="" data-venue="方針" data-status="将来統制" data-note="frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">ビルド・開発環境</span>
+              <span class="cnm">フロントエンドのビルド</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
+            </button>
+      </div>
     </div>
     <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="強制元" data-l-venue="実行場所" data-l-status="分類" data-l-note="備考">
-      <p class="mempty" id="mempty">ガードレールを選ぶと、ルールと強制方法が右側に表示されます。</p>
+      <p class="mempty" id="mempty">ルールを選ぶと、内容と強制方法が右側に表示されます。</p>
       <span class="mbar" id="mbar"></span>
       <div class="mbody">
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
@@ -183,7 +188,7 @@
         function openCard(c) {
           var acc = c.getAttribute('data-acc');
           mbar.style.background = acc;
-          meb.textContent = c.getAttribute('data-pil') + ' · ' + c.getAttribute('data-cat');
+          meb.textContent = c.getAttribute('data-cat');
           mnm.textContent = c.getAttribute('data-name');
           mrl.textContent = c.getAttribute('data-rule') || '';
           var h = '';

@@ -37,6 +37,7 @@
     .hero { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:700; font-size:1.84rem; line-height:1.12; letter-spacing:-.01em; margin:6px 0 0; }
     .registry { margin:0; min-width:0; }
     .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .deckhead { font-family:"Space Grotesk", system-ui, sans-serif; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:26px 0 8px; } .deckhead:first-of-type { margin-top:0; }
     .monitor-item { position:relative; display:grid; grid-template-columns:minmax(120px,170px) 1fr minmax(160px,230px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
     .monitor-item:first-child { border-top:0; }
     .monitor-item:hover { background:var(--panel-soft); }
@@ -101,7 +102,7 @@
 <body>
   <main>
     <nav class="topnav">
-      <a href="guardrail-monitor.html">Guardrails</a>
+      <a href="guardrail-monitor.html">Rules</a>
       <a class="here" aria-current="page">Security</a>
       <a href="application-monitor.html">Development rules</a>
       <a href="project-rules.html">Project rules</a>
@@ -116,47 +117,51 @@
     </header>
     <div class="layout">
     <div class="registry">
+      <h2 class="deckhead">Guardrails - enforced gates</h2>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Credential exfiltration boundary" data-rule="The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes)." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Secret management" data-name="Credential exfiltration boundary" data-rule="The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes)." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
+              <span class="ccat">Secret management</span>
               <span class="cnm">Credential exfiltration boundary</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Secret management" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
+              <span class="ccat">Secret management</span>
               <span class="cnm">Secret / token leak scan</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-pil="Guardrails" data-cat="Build &amp; environment" data-name="Agent execution sandbox" data-rule="Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow." data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="External" data-status="External control" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-name="Agent permission boundary" data-rule="An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
-              <span class="cnm">Agent execution sandbox</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external-control">External control</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Agent permission boundary" data-rule="An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
+              <span class="ccat">Governance</span>
               <span class="cnm">Agent permission boundary</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Agent pre-execution hooks" data-rule="Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-name="Agent pre-execution hooks" data-rule="Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
+              <span class="ccat">Governance</span>
               <span class="cnm">Agent pre-execution hooks</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-pil="Guardrails" data-cat="Governance &amp; tooling" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="Advisory" data-status="Future control" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
+      </div>
+      <h2 class="deckhead">Working agreements / planned / external</h2>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-cat="Build &amp; environment" data-name="Agent execution sandbox" data-rule="Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow." data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="External" data-status="External control" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat">Guardrails</span>
+              <span class="ccat">Build &amp; environment</span>
+              <span class="cnm">Agent execution sandbox</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external-control">External control</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="Governance" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="Advisory" data-status="Future control" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat">Governance</span>
               <span class="cnm">Branch protection</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
             </button>
       </div>
     </div>
     <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Control" data-l-note="Note">
-      <p class="mempty" id="mempty">Select a guardrail to see its rule and how it is enforced.</p>
+      <p class="mempty" id="mempty">Select a rule to see what it requires and how it is enforced.</p>
       <span class="mbar" id="mbar"></span>
       <div class="mbody">
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
@@ -183,7 +188,7 @@
         function openCard(c) {
           var acc = c.getAttribute('data-acc');
           mbar.style.background = acc;
-          meb.textContent = c.getAttribute('data-pil') + ' · ' + c.getAttribute('data-cat');
+          meb.textContent = c.getAttribute('data-cat');
           mnm.textContent = c.getAttribute('data-name');
           mrl.textContent = c.getAttribute('data-rule') || '';
           var h = '';
