@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0058: 実行前クリティカルなゲートを決定的フック（PreToolUse/Stop）へ移す</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0 0 10px;} .risk p:last-child{margin-bottom:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナー承認レビュー</span><span class="dot"></span><span class="num">0058</span><span><b>Draft</b></span><span><b>2026-07-08</b></span></p>
+      <h1>実行前クリティカルなゲートを決定的フック（PreToolUse/Stop）へ移す</h1>
+      <p class="lead">この資料は、<b>事後（check.ps1・CI）にしか効かなかったガードを、エージェントの行動の前に作動する決定的フックへ拡張する</b>ことの承認を求めます。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認のお願い（Requested Approval）</p>
+      <ol class="asks">
+        <li><b>PreToolUse ガードの導入。</b>ファイル系ツールの書込先を <code>agent-policy/policy.json</code> の保護パスと照合し、実行前に判定します。コマンド系ツールは、破壊的コマンドの deny ルールを権限境界の下の第二レイヤーとして照合します。</li>
+        <li><b>保護パスの deny / ask の使い分け。</b>Issue #64 は4パスすべて deny としていましたが、回復不能な対象（<code>.git/</code>、生成物の <code>.claude/settings.json</code> ほか）のみ <code>deny</code> とし、オーナーレビューが本旨の対象（<code>monitor/registry.json</code>・<code>agent-policy/policy.json</code>・<code>.devcontainer/</code>）は <code>ask</code>（実行時点での人間承認）とします。全 deny にするとエージェントは新しいガードレールをレジストリに登録できなくなり、統制の更新自体が止まるためです。</li>
+        <li><b>Stop ゲートの導入。</b>ターン終了時に <code>scripts/check.ps1</code> 全体を実行し、失敗中は終了をブロックして失敗内容をエージェントに返します。<code>stop_hook_active</code> による無限ループ防止付き。</li>
+        <li><b>フック層の生成とゲート化。</b>フック配線は policy.json から <code>.claude/settings.json</code> へ生成し、レジストリに <code>agent-pre-execution-hooks</code>（hard-gate）を登録。フックの無効化・スクリプト欠落・enforcement 未宣言は既存ゲートの拡張で fail します。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容（What Changed）</p>
+      <p class="sub">承認のお願いを実現する、具体的な変更ファイルの一覧です。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>agent-policy/policy.json</code></td><td>保護パスに <code>enforcement</code>（deny / ask）を宣言。<code>.claude/settings.json</code>・<code>.claude/settings.local.json</code>（deny）と <code>.claude/</code>（ask）を追加。</td></tr>
+          <tr><td><code>scripts/hooks/pretooluse-guard.ps1</code></td><td>新規。PreToolUse フック本体。実行時にポリシーを読み、保護パスは最長一致の enforcement を、コマンドはコマンド位置にアンカーした deny 照合を適用。ポリシーが読めない場合は書込を deny（フェイルクローズ）。</td></tr>
+          <tr><td><code>scripts/hooks/stop-check.ps1</code></td><td>新規。Stop フック本体。チェックスイート失敗時にターン終了をブロックし、失敗出力を返す。</td></tr>
+          <tr><td><code>scripts/generate/build-agent-config.ps1</code></td><td><code>hooks</code> セクション（PreToolUse ×2 マッチャー、Stop）を生成。</td></tr>
+          <tr><td><code>.claude/settings.json</code></td><td>再生成（権限境界＋フック配線）。</td></tr>
+          <tr><td><code>scripts/guardrails/check-agent-policy.ps1</code></td><td>フック層の検証を追加: フラグ有効・スクリプト存在＆追跡・全保護パスの enforcement 宣言。</td></tr>
+          <tr><td><code>monitor/registry.json</code> ほか生成ページ</td><td><code>agent-pre-execution-hooks</code>（hard-gate）を登録し、モニターを再生成（再利用可能24件）。</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/guardrails/agent-policy.md</code></td><td>「実行前フック」の節を追加し、実装範囲を更新（日英）。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0058-*.html</code></td><td>この資料（日英対）。レビュー索引も再生成。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク（Risk）</p>
+      <div class="risk">
+        <p><b>レイテンシ。</b>PreToolUse はツール呼び出しごとに pwsh を起動（約0.3〜0.6秒）、Stop はターン終了ごとにチェックスイート全体（数十秒）を実行します。決定的強制の対価であり、Issue #64 で明示された要求です。</p>
+        <p><b>過剰ブロック（誤検知）。</b>コマンド照合はテキストベースのため、区切り文字直後のクォート内文字列（例: コミットメッセージ中の危険コマンド）を稀に deny します。安全側の誤りであり、エージェントは表現を変えれば先へ進めます。クォート文脈の解析はサンドボックス作業（#62）に委ねます。</p>
+        <p><b>ハーネス依存。</b>フック配線は現時点で Claude Code のみ。他ハーネスにはこの層が無いため、他ハーネスのエミッター追加までは事後ゲート（CI）が唯一の防壁です。なお ask は非対話実行では deny として扱われます（安全側）。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">決めないこと（Not Decided Here）</p>
+      <ul class="scope">
+        <li>実行サンドボックス・egress／認証情報読み取り制御（Issue #62・#63）。</li>
+        <li>他ハーネス（Codex・Gemini・Cursor）向けのフック／設定エミッター。</li>
+        <li>解決後コマンドの構文解析（テキスト照合の限界の解消）。</li>
+        <li>Stop フックの高速化（クリーンツリー時のスキップ等の最適化）。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">資料チェック（Author Checks）</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>用語チェック（Terminology Check）</h3>
+        <p>この資料で業界標準の用語を使い、独自表現は標準語へ対応付けたか。</p>
+        <table>
+          <thead><tr><th>この資料の言葉</th><th>標準用語・意味</th></tr></thead>
+          <tbody>
+            <tr><td>実行前フック</td><td>Claude Code の hooks（PreToolUse / Stop イベント）。ツール実行前・ターン終了時に決定的に走るユーザー定義コマンド。</td></tr>
+            <tr><td>deny / ask</td><td>フックの <code>permissionDecision</code> 値。deny は拒否、ask は人間への実行時承認プロンプト。</td></tr>
+            <tr><td>フェイルクローズ</td><td>fail-closed。制御の判断材料が失われたとき、許可ではなく拒否側に倒す設計。</td></tr>
+            <tr><td>事後ゲート／実行前強制</td><td>post-hoc check（CI・check.ps1）と pre-execution enforcement（hooks）の対比。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>一次情報チェック（References / Primary Sources）</h3>
+        <p>判断の根拠について、大元の一次情報（公式ドキュメント・正本）に当たったか。</p>
+        <table>
+          <thead><tr><th>当たった一次情報</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://code.claude.com/docs/en/hooks">Claude Code hooks リファレンス</a></td><td>PreToolUse の <code>permissionDecision</code>（deny/ask）出力、Stop の <code>decision: block</code>、<code>stop_hook_active</code> によるループ防止。</td></tr>
+            <tr><td><a href="https://www.anthropic.com/engineering/claude-code-best-practices">Anthropic: Claude Code best practices</a></td><td>「CLAUDE.md の指示は advisory、hooks は決定論的で実行を保証する」というベンダー指針。</td></tr>
+            <tr><td>Issue #64</td><td>目的・受け入れ条件（PreToolUse・Stop・レジストリ化）とオーナー承認（2026-06-19）。</td></tr>
+            <tr><td>PR #65／資料 0056</td><td>拡張元の policy.json ＋ 生成パターン（正本からハーネス設定を生成）。</td></tr>
+            <tr><td>ローカル検証ログ</td><td>フック単体テスト: コマンド系8ケース・パス系5ケース、Stop の赤／緑／ループガードの全パス。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー資料</p>
+  </main>
+</body>
+</html>
