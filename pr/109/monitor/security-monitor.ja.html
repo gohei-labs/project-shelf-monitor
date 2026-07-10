@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>セキュリティモニター</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#FBFBF8;
+      --panel:#FFFFFF;
+      --panel-soft:#F1F1EC;
+      --ink:#0C0C0D;
+      --muted:#6E6E70;
+      --line:#E4E4DD;
+      --line-strong:#C7C7BF;
+      --green:#457B5B;
+      --blue:#5B7DB5;
+      --amber:#A67D3D;
+      --red:#B84C42;
+      --accent:#BCE000;
+      --accent-ink:#49590A;
+    }
+    * { box-sizing:border-box; }
+    html { scrollbar-gutter:stable; }
+    html, body { margin:0; }
+    body { background:var(--bg); color:var(--ink); font-family:"Inter", system-ui, sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; font-feature-settings:"tnum" 1; }
+    main { max-width:1440px; margin:0 auto; padding:24px 18px 44px; }
+    .topnav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 22px; }
+    .topnav a { color:var(--muted); text-decoration:none; border:1px solid transparent; border-radius:8px; padding:7px 10px; font-size:.86rem; line-height:1; }
+    .topnav a:hover { color:var(--ink); background:var(--panel); border-color:var(--line); }
+    .topnav a.here { color:var(--ink); background:var(--panel); border-color:var(--line-strong); }
+    .pagehead { border-bottom:1px solid var(--line); padding:0 0 18px; }
+    .eyebrow { font-size:.72rem; letter-spacing:0; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0; }
+    .hero { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:700; font-size:1.84rem; line-height:1.12; letter-spacing:-.01em; margin:6px 0 0; }
+    .registry { margin:0; min-width:0; }
+    .deck { background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .cathead { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:.82rem; letter-spacing:.06em; color:var(--ink); margin:16px 0 6px; }
+    .ccode { font-family:ui-monospace, SFMono-Regular, Consolas, monospace; color:var(--muted); }
+    .deckhead { font-family:"Space Grotesk", system-ui, sans-serif; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:26px 0 8px; } .deckhead:first-of-type { margin-top:0; }
+    .monitor-item { position:relative; display:grid; grid-template-columns:minmax(120px,170px) 1fr minmax(160px,230px); align-items:center; gap:14px; width:100%; min-height:50px; text-align:left; padding:10px 14px 10px 18px; background:var(--panel); border:0; border-top:1px solid var(--line); cursor:pointer; color:var(--ink); font:inherit; }
+    .monitor-item:first-child { border-top:0; }
+    .monitor-item:hover { background:var(--panel-soft); }
+    .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+    .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
+    .ccat { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
+    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
+    .cmk { width:6px; height:6px; flex:0 0 auto; border-radius:50%; }
+    .cmk.enf { background:var(--green); }
+    .cmk.oth { border:1px solid var(--muted); }
+    .cv { font-size:.76rem; letter-spacing:0; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .cstatus { flex:0 0 auto; border-radius:999px; border:1px solid transparent; padding:2px 7px; font-size:.7rem; font-weight:700; letter-spacing:0; }
+    .status-hard-gate { background:#EDF4EF; border-color:#C5D9CC; color:#2E5C3E; }
+    .status-conditional-gate { background:#FBF4E8; border-color:#E8D4A6; color:#7D5E25; }
+    .status-external-control { background:#FAEEED; border-color:#E8C1BD; color:#8B3730; }
+    .status-none { background:#F0ECE8; border-color:#D5CEC6; color:#5A4F44; }
+    .status-planned { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
+    .monitor-item.disabled { opacity:.55; }
+    .monitor-item.active { background:var(--panel-soft); }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 384px; gap:22px; align-items:start; margin:18px 0 0; }
+    .detail { position:sticky; top:24px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; overflow-y:auto; max-height:calc(100vh - 48px); }
+    .mempty { color:var(--muted); font-size:.88rem; line-height:1.6; margin:0; padding:22px; }
+    .detail .mbar, .detail .mbody { display:none; }
+    .detail.has-item .mbar { display:block; }
+    .detail.has-item .mbody { display:block; }
+    .detail.has-item .mempty { display:none; }
+    .backdrop { position:fixed; inset:0; background:rgba(8,8,11,0.5); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:50; }
+    .mbar { display:block; height:4px; width:100%; }
+    .mbody { padding:20px 22px 24px; position:relative; }
+    .mclose { position:absolute; top:12px; right:12px; width:32px; height:32px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:1.35rem; line-height:1; cursor:pointer; border-radius:8px; display:none; }
+    .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
+    .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0 36px 0 0; }
+    .mname { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:1.2rem; letter-spacing:0; line-height:1.28; margin:8px 0 0; }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mdiv { height:1px; background:var(--line); margin:16px 0; }
+    .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
+    .mmeta dt { color:var(--muted); letter-spacing:0; }
+    .mmeta dd { margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere; }
+    .mmeta code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.8rem; color:var(--ink); }
+    @media (prefers-reduced-motion: reduce) { .detail, .backdrop { transition:none; } }
+    @media (max-width:1000px) {
+      .layout { grid-template-columns:1fr; }
+      .detail { position:fixed; top:0; right:0; bottom:0; left:auto; width:min(440px,92vw); max-height:none; border-radius:0; border:0; border-left:1px solid var(--line); transform:translateX(100%); transition:transform .22s ease; z-index:51; }
+      .detail.show { transform:translateX(0); box-shadow:-18px 0 48px rgba(24,24,27,.22); }
+      .mclose { display:block; }
+      .backdrop.show { opacity:1; pointer-events:auto; }
+    }
+    @media (max-width:760px) {
+      main { padding:18px 12px 36px; }
+      .topnav { margin-bottom:18px; gap:6px; }
+      .topnav a { padding:7px 8px; font-size:.82rem; }
+      .hero { font-size:1.36rem; }
+      .monitor-item { grid-template-columns:1fr; gap:5px; align-items:start; padding:11px 12px 11px 18px; }
+      .cfoot { justify-content:flex-start; flex-wrap:wrap; }
+      .cv { white-space:normal; }
+      .mrule { line-break:anywhere; word-break:break-all; }
+      .mmeta { grid-template-columns:1fr; gap:3px 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="topnav">
+      <a href="guardrail-monitor.ja.html">ルール</a>
+      <a class="here" aria-current="page">セキュリティ</a>
+      <a href="project-rules.ja.html">プロジェクトルール</a>
+      <a href="application-requirements.ja.html">要求</a>
+      <a href="application-features.ja.html">機能</a>
+      <a href="application-architecture.ja.html">アーキテクチャ</a>
+      <a href="reviews.ja.html">レビュー</a>
+    </nav>
+    <header class="pagehead">
+      <p class="eyebrow">Security monitor</p>
+      <h1 class="hero">セキュリティモニター</h1>
+    </header>
+    <div class="layout">
+    <div class="registry">
+      <h2 class="deckhead">ガードレール（強制ゲート）</h2>
+      <h3 class="cathead">機密情報管理</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="機密情報管理" data-code="SEC-01" data-name="認証情報の持ち出し境界" data-rule="コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">SEC-01</span>
+              <span class="cnm">認証情報の持ち出し境界</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="機密情報管理" data-code="SEC-02" data-name="秘密情報／トークン漏れスキャン" data-rule="差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。" data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="変更ファイルの内容と PR 本文を既知のトークン形状で走査。CI は GUARDRAIL_PULL_REQUEST_BODY 経由で PR 本文を渡す。git 失敗時は fail-closed。値は伏字化。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">SEC-02</span>
+              <span class="cnm">秘密情報／トークン漏れスキャン</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
+      </div>
+      <h3 class="cathead">ガバナンス</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-03" data-name="エージェント権限境界" data-rule="AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">GOV-03</span>
+              <span class="cnm">エージェント権限境界</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-04" data-name="エージェント実行前フック" data-rule="決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">GOV-04</span>
+              <span class="cnm">エージェント実行前フック</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
+      </div>
+      <h2 class="deckhead">申し合わせ・予定・外部</h2>
+      <h3 class="cathead">ビルド・開発環境</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-cat="ビルド・開発環境" data-code="ENV-01" data-name="エージェント実行サンドボックス" data-rule="エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。" data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="外部" data-status="外部統制" data-guidance="必須" data-note="">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-01</span>
+              <span class="cnm">エージェント実行サンドボックス</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">外部</span><span class="cstatus status-external-control">外部統制</span></span>
+            </button>
+      </div>
+      <h3 class="cathead">ガバナンス</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ガバナンス" data-code="GOV-05" data-name="ブランチ保護" data-rule="必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">GOV-05</span>
+              <span class="cnm">ブランチ保護</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
+            </button>
+      </div>
+    </div>
+    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="強制元" data-l-venue="実行場所" data-l-status="挙動" data-l-guidance="適用義務" data-l-note="備考">
+      <p class="mempty" id="mempty">ルールを選ぶと、内容と強制方法が右側に表示されます。</p>
+      <span class="mbar" id="mbar"></span>
+      <div class="mbody">
+        <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
+        <p class="meb" id="meb"></p>
+        <h3 class="mname" id="mnm"></h3>
+        <p class="mrule" id="mrl"></p>
+        <div class="mdiv"></div>
+        <dl class="mmeta" id="mmeta"></dl>
+      </div>
+    </aside>
+    </div>
+    <div class="backdrop" id="bd"></div>
+  </main>
+  <script>
+    (function () {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.monitor-item'));
+      var bd = document.getElementById('bd');
+      var md = document.getElementById('md');
+      if (md) {
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), guidance: md.getAttribute('data-l-guidance'), note: md.getAttribute('data-l-note') };
+        function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
+        function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function openCard(c) {
+          var acc = c.getAttribute('data-acc');
+          mbar.style.background = acc;
+          meb.textContent = c.getAttribute('data-code') + ' · ' + c.getAttribute('data-cat');
+          mnm.textContent = c.getAttribute('data-name');
+          mrl.textContent = c.getAttribute('data-rule') || '';
+          var h = '';
+          var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }
+          h += row(L.venue, esc(c.getAttribute('data-venue') || ''));
+          h += row(L.status, esc(c.getAttribute('data-status') || ''));
+          h += row(L.guidance, esc(c.getAttribute('data-guidance') || ''));
+          var note = c.getAttribute('data-note'); if (note) { h += row(L.note, esc(note)); }
+          mmeta.innerHTML = h;
+          cards.forEach(function (x) { x.classList.remove('active'); });
+          c.classList.add('active');
+          md.classList.add('has-item'); md.classList.add('show'); bd.classList.add('show');
+        }
+        function closeModal() { bd.classList.remove('show'); md.classList.remove('show'); }
+        cards.forEach(function (c) { c.addEventListener('click', function () { openCard(c); }); });
+        bd.addEventListener('click', closeModal);
+        document.getElementById('mx').addEventListener('click', closeModal);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+        if (window.matchMedia('(min-width:1001px)').matches && cards.length) { openCard(cards[0]); }
+      }
+    })();
+  </script>
+</body>
+</html>
