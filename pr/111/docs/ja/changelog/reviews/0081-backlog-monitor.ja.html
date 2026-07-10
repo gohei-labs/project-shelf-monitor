@@ -79,7 +79,7 @@
       <ol class="asks">
         <li><b>バックログの採用。</b>ソース <code>monitor/backlog.json</code> → 生成 <code>monitor/backlog.html</code> / <code>.ja.html</code>。既存の Pages サイトと公開ミラーで配信。申し合わせ <code>no-unilateral-issues</code> を運用可能にする：何を Issue に昇格させるかはオーナーが決める。</li>
         <li><b>type 語彙の採用（調査に基づく）。</b>GitHub Issue Types・Azure DevOps・Google Issue Tracker・Mozilla BMO・Conventional Commits の deep research で、一貫した規則が判明：<code>type</code>・severity・area・status・tags は<i>別々の軸</i>。<code>type</code> 集合は <code>bug / feature / enhancement / refactor / docs / task / question</code> — GitHub デフォルト整合・Conventional Commits 写像可能。fail-open は <code>type: bug</code> に <code>fail-open</code>/<code>cwe-636</code> タグで、type ではない。<code>security</code> も tag で、ルールレジストリが <code>domain: security</code> をルールの仕組みと分けているのと同じ。</li>
-        <li><b>監査で初期投入。</b>確定した 27 件の fail-open 所見が最初の 27 項目になる（2 件 <code>accepted</code>、PR #110 が対応。25 件 <code>candidate</code>）。まだ何も Issue にはしていない — それが次の、オーナー主導のステップ。</li>
+        <li><b>監査で初期投入。</b>確定した 27 件の fail-open 所見＋本レビューで浮上した 1 件が最初の項目になる（計 28：2 件 <code>accepted</code>、PR #110 が対応。26 件 <code>candidate</code>）。まだ何も Issue にはしていない — それが次の、オーナー主導のステップ。</li>
         <li><b>ゲートで守る。</b><code>check-backlog.ps1</code>（レジストリ <code>GOV-06</code>）がソースを検証しモニターを同期させる — 集合外の type/impact/status を持つ候補は表示できず、ページはソースからドリフトできない。</li>
       </ol>
     </section>
