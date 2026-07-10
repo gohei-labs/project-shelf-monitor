@@ -56,8 +56,8 @@
     .status-hard-gate { background:#EDF4EF; border-color:#C5D9CC; color:#2E5C3E; }
     .status-conditional-gate { background:#FBF4E8; border-color:#E8D4A6; color:#7D5E25; }
     .status-external-control { background:#FAEEED; border-color:#E8C1BD; color:#8B3730; }
-    .status-working-agreement { background:#F0ECE8; border-color:#D5CEC6; color:#5A4F44; }
-    .status-future-control { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
+    .status-none { background:#F0ECE8; border-color:#D5CEC6; color:#5A4F44; }
+    .status-planned { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
     .monitor-item.disabled { opacity:.55; }
     .monitor-item.active { background:var(--panel-soft); }
     .layout { display:grid; grid-template-columns:minmax(0,1fr) 384px; gap:22px; align-items:start; margin:18px 0 0; }
@@ -121,7 +121,7 @@
       <h2 class="deckhead">ガードレール（強制ゲート）</h2>
       <h3 class="cathead">アプリケーション監視</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="アプリケーション監視" data-code="APP-01" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-note="アプリケーションモニターは product/application-monitor.json から生成し、製品の要求・機能・アーキテクチャをページ分割して表示する。アプリ開発ルールはここでは追跡せず、レジストリが保持して Project rules ビューに表示する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="アプリケーション監視" data-code="APP-01" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="アプリケーションモニターは product/application-monitor.json から生成し、製品の要求・機能・アーキテクチャをページ分割して表示する。アプリ開発ルールはここでは追跡せず、レジストリが保持して Project rules ビューに表示する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">APP-01</span>
               <span class="cnm">アプリケーションモニター鮮度</span>
@@ -131,48 +131,48 @@
       <h2 class="deckhead">申し合わせ・予定・外部</h2>
       <h3 class="cathead">ビルド・開発環境</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="ビルド・開発環境" data-code="ENV-04" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-enf="" data-venue="方針" data-status="将来統制" data-note="backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-04" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-04</span>
               <span class="cnm">バックエンドの lint とテスト</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="ビルド・開発環境" data-code="ENV-05" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-enf="" data-venue="方針" data-status="将来統制" data-note="frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-05" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-05</span>
               <span class="cnm">フロントエンドのビルド</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-future-control">将来統制</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
       </div>
       <h3 class="cathead">アプリケーションルール</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="アプリケーションルール" data-code="PROJ-01" data-name="Phase 1 は読み取り専用" data-rule="アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。" data-enf="" data-venue="名目" data-status="作業合意" data-note="製品判断。最初のコンポーネントが出来た時点でテスト可能になる。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-01" data-name="Phase 1 は読み取り専用" data-rule="アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="必須" data-note="製品判断。最初のコンポーネントが出来た時点でテスト可能になる。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-01</span>
               <span class="cnm">Phase 1 は読み取り専用</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-working-agreement">作業合意</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="アプリケーションルール" data-code="PROJ-02" data-name="managed-root パス境界" data-rule="アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。" data-enf="" data-venue="名目" data-status="将来統制" data-note="最初のコンポーネントの境界テストと同時にハードゲート化する（要求 REQ-002）。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-02" data-name="managed-root パス境界" data-rule="アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="予定" data-note="最初のコンポーネントの境界テストと同時にハードゲート化する（要求 REQ-002）。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-02</span>
               <span class="cnm">managed-root パス境界</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-future-control">将来統制</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="アプリケーションルール" data-code="PROJ-03" data-name="構造化された操作ログ" data-rule="アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。" data-enf="" data-venue="名目" data-status="将来統制" data-note="コアのログ規則のプロジェクト適用。ログ検証テストが出来た時点でゲート化する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-03" data-name="構造化された操作ログ" data-rule="アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="予定" data-note="コアのログ規則のプロジェクト適用。ログ検証テストが出来た時点でゲート化する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-03</span>
               <span class="cnm">構造化された操作ログ</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-future-control">将来統制</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="アプリケーションルール" data-code="PROJ-04" data-name="アーキテクチャ変更は記録で決める" data-rule="アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。" data-enf="" data-venue="名目" data-status="作業合意" data-note="spec-before-implementation のアプリ版。要求 ID への紐付けを担う。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-04" data-name="アーキテクチャ変更は記録で決める" data-rule="アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="必須" data-note="spec-before-implementation のアプリ版。要求 ID への紐付けを担う。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-04</span>
               <span class="cnm">アーキテクチャ変更は記録で決める</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-working-agreement">作業合意</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span></span>
             </button>
       </div>
     </div>
-    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="強制元" data-l-venue="実行場所" data-l-status="分類" data-l-note="備考">
+    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="強制元" data-l-venue="実行場所" data-l-status="挙動" data-l-guidance="適用義務" data-l-note="備考">
       <p class="mempty" id="mempty">ルールを選ぶと、内容と強制方法が右側に表示されます。</p>
       <span class="mbar" id="mbar"></span>
       <div class="mbody">
@@ -194,7 +194,7 @@
       var md = document.getElementById('md');
       if (md) {
         var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
-        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), note: md.getAttribute('data-l-note') };
+        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), guidance: md.getAttribute('data-l-guidance'), note: md.getAttribute('data-l-note') };
         function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
         function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
         function openCard(c) {
@@ -207,6 +207,7 @@
           var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }
           h += row(L.venue, esc(c.getAttribute('data-venue') || ''));
           h += row(L.status, esc(c.getAttribute('data-status') || ''));
+          h += row(L.guidance, esc(c.getAttribute('data-guidance') || ''));
           var note = c.getAttribute('data-note'); if (note) { h += row(L.note, esc(note)); }
           mmeta.innerHTML = h;
           cards.forEach(function (x) { x.classList.remove('active'); });

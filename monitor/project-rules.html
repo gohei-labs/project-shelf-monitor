@@ -56,8 +56,8 @@
     .status-hard-gate { background:#EDF4EF; border-color:#C5D9CC; color:#2E5C3E; }
     .status-conditional-gate { background:#FBF4E8; border-color:#E8D4A6; color:#7D5E25; }
     .status-external-control { background:#FAEEED; border-color:#E8C1BD; color:#8B3730; }
-    .status-working-agreement { background:#F0ECE8; border-color:#D5CEC6; color:#5A4F44; }
-    .status-future-control { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
+    .status-none { background:#F0ECE8; border-color:#D5CEC6; color:#5A4F44; }
+    .status-planned { background:#EDF1F8; border-color:#C5D0E5; color:#3E5580; }
     .monitor-item.disabled { opacity:.55; }
     .monitor-item.active { background:var(--panel-soft); }
     .layout { display:grid; grid-template-columns:minmax(0,1fr) 384px; gap:22px; align-items:start; margin:18px 0 0; }
@@ -121,7 +121,7 @@
       <h2 class="deckhead">Guardrails - enforced gates</h2>
       <h3 class="cathead">Application monitoring</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Application monitoring" data-code="APP-01" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-note="The application monitor presents product requirements, features, and architecture as separate pages, generated from product/application-monitor.json. Application development rules are not tracked here; they live in the registry and appear on the Project rules view.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Application monitoring" data-code="APP-01" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="The application monitor presents product requirements, features, and architecture as separate pages, generated from product/application-monitor.json. Application development rules are not tracked here; they live in the registry and appear on the Project rules view.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">APP-01</span>
               <span class="cnm">Application monitor freshness</span>
@@ -131,48 +131,48 @@
       <h2 class="deckhead">Working agreements / planned / external</h2>
       <h3 class="cathead">Build &amp; environment</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="Build &amp; environment" data-code="ENV-04" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Build &amp; environment" data-code="ENV-04" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-04</span>
               <span class="cnm">Backend lint and tests</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="Build &amp; environment" data-code="ENV-05" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="Future control" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Build &amp; environment" data-code="ENV-05" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-05</span>
               <span class="cnm">Frontend build</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
       </div>
       <h3 class="cathead">Application rules</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="Application rules" data-code="PROJ-01" data-name="Phase 1 is read-only" data-rule="The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="Product decision. Becomes testable once the first component exists.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-01" data-name="Phase 1 is read-only" data-rule="The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Mandatory" data-note="Product decision. Becomes testable once the first component exists.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-01</span>
               <span class="cnm">Phase 1 is read-only</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="Application rules" data-code="PROJ-02" data-name="Managed-root path boundary" data-rule="Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests." data-enf="" data-venue="Honor" data-status="Future control" data-note="Becomes a hard gate with the first component's boundary tests (requirement REQ-002).">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-02" data-name="Managed-root path boundary" data-rule="Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Planned" data-note="Becomes a hard gate with the first component's boundary tests (requirement REQ-002).">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-02</span>
               <span class="cnm">Managed-root path boundary</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="future-control" data-cat="Application rules" data-code="PROJ-03" data-name="Structured operation logging" data-rule="Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events." data-enf="" data-venue="Honor" data-status="Future control" data-note="Project application of the core logging rules; gated once log-assertion tests exist.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-03" data-name="Structured operation logging" data-rule="Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Planned" data-note="Project application of the core logging rules; gated once log-assertion tests exist.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-03</span>
               <span class="cnm">Structured operation logging</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-future-control">Future control</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="working-agreement" data-cat="Application rules" data-code="PROJ-04" data-name="Architecture changes decided by record" data-rule="A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation." data-enf="" data-venue="Honor" data-status="Working agreement" data-note="Application-level counterpart of spec-before-implementation, tied to the requirement IDs.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-04" data-name="Architecture changes decided by record" data-rule="A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Mandatory" data-note="Application-level counterpart of spec-before-implementation, tied to the requirement IDs.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-04</span>
               <span class="cnm">Architecture changes decided by record</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-working-agreement">Working agreement</span></span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span></span>
             </button>
       </div>
     </div>
-    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Control" data-l-note="Note">
+    <aside class="detail" id="md" role="region" aria-live="polite" aria-labelledby="mnm" data-l-enf="Enforced by" data-l-venue="Where" data-l-status="Behavior" data-l-guidance="Guidance" data-l-note="Note">
       <p class="mempty" id="mempty">Select a rule to see what it requires and how it is enforced.</p>
       <span class="mbar" id="mbar"></span>
       <div class="mbody">
@@ -194,7 +194,7 @@
       var md = document.getElementById('md');
       if (md) {
         var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
-        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), note: md.getAttribute('data-l-note') };
+        var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), guidance: md.getAttribute('data-l-guidance'), note: md.getAttribute('data-l-note') };
         function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
         function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
         function openCard(c) {
@@ -207,6 +207,7 @@
           var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }
           h += row(L.venue, esc(c.getAttribute('data-venue') || ''));
           h += row(L.status, esc(c.getAttribute('data-status') || ''));
+          h += row(L.guidance, esc(c.getAttribute('data-guidance') || ''));
           var note = c.getAttribute('data-note'); if (note) { h += row(L.note, esc(note)); }
           mmeta.innerHTML = h;
           cards.forEach(function (x) { x.classList.remove('active'); });
