@@ -93,6 +93,7 @@
           <tr><td><code>scripts/guardrails/check-component-checks.ps1</code></td><td>新しい条件付きゲート：対象コンポーネントの commands.check を cwd = component path、子 pwsh で実行。</td></tr>
           <tr><td><code>scripts/check.ps1</code></td><td>呼び出しを 1 つ配線：<code>-Id backend-checks -Parameters @{ ComponentType = @("backend") }</code>。</td></tr>
           <tr><td><code>.github/workflows/ci.yml</code></td><td><code>check</code> ジョブで uv を導入（astral-sh/setup-uv@v5、キャッシュ有効）。条件付きゲートが CI で走る。</td></tr>
+          <tr><td><code>project-components.json</code>・<code>scripts/setup/bootstrap.sh</code></td><td>任意の <code>commands.setup</code>（<code>uv sync --frozen</code>）。Dev Container のネットワークがまだ開いているうちに、bootstrap が component path で実行する。以後 check ゲートはオフラインで走る。setup の失敗・リポジトリ外パス・複数行コマンドでは bootstrap が fail-closed で中断する。</td></tr>
           <tr><td><code>monitor/registry.json</code></td><td>ENV-04 を enforcedBy 付きの条件付きゲートへ昇格。ENV-04 / ENV-05 の note を書き直し。</td></tr>
           <tr><td><code>scripts/guardrails/check-application-monitor.ps1</code></td><td>相互チェックを追加：アーキテクチャ記録と契約の双方に宣言されたコンポーネントは同じ <code>type</code> を持たねばならない（付け替えるとゲートの対象から外れる）。</td></tr>
           <tr><td><code>scripts/guardrails/check-application-monitor.ps1</code>・<code>scripts/generate/build-application-monitor.ps1</code></td><td>廃止 controlType 語彙と古い CSS を削除。</td></tr>
@@ -106,7 +107,7 @@
     <section>
       <p class="kicker">リスク</p>
       <div class="risk">
-        <p>中。本ゲートは追跡ファイルから読んだコマンドテキストを実行します——それがコンポーネント契約の目的であり、保護は <code>project-components.json</code> が他の制御ファイルと同様にレビューゲートを通ること、および component path がリポジトリ内に閉じ込められることです。ゲートの初版はプログラム名を集めるためコマンドを <code>&amp;&amp;</code> / <code>;</code> で分割していましたが、これは <code>python -c</code> の引用符内の <code>sys.exit(3)</code> を「存在しないプログラム」と誤認し、<b>成功を報告しながら check を黙ってスキップ</b>していました（fail-open）。コミット前に負のテストが捕捉し、現在は先頭トークンのみを見て、後続プログラム欠落では fail-closed に倒れます。レビューでさらに 2 つの fail-open 経路が見つかり、本 PR で塞ぎました：契約側だけでコンポーネントを<b>付け替える</b>（backend → worker）とゲートの対象から黙って外れる——アーキテクチャ記録と契約は <code>type</code> が一致しなければならなくなりました。また component path の封じ込め検査は字句的で、コミットされた<b>シンボリックリンク</b>（パス自身または祖先）によって作業ディレクトリがリポジトリ外に置かれえた——ゲートはリンクを辿って正規化し、外部を指す場合は拒否します。残余：Dev Container / Bash レーンには uv が無いため（可視の）スキップとなり、PowerShell の CI レーンより強制が弱いままです。</p>
+        <p>中。本ゲートは追跡ファイルから読んだコマンドテキストを実行します——それがコンポーネント契約の目的であり、保護は <code>project-components.json</code> が他の制御ファイルと同様にレビューゲートを通ること、および component path がリポジトリ内に閉じ込められることです。ゲートの初版はプログラム名を集めるためコマンドを <code>&amp;&amp;</code> / <code>;</code> で分割していましたが、これは <code>python -c</code> の引用符内の <code>sys.exit(3)</code> を「存在しないプログラム」と誤認し、<b>成功を報告しながら check を黙ってスキップ</b>していました（fail-open）。コミット前に負のテストが捕捉し、現在は先頭トークンのみを見て、後続プログラム欠落では fail-closed に倒れます。レビューでさらに 2 つの fail-open 経路が見つかり、本 PR で塞ぎました：契約側だけでコンポーネントを<b>付け替える</b>（backend → worker）とゲートの対象から黙って外れる——アーキテクチャ記録と契約は <code>type</code> が一致しなければならなくなりました。また component path の封じ込め検査は字句的で、コミットされた<b>シンボリックリンク</b>（パス自身または祖先）によって作業ディレクトリがリポジトリ外に置かれえた——ゲートはリンクを辿って正規化し、外部を指す場合は拒否します。もう 1 点、記録に残すべき訂正があります：本アーティファクトと変更ノートは当初「Dev Container レーンには uv が無いのでスキップされる」と主張していました。CI がこれを反証しました——uv はイメージに<i>存在し</i>、ゲートは実行され、コンテナのファイアウォールが PyPI を遮断するため <code>Network unreachable</code> で失敗しました。著者も独立レビューも、どちらも実行していないレーンについて誤った主張をしていたのです。宣言した <code>commands.setup</code> が、egress が閉じる前に環境を準備します。</p>
       </div>
     </section>
 
