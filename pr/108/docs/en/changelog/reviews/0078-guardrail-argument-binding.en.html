@@ -88,8 +88,8 @@
       <table>
         <thead><tr><th>Guardrail</th><th>What it received</th><th>Consequence</th></tr></thead>
         <tbody>
-          <tr><td><code>secret-scan</code> (SEC-01)</td><td><code>$PullRequestBody</code> = the literal string <code>-PullRequestBody</code>; the real body dropped</td><td>A <code>ghp_…</code> token in a PR body <b>passed</b> the gate (exit 0). With the fix it reports <code>(PR body):1 :: GitHub token</code> and exits 1.</td></tr>
-          <tr><td><code>spec-before-implementation</code> (DR-02)</td><td><code>$ChangedFiles</code> = <code>@("-PullRequestBody")</code>, a fabricated one-entry list matching no code-path pattern</td><td>Concluded "No implementation code changed" on <b>every</b> run; never demanded a change record. With the fix it derives the list from <code>git diff</code>.</td></tr>
+          <tr><td><code>secret-scan</code> (SEC-02)</td><td><code>$PullRequestBody</code> = the literal string <code>-PullRequestBody</code>; the real body dropped</td><td>A <code>ghp_…</code> token in a PR body <b>passed</b> the gate (exit 0). With the fix it reports <code>(PR body):1 :: GitHub token</code> and exits 1.</td></tr>
+          <tr><td><code>spec-before-implementation</code> (DEC-03)</td><td><code>$ChangedFiles</code> = <code>@("-PullRequestBody")</code>, a fabricated one-entry list matching no code-path pattern</td><td>Concluded "No implementation code changed" on <b>every</b> run; never demanded a change record. With the fix it derives the list from <code>git diff</code>.</td></tr>
         </tbody>
       </table>
     </section>
@@ -100,6 +100,7 @@
         <thead><tr><th>Changed file</th><th>What changed</th></tr></thead>
         <tbody>
           <tr><td><code>scripts/check.ps1</code></td><td><code>Invoke-Guardrail</code>: <code>-Arguments [object[]]</code> → <code>-Parameters [hashtable]</code>, splatted by name. Two call sites updated to <code>@{ PullRequestBody = $PullRequestBody }</code>.</td></tr>
+          <tr><td><code>scripts/generate/build-pages-site.ps1</code></td><td><code>Invoke-RepoScript</code> had the same forwarder shape with no callers passing parameters; hardened to <code>[hashtable]</code> so a future caller cannot reintroduce the defect.</td></tr>
           <tr><td><code>docs/{en,ja}/changelog/0069-*.md</code></td><td>Change note (English and Japanese).</td></tr>
           <tr><td><code>docs/{en,ja}/changelog/reviews/0078-*.html</code>, <code>monitor/reviews*.html</code></td><td>This artifact; reviews index regenerated.</td></tr>
         </tbody>
@@ -119,6 +120,7 @@
         <li>Whether past merged pull requests should be re-scanned for secrets in their bodies (no token was found in this repository's code; the PR-body path was simply never exercised).</li>
         <li>Adding a wired regression test for the runner — <code>scripts/tests/</code> exists but nothing runs it; wiring a test lane is its own change.</li>
         <li>The component-check activation that uncovered this (it follows in a separate change).</li>
+        <li>Whether a guardrail should validate that rule codes cited in change notes and review artifacts resolve to a real registry entry — this artifact's own codes were wrong on first draft (SEC-01/DR-02 instead of SEC-02/DEC-03) and no gate noticed. Owner decision.</li>
       </ul>
     </section>
 

@@ -88,8 +88,8 @@
       <table>
         <thead><tr><th>ガードレール</th><th>実際に受け取っていた値</th><th>結果</th></tr></thead>
         <tbody>
-          <tr><td><code>secret-scan</code>（SEC-01）</td><td><code>$PullRequestBody</code> = リテラル文字列 <code>-PullRequestBody</code>。本物の本文は破棄</td><td>PR 本文の <code>ghp_…</code> トークンがゲートを<b>通過</b>（exit 0）。修正後は <code>(PR body):1 :: GitHub token</code> を報告し exit 1。</td></tr>
-          <tr><td><code>spec-before-implementation</code>（DR-02）</td><td><code>$ChangedFiles</code> = <code>@("-PullRequestBody")</code>。どのコードパスにも一致しない捏造の 1 件一覧</td><td><b>毎回</b>「実装コードの変更なし」と結論し、変更記録を要求したことが無かった。修正後は <code>git diff</code> から一覧を算出。</td></tr>
+          <tr><td><code>secret-scan</code>（SEC-02）</td><td><code>$PullRequestBody</code> = リテラル文字列 <code>-PullRequestBody</code>。本物の本文は破棄</td><td>PR 本文の <code>ghp_…</code> トークンがゲートを<b>通過</b>（exit 0）。修正後は <code>(PR body):1 :: GitHub token</code> を報告し exit 1。</td></tr>
+          <tr><td><code>spec-before-implementation</code>（DEC-03）</td><td><code>$ChangedFiles</code> = <code>@("-PullRequestBody")</code>。どのコードパスにも一致しない捏造の 1 件一覧</td><td><b>毎回</b>「実装コードの変更なし」と結論し、変更記録を要求したことが無かった。修正後は <code>git diff</code> から一覧を算出。</td></tr>
         </tbody>
       </table>
     </section>
@@ -100,6 +100,7 @@
         <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
         <tbody>
           <tr><td><code>scripts/check.ps1</code></td><td><code>Invoke-Guardrail</code>：<code>-Arguments [object[]]</code> → <code>-Parameters [hashtable]</code>。名前で束縛してスプラット。呼び出し 2 箇所を <code>@{ PullRequestBody = $PullRequestBody }</code> に更新。</td></tr>
+          <tr><td><code>scripts/generate/build-pages-site.ps1</code></td><td><code>Invoke-RepoScript</code> も同じ転送の形（パラメータを渡す呼び出し元は無し）。将来の再導入を防ぐため <code>[hashtable]</code> で構造的に塞いだ。</td></tr>
           <tr><td><code>docs/{en,ja}/changelog/0069-*.md</code></td><td>変更ノート（英語・日本語）。</td></tr>
           <tr><td><code>docs/{en,ja}/changelog/reviews/0078-*.html</code>・<code>monitor/reviews*.html</code></td><td>本アーティファクト。レビュー索引を再生成。</td></tr>
         </tbody>
@@ -119,6 +120,7 @@
         <li>過去のマージ済み PR の本文を秘密情報について再スキャンするかどうか（リポジトリのコードにトークンは無く、PR 本文の経路が一度も動いていなかっただけ）。</li>
         <li>実行部の回帰テストの配線——<code>scripts/tests/</code> は存在するが何も実行していない。テストレーンの配線は別の変更。</li>
         <li>本欠陥を発見した契機であるコンポーネントチェックの有効化（別の変更で続く）。</li>
+        <li>変更ノートやレビュー成果物が引用するルールコードが、実在する台帳エントリに解決するかをガードレールで検証すべきか——本アーティファクト自身、初版でコードを誤っており（SEC-02 / DEC-03 とすべきところを SEC-01 / DR-02）、どのゲートも気づかなかった。オーナー判断。</li>
       </ul>
     </section>
 
