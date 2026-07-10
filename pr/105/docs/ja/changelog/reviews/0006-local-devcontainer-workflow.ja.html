@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Review 0006: Local Dev Container Workflow</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5f6b7d;
+      --line: #d9e0ea;
+      --blue: #235fbd;
+      --green: #24764a;
+      --amber: #9a6400;
+      --red: #b42318;
+      --violet: #6352bf;
+      --soft-blue: #e8f1ff;
+      --soft-green: #e8f6ec;
+      --soft-amber: #fff3d8;
+      --soft-red: #fdecea;
+      --soft-violet: #efedff;
+      --soft-gray: #eef2f6;
+      --shadow: 0 16px 34px rgba(23, 32, 51, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", Meiryo, sans-serif;
+      line-height: 1.68;
+    }
+    a { color: var(--blue); text-underline-offset: 3px; }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: .92em;
+      background: #f3f5f9;
+      border: 1px solid #e4e8f0;
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; letter-spacing: 0; }
+    h2 { font-size: clamp(1.28rem, 2vw, 1.9rem); line-height: 1.22; letter-spacing: 0; }
+    h3 { font-size: 1.02rem; line-height: 1.25; letter-spacing: 0; }
+    p, li, td { color: var(--muted); }
+    ul, ol { margin: 0; padding-left: 1.2rem; }
+    li { margin: 5px 0; }
+    .page { max-width: 1160px; margin: 0 auto; padding: 28px 22px 64px; }
+    .hero {
+      min-height: 48vh;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+      padding: 34px 0 28px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .panel, .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-width: 0;
+    }
+    .panel { box-shadow: var(--shadow); }
+    .hero-copy { max-width: 840px; font-size: 1.05rem; margin-top: 12px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: .78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tag-blue { background: var(--soft-blue); color: var(--blue); }
+    .tag-green { background: var(--soft-green); color: var(--green); }
+    .tag-amber { background: var(--soft-amber); color: var(--amber); }
+    .tag-red { background: var(--soft-red); color: var(--red); }
+    .tag-violet { background: var(--soft-violet); color: var(--violet); }
+    .tag-gray { background: var(--soft-gray); color: var(--muted); }
+    .kicker { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .section { padding-top: 34px; }
+    .section-head { display: grid; gap: 8px; max-width: 920px; margin-bottom: 16px; }
+    .grid { display: grid; gap: 14px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { display: grid; gap: 10px; }
+    .approval { border-left: 5px solid var(--green); background: #fbfffc; }
+    .warning { border-left: 5px solid var(--amber); background: #fffdf8; }
+    .danger { border-left: 5px solid var(--red); background: #fffafa; }
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .matrix th,
+    .matrix td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .matrix th { background: #f8fafc; color: var(--ink); font-size: .88rem; }
+    .matrix tr:last-child td { border-bottom: 0; }
+    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .step {
+      display: grid;
+      gap: 7px;
+      min-height: 132px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 14px;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 8px; }
+    @media (max-width: 900px) {
+      .hero-grid, .grid-2, .grid-3, .flow { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="kicker">
+        <span class="tag tag-blue">Human Review</span>
+        <span class="tag tag-green">PR #20</span>
+        <span class="tag tag-violet">Issue #19</span>
+      </div>
+      <div class="hero-grid">
+        <div class="panel">
+          <h1>ローカル開発環境の preflight と smoke test を作る</h1>
+          <p class="hero-copy">
+            このレビューは「このPCでコンテナが正常起動したこと」の承認ではありません。
+            Docker-compatible container runtime を導入する前に、前提条件を確認する入口と、導入後に同じ手順で起動確認する入口を承認するための資料です。
+          </p>
+        </div>
+        <aside class="panel approval">
+          <span class="tag tag-green">承認してほしいこと</span>
+          <ol>
+            <li><code>check-local-dev.ps1</code> を owner PC の <code>preflight check</code> にする。</li>
+            <li><code>run-local-dev.ps1</code> を <code>bootstrap</code> と <code>smoke test</code> の入口にする。</li>
+            <li>必要条件を Docker Desktop という製品名ではなく、Docker-compatible runtime として定義する。</li>
+            <li>実機での container execution が通るまで Issue #19 を open のまま残す。</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" data-guardrail="standard-terminology">
+      <div class="section-head">
+        <span class="tag tag-blue">Terminology Check</span>
+        <h2>標準用語チェック</h2>
+        <p>今回の資料では、会話上の曖昧な言葉を次の標準用語に寄せます。</p>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>標準用語</th>
+            <th>このPRでの意味</th>
+            <th>置き換える表現</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>container runtime</code></td>
+            <td>container を実行する基盤。Docker Desktopは推奨実装の一つで、必須の製品名ではありません。</td>
+            <td>Docker Desktopを入れる、Dockerが必要</td>
+          </tr>
+          <tr>
+            <td><code>Docker-compatible CLI</code></td>
+            <td><code>docker</code> と <code>docker compose</code> から同じ手順を実行できるCLI。</td>
+            <td>Dockerコマンドがある、Dockerっぽいやつ</td>
+          </tr>
+          <tr>
+            <td><code>preflight check</code></td>
+            <td>起動前に、Git、runtime、daemon、Compose、WSL、shelf path を確認する診断。</td>
+            <td>前提確認、環境チェック</td>
+          </tr>
+          <tr>
+            <td><code>bootstrap</code></td>
+            <td>依存関係やツールを準備する初期化処理。</td>
+            <td>セットアップ、準備</td>
+          </tr>
+          <tr>
+            <td><code>smoke test</code></td>
+            <td>container を起動し、最低限のcheckが動くことを確認する軽い検証。</td>
+            <td>とりあえず動くか見る</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-red">Decision Boundary</span>
+        <h2>今回判断すること / まだ判断しないこと</h2>
+        <p>このPRは、ローカル環境そのものの完成ではなく、ローカル環境を検証するための再現可能な入口を作るPRです。</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card approval">
+          <span class="tag tag-green">今回判断する</span>
+          <ul>
+            <li>preflight check で不足条件を見える化する。</li>
+            <li>run script で bootstrap、Compose起動、container内checkを順番に実行する。</li>
+            <li>CI上のDev Container検証と、owner PC上のlocal verificationを分ける。</li>
+            <li>Docker Desktopは推奨実装として扱い、要件はDocker-compatible runtimeにする。</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <span class="tag tag-amber">まだ判断しない</span>
+          <ul>
+            <li>このPCで最終的にDev Containerが正常起動したか。</li>
+            <li>Docker Desktop、Podman Desktop、Rancher Desktop、remote Docker host のどれを長期標準にするか。</li>
+            <li>Docker Desktopのライセンス判断が将来の商用利用に十分か。</li>
+            <li>アプリ本体の起動、UI、機能の品質。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-violet">Runtime Position</span>
+        <h2>Docker Desktopの位置づけ</h2>
+        <p>Docker Desktopは、Windows + VS Code Dev Containers の最初の推奨ルートです。ただし、PR #20の要件は製品名ではなく、互換性のあるruntime能力です。</p>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>選択肢</th>
+            <th>位置づけ</th>
+            <th>このPRでの扱い</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Docker Desktop + WSL2</td>
+            <td>Windowsで最も素直なDev Containers導線。Docker公式ライセンス条件の確認が必要。</td>
+            <td>最初の推奨実装。導入後にpreflightとsmoke testを実行する。</td>
+          </tr>
+          <tr>
+            <td>Podman Desktop</td>
+            <td>Docker互換設定により、Docker toolsをPodman engineへ向けられる場合がある。</td>
+            <td>代替候補。今回のbaselineにはしない。</td>
+          </tr>
+          <tr>
+            <td>Rancher Desktop / remote Docker host</td>
+            <td>Docker-compatible workflowを提供できる可能性がある。</td>
+            <td>代替候補。別Issueで評価する。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-violet">Workflow</span>
+        <h2>ローカル検証フロー</h2>
+        <p>PR #20は、実機のcontainer runtime導入前でも「次に何が足りないか」を明確にし、導入後に同じ手順で検証できるようにします。</p>
+      </div>
+      <div class="flow">
+        <div class="step">
+          <span class="tag tag-green">Step 1</span>
+          <h3>Preflight</h3>
+          <p><code>scripts/check-local-dev.ps1</code> で Git、Docker-compatible CLI、daemon、Compose、WSL、shelf path を確認します。</p>
+        </div>
+        <div class="step">
+          <span class="tag tag-amber">Step 2</span>
+          <h3>Fix Prerequisites</h3>
+          <p>失敗した項目だけを直します。現在は <code>docker</code> CLI がPowerShellから見えていません。</p>
+        </div>
+        <div class="step">
+          <span class="tag tag-blue">Step 3</span>
+          <h3>Bootstrap</h3>
+          <p><code>scripts/run-local-dev.ps1</code> がWindows側のbootstrap/checkを実行し、workspace containerを起動します。</p>
+        </div>
+        <div class="step">
+          <span class="tag tag-violet">Step 4</span>
+          <h3>Smoke Test</h3>
+          <p>container内でLinux側のbootstrap/checkを実行し、結果をIssue #19に記録します。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-blue">Current Diagnosis</span>
+        <h2>このPCの現在地</h2>
+        <p>これはPR #20作成時点の診断結果です。runtime導入後に再実行して更新します。</p>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>状態</th>
+            <th>意味</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Git</td>
+            <td><span class="tag tag-green">OK</span></td>
+            <td>repository操作の前提は満たしています。</td>
+          </tr>
+          <tr>
+            <td>WSL</td>
+            <td><span class="tag tag-green">OK</span></td>
+            <td>PowerShellからWSLは見えています。</td>
+          </tr>
+          <tr>
+            <td>Docker-compatible CLI</td>
+            <td><span class="tag tag-red">FAIL</span></td>
+            <td>PowerShellから <code>docker</code> が見えていません。runtime導入またはPATH反映が必要です。</td>
+          </tr>
+          <tr>
+            <td>Container daemon</td>
+            <td><span class="tag tag-red">FAIL</span></td>
+            <td>CLIがないため、daemon到達性を確認できません。</td>
+          </tr>
+          <tr>
+            <td>Docker Compose v2</td>
+            <td><span class="tag tag-red">FAIL</span></td>
+            <td><code>docker compose</code> が使える状態ではありません。</td>
+          </tr>
+          <tr>
+            <td>Dev Container CLI</td>
+            <td><span class="tag tag-amber">WARN</span></td>
+            <td>任意です。VS Code Dev Containers extensionを主導線にする場合は必須ではありません。</td>
+          </tr>
+          <tr>
+            <td>Shelf path</td>
+            <td><span class="tag tag-green">OK</span></td>
+            <td>安全なplaceholderとして <code>.local/shelf</code> が存在しています。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-green">Guardrails</span>
+        <h2>漏れを防ぐ仕組み</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="card approval">
+          <span class="tag tag-green">Fail Fast</span>
+          <h3>前提不足で止める</h3>
+          <p>runtimeがない状態でcontainer起動へ進まず、preflightで失敗させます。</p>
+        </div>
+        <div class="card warning">
+          <span class="tag tag-amber">Deferred Work</span>
+          <h3>後回しをIssueに残す</h3>
+          <p>実機検証が終わるまでIssue #19をopenにし、完了扱いにしません。</p>
+        </div>
+        <div class="card approval">
+          <span class="tag tag-blue">Standard Terms</span>
+          <h3>標準用語で説明する</h3>
+          <p>runtime、preflight、bootstrap、smoke testとして整理し、内輪の説明に戻さないようにします。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-gray">References</span>
+        <h2>参考にした一次情報</h2>
+      </div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>情報源</th>
+            <th>このPRで使った判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://code.visualstudio.com/docs/devcontainers/containers">VS Code Dev Containers docs</a></td>
+            <td>Dev ContainersはDocker installed locally/remoteとDocker compliant CLIを扱える。Windowsの主要導線はDocker Desktop + WSL2。</td>
+          </tr>
+          <tr>
+            <td><a href="https://docs.docker.com/subscription/desktop-license/">Docker Desktop license docs</a></td>
+            <td>Docker Desktopには利用条件があるため、将来の商用利用ではライセンス確認が必要。</td>
+          </tr>
+          <tr>
+            <td><a href="https://podman-desktop.io/docs/migrating-from-docker/managing-docker-compatibility">Podman Desktop Docker compatibility docs</a></td>
+            <td>Podman DesktopはDocker互換設定を持つため、将来の代替runtime候補として残す。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="tag tag-green">Next Step</span>
+        <h2>承認後にやること</h2>
+        <p>
+          このPRを承認する場合、次はDocker-compatible runtimeを導入または設定し、
+          <code>scripts/check-local-dev.ps1</code> と <code>scripts/run-local-dev.ps1 -Quick</code> を実行します。
+          成功または失敗の結果はIssue #19に記録します。
+        </p>
+        <div class="footer-links">
+          <a href="../changes/0012-local-devcontainer-workflow.md">Change Note 0012</a>
+          <a href="../development-environment.md">Development Environment Guide</a>
+          <a href="../specs/development-environment.md">Development Environment Spec</a>
+        </div>
+      </div>
+    </section>
+  <section data-guardrail="standard-terminology">
+  <h2>Terminology Check</h2>
+  <p>This migrated review artifact keeps its original wording. Any future substantive edit should use standard documentation and engineering terminology.</p>
+</section>
+<section data-guardrail="runtime-boundary">
+  <h2>Runtime Boundary Check</h2>
+  <p>This review artifact migration only changes documentation location and guardrail coverage. It does not change runtime services, storage, credentials, host setup, or product data.</p>
+</section>
+<section data-guardrail="primary-references">
+  <h2>References</h2>
+  <p>References: Not applicable. This is a path migration of an existing review artifact.</p>
+</section>
+</main>
+</body>
+</html>
