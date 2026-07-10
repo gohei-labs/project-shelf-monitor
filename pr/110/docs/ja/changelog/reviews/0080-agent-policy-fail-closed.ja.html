@@ -77,9 +77,9 @@
     <section class="approval">
       <p class="kicker">承認のお願い</p>
       <ol class="asks">
-        <li><b>キー不在で fail-closed。</b><code>@($policy.key).Count -eq 0</code> は、キーを<i>削除</i>した場合には発火しません。PowerShell の <code>@($null).Count</code> は <b>1</b> だからです。ゲートは今後、キーの不在・null・空リスト・空白エントリ（空白 prefix はすべてのリモートに一致）を拒否します。<code>credentialDenyRead</code>・<code>pushRemoteAllowedPrefixes</code>・<code>allowBaseline</code> に適用し、構造キー <code>deny</code> / <code>protectedPaths</code> / <code>hooks</code> の存在を必須化してチェックが空虚に通らないようにします。</li>
+        <li><b>キー不在で fail-closed。</b><code>@($policy.key).Count -eq 0</code> は、キーを<i>削除</i>した場合には発火しません。PowerShell の <code>@($null).Count</code> は <b>1</b> だからです。ゲートは今後、キーの不在・null・空リスト・空白エントリ（空文字 prefix はすべてのリモートに一致し、空白のみの prefix はどれにも一致しない——どちらも無意味）を拒否します。<code>credentialDenyRead</code>・<code>pushRemoteAllowedPrefixes</code>・<code>allowBaseline</code> に適用し、構造キー <code>deny</code> / <code>protectedPaths</code> / <code>hooks</code> の存在を必須化してチェックが空虚に通らないようにします。</li>
         <li><b>ルールが名指しする deny をすべて固定。</b><code>$requiredDeny</code> は 4 つの id しか持たない一方、SEC-01 は curl <i>と wget</i> のアップロードを、GOV-03 は破壊的 git コマンドを名指しします。今後は 10 件すべてを列挙します。従来は <code>wget-upload</code> や <code>hard-reset</code> を削除しても緑でした。</li>
-        <li><b>自己整合ではなく性質を検証。</b><code>-Verify</code> の同期チェックは、同じ弱体化ポリシーから設定を再生成して比較するため、常に「同期」しています。新チェックは生成済み <code>.claude/settings.json</code> を読み、各認証情報パスに対応する <code>Read(&lt;path&gt;)</code> deny ルールの存在を検証します。</li>
+        <li><b>ソースの自己整合だけでなく、生成物を検証。</b><code>-Verify</code> の同期チェックは、同じ弱体化ポリシーから設定を再生成して比較するため、常に「同期」しています。新チェックは生成済み <code>.claude/settings.json</code> を読み、宣言された各認証情報パスに対応する <code>Read(&lt;path&gt;)</code> deny ルールの存在を検証します。（宣言されたパスが設定に届いていることは固定しますが、宣言されたパスが<i>本物の</i>認証情報ルートであることまでは、まだ固定しません——「リスク」参照。）</li>
         <li><b>実行時と生成時にも fail-closed。</b>allowlist が不在・空・空白のとき、PreToolUse フックは明示的なリモート URL への push を拒否します。生成器は、無意味なルール <code>Read()</code>・<code>Read(/**)</code> をコンパイルする代わりに throw します。</li>
         <li><b>境界の変更にレビューを強制。</b><code>agent-policy/</code> と <code>scripts/hooks/</code> を、レビュー成果物のリンクを必須とする高リスクパスに追加します。</li>
       </ol>
@@ -96,7 +96,7 @@
           <tr><td><code>wget-upload</code> deny ルールの削除</td><td>ゲート exit 0——wget の exfiltration チャネルが再開</td><td>exit 1</td></tr>
           <tr><td><code>hard-reset</code> / <code>clean-force</code> / <code>branch-force-delete</code> / <code>rm-rf-home</code> の削除</td><td>ゲート exit 0</td><td>exit 1</td></tr>
           <tr><td><code>.claude/settings.json</code> から <code>Read(...)</code> ルールを手で剥がす</td><td>同期チェックでのみ捕捉</td><td>認証情報パスごとに明示的に捕捉</td></tr>
-          <tr><td><code>pushRemoteAllowedPrefixes</code> に空白エントリ <code>"  "</code></td><td>ゲート exit 0。すべてのリモートが一致</td><td>exit 1</td></tr>
+          <tr><td><code>pushRemoteAllowedPrefixes</code> に空文字エントリ <code>""</code></td><td>ゲート exit 0。フックが全リモートを許可（<code>StartsWith("")</code> が true）</td><td>exit 1</td></tr>
         </tbody>
       </table>
     </section>
@@ -104,7 +104,7 @@
     <section>
       <p class="kicker">リスク</p>
       <div class="risk">
-        <p>変更自体は低リスクで、追加するのは「拒否」だけです。いかなる境界も弱められず、正当なポリシーはそのまま通過します（確認済み）。コスト：deny ルールの廃止には今後ゲートの編集が必要になります——意図的で、<code>scope</code> や <code>guidance</code> の値を固定しているのと同じ方式です。直らないもの：<code>$requiredDeny</code> は依然として手で保守するため、新しい exfiltration チャネルをポリシーに足しても、ここに id を足さなければ固定されません。また本変更が修理するのは 1 つの統制面のみです——同じ監査が、UTF-16 ファイルを見逃す秘密情報スキャナを含む 26 件の fail-open を追加で確定報告しています。</p>
+        <p>変更自体は低リスクで、追加するのは「拒否」だけです。いかなる境界も弱められず、正当なポリシーはそのまま通過します（確認済み）。コスト：deny ルールの廃止には今後ゲートの編集が必要になります——意図的で、<code>scope</code> や <code>guidance</code> の値を固定しているのと同じ方式です。直らないもの：値の差し替え。空白でないが過度に広い push prefix（<code>["https://"]</code>）はゲートを通過し、フックは全 https リモートを許可します。ゴミの認証情報パス（<code>["x"]</code>）は通過しつつ本物の <code>~/.aws</code> / <code>~/.ssh</code> / <code>~/.netrc</code> を落とします。いずれも今は review-artifact ゲートが可視化するのみで、固定はしません。<code>$requiredDeny</code> も依然として手で保守するため、新しい exfiltration チャネルをポリシーに足しても、ここに id を足さなければ固定されません。また本変更が修理するのは 1 つの統制面のみです——同じ監査が、UTF-16 ファイルを見逃す秘密情報スキャナを含む 26 件の fail-open を追加で確定報告しています。</p>
       </div>
     </section>
 

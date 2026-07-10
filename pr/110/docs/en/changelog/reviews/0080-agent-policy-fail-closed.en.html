@@ -77,9 +77,9 @@
     <section class="approval">
       <p class="kicker">Requested Approval</p>
       <ol class="asks">
-        <li><b>Fail closed on a missing key.</b> <code>@($policy.key).Count -eq 0</code> never fires on a <i>deleted</i> key: PowerShell's <code>@($null).Count</code> is <b>1</b>. The gate now rejects an absent key, a null, an empty list, and a blank entry (a blank prefix matches every remote). Applied to <code>credentialDenyRead</code>, <code>pushRemoteAllowedPrefixes</code>, <code>allowBaseline</code>; the structural keys <code>deny</code> / <code>protectedPaths</code> / <code>hooks</code> must exist so no check passes vacuously.</li>
+        <li><b>Fail closed on a missing key.</b> <code>@($policy.key).Count -eq 0</code> never fires on a <i>deleted</i> key: PowerShell's <code>@($null).Count</code> is <b>1</b>. The gate now rejects an absent key, a null, an empty list, and a blank entry (an empty-string prefix matches every remote; a whitespace one matches none — both are meaningless). Applied to <code>credentialDenyRead</code>, <code>pushRemoteAllowedPrefixes</code>, <code>allowBaseline</code>; the structural keys <code>deny</code> / <code>protectedPaths</code> / <code>hooks</code> must exist so no check passes vacuously.</li>
         <li><b>Pin every deny rule the rules name.</b> <code>$requiredDeny</code> held four ids while SEC-01 names curl <i>and wget</i> uploads and GOV-03 names the destructive git commands. It now names all ten. Deleting <code>wget-upload</code> or <code>hard-reset</code> previously passed green.</li>
-        <li><b>Verify the property, not the file's self-consistency.</b> The <code>-Verify</code> sync check regenerates the config from the same weakened policy, so it is always "in sync". A new check reads the generated <code>.claude/settings.json</code> and asserts a <code>Read(&lt;path&gt;)</code> deny rule exists for each credential path.</li>
+        <li><b>Check the compiled output, not only the source's self-consistency.</b> The <code>-Verify</code> sync check regenerates the config from the same weakened policy, so it is always "in sync". A new check reads the generated <code>.claude/settings.json</code> and asserts a <code>Read(&lt;path&gt;)</code> deny rule exists for each declared credential path. (This pins that the declared paths reach the config; it does not yet pin that the declared paths <i>are</i> the real credential roots — see Risk.)</li>
         <li><b>Fail closed at runtime and at generation.</b> The PreToolUse hook denies a push to an explicit remote URL when the allowlist is missing/empty/blank; the generator throws instead of compiling the meaningless rules <code>Read()</code> and <code>Read(/**)</code>.</li>
         <li><b>Force review on the boundary.</b> <code>agent-policy/</code> and <code>scripts/hooks/</code> join the high-risk paths that require a linked review artifact.</li>
       </ol>
@@ -96,7 +96,7 @@
           <tr><td>Remove the <code>wget-upload</code> deny rule</td><td>Gate exit 0 — the wget exfiltration channel reopens</td><td>exit 1</td></tr>
           <tr><td>Remove <code>hard-reset</code> / <code>clean-force</code> / <code>branch-force-delete</code> / <code>rm-rf-home</code></td><td>Gate exit 0</td><td>exit 1</td></tr>
           <tr><td>Hand-strip the <code>Read(...)</code> rules from <code>.claude/settings.json</code></td><td>Caught only by the sync check</td><td>Caught explicitly, per credential path</td></tr>
-          <tr><td>Blank entry <code>"  "</code> in <code>pushRemoteAllowedPrefixes</code></td><td>Gate exit 0; every remote matches</td><td>exit 1</td></tr>
+          <tr><td>Empty-string entry <code>""</code> in <code>pushRemoteAllowedPrefixes</code></td><td>Gate exit 0; the hook allows every remote (<code>StartsWith("")</code> is true)</td><td>exit 1</td></tr>
         </tbody>
       </table>
     </section>
@@ -104,7 +104,7 @@
     <section>
       <p class="kicker">Risk</p>
       <div class="risk">
-        <p>Low to make; the change only adds refusals. It cannot weaken any boundary, and a legitimate policy passes unchanged (verified). What it costs: retiring a deny rule now requires editing the gate — deliberate, matching how <code>scope</code> and <code>guidance</code> values are pinned. What it does not fix: <code>$requiredDeny</code> remains hand-maintained, so a new exfiltration channel added to the policy without adding its id here is not pinned. And this repairs one control surface only — the same audit confirmed 26 further fail-opens across the suite, including a secret scanner that misses UTF-16 files.</p>
+        <p>Low to make; the change only adds refusals. It cannot weaken any boundary, and a legitimate policy passes unchanged (verified). What it costs: retiring a deny rule now requires editing the gate — deliberate, matching how <code>scope</code> and <code>guidance</code> values are pinned. What it does not fix: value substitution. A non-blank but overbroad push prefix (<code>["https://"]</code>) passes the gate and the hook then allows every https remote; junk credential paths (<code>["x"]</code>) pass while dropping the real <code>~/.aws</code> / <code>~/.ssh</code> / <code>~/.netrc</code>. Both are now surfaced by the review-artifact gate rather than pinned. <code>$requiredDeny</code> likewise remains hand-maintained, so a new exfiltration channel added to the policy without adding its id here is not pinned. And this repairs one control surface only — the same audit confirmed 26 further fail-opens across the suite, including a secret scanner that misses UTF-16 files.</p>
       </div>
     </section>
 
