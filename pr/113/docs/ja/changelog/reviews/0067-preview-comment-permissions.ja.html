@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0067: プレビューコメントを確実に PR へ届ける</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナーレビュー</span><span class="dot"></span><span class="num">0067</span><span><b>提案</b></span><span><b>2026-07-09</b></span></p>
+      <h1>プレビューコメントを確実に PR へ届ける</h1>
+      <p class="lead">このレビューは <b>Monitor Preview ワークフローにプレビューリンク投稿へ必要な pull-request の write 権限を与え、コメント失敗を警告として隠さずステップの失敗にすること</b> の承認を求めます。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認をお願いする事項</p>
+      <ol class="asks">
+        <li>Monitor Preview ワークフローのトークンを <code>pull-requests: read</code> から <code>pull-requests: write</code> に引き上げる。issues API 経由でプルリクエストにコメントするにはこの権限が必要で、<code>issues: write</code> だけでは足りない。これが最近の全 PR でプレビューリンクのコメントが欠けていた原因（403 が握りつぶされていた）。</li>
+        <li>プレビューリンクのコメントをオーナー向けの制御手段として扱う：コメントの作成・更新に失敗した場合、ステップはプレビュー URL をログに出力したうえで fail する。これにより同じ退行が二度とサイレントに起こらない。</li>
+        <li>同じ permissions ブロックから未使用の <code>issues: write</code> を削除する。このワークフローの issues API 呼び出しはすべてプルリクエスト向けで、pull-requests 権限が支配する — <code>issues: write</code> があっても 403 だった事実がその証明（オーナーの基準：不要になるものは消す）。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容</p>
+      <p class="sub">ワークフロー1ファイル（このほかに変更記録 0058 の対を追加）。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更点</th></tr></thead>
+        <tbody>
+          <tr><td><code>.github/workflows/monitor-preview.yml</code></td><td>権限を <code>pull-requests: read</code> から <code>write</code> へ引き上げ、未使用の <code>issues: write</code> を削除（理由は両方ともコメントで明記）。コメントステップの <code>catch</code> は失敗を警告に格下げせず、プレビュー URL をログに出して exit 1 する。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク</p>
+      <div class="risk">
+        <p>トークンが得る write 権限は本リポジトリのプルリクエストに限られ、実行はデフォルトブランチ由来の信頼された <code>workflow_run</code> コンテキストで行われる — PR 側で改変されたコードはこのトークンに触れられない（従来設計のまま）。失敗を隠さない方針により、将来権限が制限された場合はステップが明示的に壊れる。文書化された代替手段は <code>MONITOR_PREVIEW_COMMENT_TOKEN</code> シークレット。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">ここでは決めないこと</p>
+      <ul class="scope">
+        <li><code>MONITOR_PREVIEW_COMMENT_TOKEN</code> シークレットを設定するかどうか。既定トークンで足りるようになる。</li>
+        <li>すでにオープン中の PR へのプレビューコメントの遡及投稿（PR #89 のリンクは本文へ手動で追記済み）。</li>
+        <li>プレビューが何をどこへデプロイするかの変更。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">作成者チェック</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>この資料は業界標準の用語を使い、独自の言い回しを標準用語に対応付けたか。</p>
+        <table>
+          <thead><tr><th>本資料の言い回し</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>ワークフロートークン権限</td><td>GitHub Actions の <code>GITHUB_TOKEN</code> の範囲を定めるワークフロー単位の <code>permissions:</code> ブロック。issues API 経由の PR コメントには <code>pull-requests: write</code> が必要。</td></tr>
+            <tr><td>明示的な失敗（握りつぶしの対義）</td><td>ステップを停止させ CI ステータスに現れるエラー。catch されて警告ログだけ残しステップは success と報告される状態の反対。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>この決定の根拠となる事実について、一次情報（公式文書・正本）を参照したか。</p>
+        <table>
+          <thead><tr><th>参照した一次情報</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td>PR #89 の Monitor Preview 実行ログ（job publish-pr-preview、step "Comment PR monitor preview"）</td><td>観測された欠陥：コメント API 呼び出しが <code>403 (Forbidden)</code> になりつつステップは success で完了。</td></tr>
+            <tr><td>GitHub Actions 公式文書：GITHUB_TOKEN の権限（Assigning permissions to jobs）</td><td>プルリクエストへの issue コメントにはワークフロートークンの <code>pull-requests</code> write 権限が必要であること。</td></tr>
+            <tr><td><code>docs/ja/rules/observability/documentation-system.md</code></td><td>この欠陥が破っていたルール：PR はプレビュー URL を PR コメントに反映し、オーナーがマージ前にモニタを確認できるようにしなければならない。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー資料</p>
+  </main>
+</body>
+</html>

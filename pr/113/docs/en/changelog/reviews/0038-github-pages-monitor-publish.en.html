@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Review 0038 - GitHub Pages Monitor Publish</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.2; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">Review artifact 0038. Status: Draft for owner review. Date: 2026-06-17.</p>
+  <h1>GitHub Pages Monitor Publish</h1>
+  <p><span class="tag">Recommended</span><span class="tag">CI</span><span class="tag">Monitor</span></p>
+
+  <section>
+    <h2>Decision Summary</h2>
+    <p>Add a GitHub Pages workflow that builds the monitor site from repository sources and deploys it from pushes to <code>main</code>.</p>
+  </section>
+
+  <section>
+    <h2>What The Owner Needs To Approve</h2>
+    <div class="box">Approve GitHub Pages as the always-available human monitor surface, with <code>monitor/registry.json</code> and review artifacts remaining the source of truth.</div>
+  </section>
+
+  <section>
+    <h2>Recommendation</h2>
+    <p>Proceed. The owner gets a stable URL for monitoring, while CI still builds from source and avoids treating Pages output as editable truth.</p>
+  </section>
+
+  <section>
+    <h2>Risks And Mitigations</h2>
+    <table>
+      <tr><th>Risk</th><th>Mitigation</th></tr>
+      <tr><td>Pages deploys stale monitor output.</td><td>The Pages workflow runs <code>scripts/generate/build-pages-site.ps1</code>, which regenerates monitor pages before packaging the artifact.</td></tr>
+      <tr><td>Pages becomes a second source of truth.</td><td>The artifact is built into <code>artifacts/pages-site</code> and is not edited directly or committed.</td></tr>
+      <tr><td>Private repository content is exposed by Pages.</td><td>The artifact copies only <code>monitor/</code> HTML/registry data and HTML review artifacts, not the whole repository.</td></tr>
+      <tr><td>Repository Pages settings are not enabled.</td><td>Set Pages source to <code>GitHub Actions</code> in repository settings before relying on the URL.</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>Term</th><th>Use here</th></tr>
+      <tr><td>GitHub Pages</td><td>The hosted static site used as the owner-facing monitor surface.</td></tr>
+      <tr><td>Pages artifact</td><td>The generated static files uploaded by Actions for deployment.</td></tr>
+      <tr><td>Source of truth</td><td>The editable repository source used to generate the monitor; not the Pages output.</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>The runtime remains GitHub Actions plus PowerShell. No Node, package manager, or extra build dependency is introduced.</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">GitHub Docs: configuring a Pages publishing source</a></td><td>Pages can publish through custom GitHub Actions workflows; repository settings must select GitHub Actions.</td></tr>
+      <tr><td><a href="https://github.com/actions/upload-pages-artifact">actions/upload-pages-artifact</a></td><td>Uploads a directory as the Pages artifact.</td></tr>
+      <tr><td><a href="https://github.com/actions/deploy-pages">actions/deploy-pages</a></td><td>Deploys the uploaded artifact and requires Pages/OIDC permissions.</td></tr>
+      <tr><td><code>scripts/generate/build-pages-site.ps1</code></td><td>Local source-to-artifact build path.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Next Step</h2>
+    <p>Enable GitHub Pages with source <code>GitHub Actions</code>, then merge and let the workflow deploy from <code>main</code>.</p>
+  </section>
+</main>
+</body>
+</html>
