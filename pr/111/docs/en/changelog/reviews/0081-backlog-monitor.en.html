@@ -79,7 +79,7 @@
       <ol class="asks">
         <li><b>Adopt the backlog.</b> Source <code>monitor/backlog.json</code> → generated <code>monitor/backlog.html</code> / <code>.ja.html</code>, deployed through the existing Pages site and public mirror. It operationalizes the <code>no-unilateral-issues</code> agreement: the owner decides what graduates to an Issue.</li>
         <li><b>Adopt the type vocabulary (research-grounded).</b> Deep research into GitHub Issue Types, Azure DevOps, Google Issue Tracker, Mozilla BMO, and Conventional Commits found one rule: <code>type</code>, severity, area, status, and tags are <i>separate axes</i>. The <code>type</code> set is <code>bug / feature / enhancement / refactor / docs / task / question</code> — GitHub-default-aligned and Conventional-Commits-mappable. A fail-open is <code>type: bug</code> with a <code>fail-open</code>/<code>cwe-636</code> tag, not a type; <code>security</code> is a tag, mirroring how the rule registry keeps <code>domain: security</code> separate from a rule's mechanism.</li>
-        <li><b>Seed it with the audit.</b> The 27 confirmed fail-open findings become the first 27 items (2 <code>accepted</code>, addressed in PR #110; 25 <code>candidate</code>). Nothing is filed as an Issue yet — that is the next, owner-led step.</li>
+        <li><b>Seed it with the audit.</b> The 27 confirmed fail-open findings become the first items, plus one surfaced by this review (28 total: 2 <code>accepted</code>, addressed in PR #110; 26 <code>candidate</code>). Nothing is filed as an Issue yet — that is the next, owner-led step.</li>
         <li><b>Gate it.</b> <code>check-backlog.ps1</code> (registry <code>GOV-06</code>) validates the source and keeps the monitor in sync — so a candidate cannot be shown with an out-of-set type/impact/status and the page cannot drift from the source.</li>
       </ol>
     </section>
@@ -109,7 +109,7 @@
     <section>
       <p class="kicker">Not Decided Here</p>
       <ul class="scope">
-        <li>Which of the 25 candidates become GitHub Issues, and in what priority — the next, owner-led triage pass over this board.</li>
+        <li>Which of the 26 candidates become GitHub Issues, and in what priority — the next, owner-led triage pass over this board.</li>
         <li>Whether item content should become bilingual (today only the chrome is; item text is English/technical).</li>
         <li>An importer for future items — they are hand-added to <code>monitor/backlog.json</code> for now.</li>
       </ul>
