@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0074: レジストリ scope フィールドの検証</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.85; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.7rem; line-height:1.15; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナーレビュー</span><span class="dot"></span><span class="num">0074</span><span><b>Draft</b></span><span><b>2026-07-10</b></span></p>
+      <h1>レジストリ scope フィールドの検証</h1>
+      <p class="lead">このレビューは、<b>レジストリ整合ゲートが、欠落・不正なルールの <code>scope</code> を拒否する</b>ようにする承認を求めるものです — <code>domain</code> や <code>code</code> と同様に <code>scope</code> を検証する、スキーマの堅牢化です。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b><code>scope</code> を強制する。</b><code>check-registry.ps1</code>（GOV-02）は、各ルールが <code>scope</code> を宣言することを必須にし、<code>generic</code> / <code>bilingual</code> / <code>product</code> 以外の値を拒否します。既存の <code>domain</code> 検証と同じ形で、ローカルと CI で失敗させます。現行 37 ルールはすべて無改変で通過。</li>
+        <li><b><code>stack</code> は先送り。</b><code>scope: stack</code> は最初のスタック宣言まで意図的に拒否のまま。導入は先送りのスキーマ作業の一部で、この許可集合を意図的に拡張します — 値を早まって設定できないようにします。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <p class="sub">承認内容を実装する具体ファイル。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrails/check-registry.ps1</code></td><td>既存の <code>domain</code> 検証の隣に、<code>scope</code> の必須＋許可集合の検証を追加。</td></tr>
+          <tr><td><code>docs/en/changelog/0065-*.md</code> + <code>ja</code></td><td>変更ノート（英日）。</td></tr>
+          <tr><td><code>docs/en/changelog/reviews/0074-*.en.html</code> + <code>ja</code></td><td>本成果物（英日）。レビュー索引を再生成。</td></tr>
+          <tr><td><code>monitor/reviews.html</code> + <code>.ja</code></td><td>再生成。レビュー索引に 0074 カードを追加。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>低。チェッカーのみの変更 — レジストリのデータ・配線・モニター出力は一切触らず、37 ルールはすべて既に妥当な scope を持つ。唯一の留意点：<code>scope: stack</code> を導入する際は、ここの許可集合を同じ変更で拡張する必要がある。これは意図的で、新しい scope 値は静かに紛れ込むのではなくゲートの意識的な編集を強制すべき、という設計。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>妥当だが層が誤っている scope（#101 のような）を捕まえること：それは分類テスト／人によるレビューの判断のまま — enum チェックは正しい層を決められない。</li>
+        <li><code>scope: stack</code> の導入と <code>backend-checks</code> / <code>frontend-build</code> の再スコープ（最初のスタック宣言時）。</li>
+        <li>マージゲート自体が強制されるか — Issue #102（プラン制限。別途のオーナー判断）。</li>
+        <li>GOV-02 のルール文を、検証するフィールドを列挙するよう拡張するか（現状はプロセス文が汎用のまま）。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>本成果物は業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙へ対応づけているか。</p>
+        <table>
+          <thead><tr><th>本成果物の用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>レジストリ整合ゲート（GOV-02）</td><td>正本データを信頼する前のスキーマ／整合性検証。ここでは monitor/registry.json の構造検証。</td></tr>
+            <tr><td>許可集合（closed enum）</td><td>フィールドを固定の許容値リストと照合し、それ以外を拒否する検証。</td></tr>
+            <tr><td>scope</td><td>ルールの層（コア / プロジェクト）の所属。モニタービューも選ぶ（project-rules は scope product を表示）。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>本決定の根拠となる一次情報を直接確認したか。</p>
+        <table>
+          <thead><tr><th>確認した情報源</th><th>裏づける内容</th></tr></thead>
+          <tbody>
+            <tr><td><code>scripts/guardrails/check-registry.ps1</code>（既存の domain/code/category 検証）</td><td>本変更が倣った検証イディオムと、既存の穴（scope 未検証）。</td></tr>
+            <tr><td><code>docs/en/rules/guardrails/layering.md</code></td><td>scope の意味（generic/bilingual = コア、product = プロジェクト）と先送りの <code>scope: stack</code>。</td></tr>
+            <tr><td>PR #101 / 変更ノート 0064</td><td>scope 検証の堅牢化を促した層の誤り - ただし妥当な値（<code>product</code>）が誤った層にあったケースで、それを捕まえるのは（この enum ゲートではなく）分類テスト。</td></tr>
+            <tr><td>ローカル検証ログ</td><td>ネガティブテスト（不正 scope → check-registry.ps1 exit 1）と、緑の全スイート（37 ルール通過）。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー成果物</p>
+  </main>
+</body>
+</html>
