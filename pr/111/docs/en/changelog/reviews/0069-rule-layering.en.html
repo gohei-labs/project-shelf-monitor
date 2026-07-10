@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0069: Core, stack, and project rule layers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0069</span><span><b>Proposed</b></span><span><b>2026-07-09</b></span></p>
+      <h1>Core, stack, and project rule layers</h1>
+      <p class="lead">This review asks for approval to <b>adopt the three-layer rule scope model with declaration-based stack activation and Azure-style tracked exceptions</b>.</p>
+    </header>
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li>Three layers: core (all projects, technology-independent), stack (written once per technology stack, reused), project (thin: declarations + genuinely project-specific rules). Layer derives from the registry's existing <code>scope</code> field. Precedent: NIST baseline / overlay / tailoring.</li>
+        <li>Activation by declaration: a project adopts a stack's rules by declaring the stack in <code>project-components.json</code>; the future-controls backend-checks / frontend-build are the registered landing points (advisory today; they become stack-conditional gates once components are declared). Precedent: GitHub reusable workflows and rulesets, ESLint shareable configs, Backstage templates, golden path / paved road.</li>
+        <li>Exception model: lower layers may only add explicit, tracked exemptions (category Waiver or Mitigated, expiresOn, requestedBy/approvedBy) and can never relax higher-layer rules — the Azure explicit-deny model, with GCP-style child supersession explicitly rejected.</li>
+      </ol>
+    </section>
+    <section>
+      <p class="kicker">What Changed</p>
+      <p class="sub">Docs only (plus the paired change note 0060).</p>
+      <table>
+        <thead><tr><th>Changed file</th><th>What changed</th></tr></thead>
+        <tbody>
+          <tr><td><code>docs/{en,ja}/rules/guardrails/layering.md</code></td><td>New rules doc defining the layers, activation, exception model, the honest standards gap for AI-agent CI controls, and the recorded schema deferrals.</td></tr>
+          <tr><td>READMEs / indexes</td><td>Link the new doc.</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>Docs-only: no gate or schema changes. The main risk is designing ahead of use — stack rules and the exemption file schema are intentionally deferred until the first application project exists, so the model may need adjustment on first contact; both deferrals are recorded in the doc and change note.</p>
+      </div>
+    </section>
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>The concrete per-stack rule content (written when the first project fixes its stacks).</li>
+        <li>The exemption record's file schema (lands with the first real exception).</li>
+        <li>The controlType axis split and the guardrails array-key rename (recorded deferrals; land with the first stack onboarding's schema change).</li>
+      </ul>
+    </section>
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>Did this artifact use industry-standard terms, and map any ad hoc wording to those terms?</p>
+        <table>
+          <thead><tr><th>Wording in this artifact</th><th>Standard term / meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Core / stack / project layers</td><td>NIST baseline / overlay / tailoring (SP 800-53B); stack layer ≈ golden path / paved road in platform engineering.</td></tr>
+            <tr><td>Exception (Waiver / Mitigated)</td><td>Azure Policy exemption categories: Waiver = time-bound accepted non-compliance; Mitigated = intent met by other means.</td></tr>
+            <tr><td>Activation by declaration</td><td>Declarative opt-in to centrally defined rule packages (uses:, extends, ruleset targeting).</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>All external claims verified against live primary sources by adversarial research (3-vote verification, 2026-07-09).</p>
+        <table>
+          <thead><tr><th>Primary source consulted</th><th>What it supports</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://csrc.nist.gov/pubs/sp/800/53/b/upd1/final">NIST SP 800-53B</a></td><td>Baselines, overlays (write-once per technology/community), tailoring — the three-layer analogue.</td></tr>
+            <tr><td><a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/exemption-structure">Azure Policy exemption structure</a> / <a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/effect-basics">effect basics</a></td><td>Tracked exemptions (Waiver / Mitigated, expiresOn) declared at the lower layer; cumulative most-restrictive layering. The verbatim "explicit deny system" sentence is cited from the <a href="https://learn.microsoft.com/en-us/azure/governance/policy/overview">Azure Policy overview</a>.</td></tr>
+            <tr><td><a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy">GCP Organization Policy hierarchy</a></td><td>The rejected alternative: child policies supersede parents by default.</td></tr>
+            <tr><td><a href="https://engineering.atspotify.com/2020/08/how-we-use-golden-paths-to-solve-fragmentation-in-our-software-ecosystem">Spotify golden paths</a> / <a href="https://netflixtechblog.com/full-cycle-developers-at-netflix-a08c31f83249">Netflix paved road</a> / <a href="https://backstage.io/docs/features/software-templates/">Backstage templates</a></td><td>Stack-layer vocabulary: central, opinionated, expert-owned stack definitions with voluntary/declared adoption.</td></tr>
+            <tr><td><a href="https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows">GitHub reusable workflows</a> / <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets">rulesets</a> / <a href="https://eslint.org/docs/latest/extend/shareable-configs">ESLint shareable configs</a></td><td>Declaration-based opt-in to centrally defined rules is established practice.</td></tr>
+            <tr><td><a href="https://nvlpubs.nist.gov/nistpubs/ai/nist.ai.100-1.pdf">NIST AI 100-1</a> / <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf">NIST AI 600-1</a></td><td>Verified absence (NIST corpus): voluntary frameworks with no CI/coding-agent controls.</td></tr>
+            <tr><td>Issue #93; change notes 0059–0060; review 0068</td><td>Owner-confirmed scope and the deferrals this design inherits.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <p class="foot">Project Shelf · owner-facing review artifact</p>
+  </main>
+</body>
+</html>
