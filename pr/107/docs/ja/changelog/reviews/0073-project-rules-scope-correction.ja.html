@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0073: プロジェクトルールのスコープ修正</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.85; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.7rem; line-height:1.15; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナーレビュー</span><span class="dot"></span><span class="num">0073</span><span><b>Draft</b></span><span><b>2026-07-10</b></span></p>
+      <h1>プロジェクトルールのスコープ修正</h1>
+      <p class="lead">このレビューは、<b>統制システムの3ルールを Project rules ビューから移し、古くなった note を1件修正する</b>承認を求めるものです。これにより、そのビューには真に製品の判断だけが並びます。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>APP-01 の note を修正する。</b>note はまだ、アプリケーションモニターが「アプリ固有の開発ルールを追跡する」と述べていました - これは変更ノート 0063 で廃止した役割です。修正後は、モニターは要求・機能・アーキテクチャのみを表示し、アプリ開発ルールはレジストリが保持して Project rules ビューに表示する、と明記します。</li>
+        <li><b>3ルールをコアへ再スコープする。</b>0063 の分類テストを当てると、<code>devcontainer-build</code>（ENV-02）・<code>component-contract</code>（ENV-03）・<code>compose-config</code>（ENV-06）はいずれも転用テストを通り、製品固有名詞を持ちません - stack-neutral な統制システムの環境ルールであって、製品の判断ではありません。スコープを <code>product</code> から <code>generic</code> に変更します。</li>
+        <li><b>ビュー移動を受け入れる。</b>Project rules ビューは 10 件から 7 件へ（<code>APP-01</code> + <code>PROJ-01</code>..<code>PROJ-04</code> + スタックの受け皿 <code>backend-checks</code> / <code>frontend-build</code>）。3ルールはルールビューへ移動（21→24）。ゲート・強制・CI 配線は不変で、移るのは表示先ビューだけです。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <p class="sub">承認内容を実装する具体ファイル。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>monitor/registry.json</code></td><td>APP-01 の note を 0063 後の実態に書き直し。ENV-02 / ENV-03 / ENV-06 の scope を <code>product</code> から <code>generic</code> へ。</td></tr>
+          <tr><td><code>monitor/guardrail-monitor.html</code> + <code>.ja</code></td><td>再生成。ルールビュー 21→24（再スコープした3件が加わる）。</td></tr>
+          <tr><td><code>monitor/project-rules.html</code> + <code>.ja</code></td><td>再生成。プロジェクトルール 10→7（再スコープした3件が抜ける）。</td></tr>
+          <tr><td><code>monitor/reviews.html</code> + <code>.ja</code></td><td>再生成。レビュー索引に 0073 カードを追加。</td></tr>
+          <tr><td><code>docs/en/changelog/0064-*.md</code> + <code>ja</code></td><td>変更ノート（英日）。</td></tr>
+          <tr><td><code>docs/en/changelog/reviews/0073-*.en.html</code> + <code>ja</code></td><td>本成果物（英日）。レビュー索引を再生成。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>低。ゲート配線・強制・CI ジョブは何も変わりません - <code>scope</code> は、ルールがどのモニタービューに現れるかを選ぶだけの層・表示タグです。残る露出は、<code>check-registry.ps1</code> がいまだ <code>scope</code> を検証しないため同種のドリフトが再発しうる点で、fast-follow の PR で <code>scope</code> 検証を追加します。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li><code>check-registry.ps1</code> への <code>scope</code> 検証の追加（直後の fast-follow PR）。</li>
+        <li><code>scope: stack</code> の導入と <code>backend-checks</code> / <code>frontend-build</code> の再スコープ（最初のスタック宣言時）。</li>
+        <li>次のアプリが引き続き shelf 製品かどうか - <code>PROJ-01</code> / <code>PROJ-03</code> は、その別途のオーナー判断まで shelf とフェーズの前提を保持する。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>本成果物は業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙へ対応づけているか。</p>
+        <table>
+          <thead><tr><th>本成果物の用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>分類テスト（転用テスト）</td><td>再利用性の基準（そのルールは別プロジェクトでも無改変で通用するか）。NIST の baseline と tailoring の区別に対応（layering.md）。</td></tr>
+            <tr><td>scope タグ</td><td>ゲート配線ではなくルールの層（コア / プロジェクト）の所属。モニタービューを選ぶだけ。</td></tr>
+            <tr><td>コアルール</td><td>あらゆるプロジェクトに適用する技術非依存のルール（scope generic / bilingual）。NIST の control baseline。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>本決定の根拠となる一次情報を直接確認したか。</p>
+        <table>
+          <thead><tr><th>確認した情報源</th><th>裏づける内容</th></tr></thead>
+          <tbody>
+            <tr><td><code>docs/en/rules/guardrails/layering.md</code>（Classification Test）</td><td>各再スコープ判断に当てた3問テストとリトマス試験。</td></tr>
+            <tr><td>変更ノート 0063 / 成果物 0072</td><td>APP-01 の note を古くした「開発ルール追跡」役割の廃止。据え置いた2件の future-control の受け皿。</td></tr>
+            <tr><td><code>monitor/registry.json</code>（正本）</td><td>再スコープしたルールと修正した note。ビュー所属の単一の正本。</td></tr>
+            <tr><td>ローカル検証ログ</td><td>再生成後の件数（process 24 / security 6 / project 7）と緑のスイート。</td></tr>
+            <tr><td>オーナー監査（2026-07-10 セッション）</td><td>ENV-02 / ENV-03 / ENV-06 の再スコープと APP-01 修正、scope 検証は fast-follow へ先送り、という判断。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー成果物</p>
+  </main>
+</body>
+</html>

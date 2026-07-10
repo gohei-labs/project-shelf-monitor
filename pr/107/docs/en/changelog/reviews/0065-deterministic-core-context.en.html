@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0065: Deliver the required core context deterministically at session start</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0 0 10px;} .risk p:last-child{margin-bottom:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0065</span><span><b>Draft</b></span><span><b>2026-07-09</b></span></p>
+      <h1>Deliver the required core context deterministically at session start</h1>
+      <p class="lead">This review asks for approval to <b>stop trusting that the agent read the required documents, and instead force-inject their content at session start</b>. Final part of the quality-gate trilogy (#80).</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>Full-content injection via a SessionStart hook.</b> <code>scripts/hooks/session-start-context.ps1</code> injects the full content of all ten <code>alwaysRead</code> files (~53 KB injected) from <code>agent-context/agent-core-context.json</code> at session start, including resume, <code>/clear</code>, and context compaction. "Pretending to have read" becomes structurally impossible — the choice itself disappears.</li>
+        <li><b>Approve the cost rationale.</b> Injection costs ~13.5k tokens per session — the same tokens an obedient agent would spend on Read tool calls (slightly less, without call overhead). The same cost as compliance, with the possibility of non-compliance removed.</li>
+        <li><b>Gate it and promote the registry entry.</b> Hook wiring is compiled from policy.json; the existing gate verifies the flag stays on and the tracked script exists. <code>core-context-reading</code> is promoted advisory → active (hard-gate). <code>readWhenRelevant</code> entries are injected as a path + trigger list only; reading those on a matching task remains the agent's responsibility — recorded honestly as a residual.</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <p class="sub">The concrete files that implement the requested approval.</p>
+      <table>
+        <thead><tr><th>Changed file</th><th>What changed</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/hooks/session-start-context.ps1</code></td><td>New. The SessionStart hook. Reads the manifest at run time; injects alwaysRead content plus the readWhenRelevant list. If the manifest is broken it injects a loud warning instead of silence (fail-loud); honors the registry toggle.</td></tr>
+          <tr><td><code>agent-policy/policy.json</code></td><td>Added <code>hooks.sessionStartInjectsCoreContext: true</code>.</td></tr>
+          <tr><td><code>scripts/generate/build-agent-config.ps1</code> / <code>.claude/settings.json</code></td><td>SessionStart wiring emitted; config regenerated.</td></tr>
+          <tr><td><code>scripts/guardrails/check-agent-policy.ps1</code></td><td>Verifies the flag stays on and the hook script is tracked.</td></tr>
+          <tr><td><code>monitor/registry.json</code> and generated pages</td><td><code>core-context-reading</code> promoted advisory → active (hard-gate); monitor regenerated.</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/agent-context/core-context.md</code> / <code>guardrails/agent-policy.md</code></td><td>"Deterministic Delivery" section and SessionStart description added (both languages).</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0065-*.html</code></td><td>This artifact (Japanese primary, English pair); reviews index regenerated.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p><b>Constant context cost.</b> ~13.5k tokens per session, growing if alwaysRead grows; contained by review discipline on the manifest (its integrity is already gated). A summarized-injection variant remains possible later, and the registry toggle can pause delivery instantly.</p>
+        <p><b>Coverage.</b> Delivery exists for the Claude Code harness only; other harnesses stay manifest-based manual reading until their emitters land — the asymmetry is stated in the docs and the registry note.</p>
+        <p><b>Conditional reading stays residual.</b> readWhenRelevant reading remains the agent's responsibility (full injection would more than double the constant cost; the list-only choice is deliberate).</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>SessionStart-equivalent emitters for other harnesses.</li>
+        <li>Criteria for switching to summarized injection.</li>
+        <li>Deterministic enforcement of readWhenRelevant.</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>Does this artifact use industry-standard terms, mapping any project-specific wording to standard vocabulary?</p>
+        <table>
+          <thead><tr><th>Term in this artifact</th><th>Standard term / meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Deterministic delivery</td><td>Context injection guaranteed by the harness (SessionStart hook), not requested from the agent.</td></tr>
+            <tr><td>Fail-loud</td><td>On failure, continue but inject a prominent warning rather than silence (visible fail-open).</td></tr>
+            <tr><td>Advisory-to-hard-gate promotion</td><td>This project's registry vocabulary for upgrading an honor-system rule to mechanical enforcement.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>Were the primary sources behind this decision consulted directly?</p>
+        <table>
+          <thead><tr><th>Source consulted</th><th>What it supports</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://code.claude.com/docs/en/hooks">Claude Code hooks reference</a></td><td>The SessionStart hook's <code>additionalContext</code> output (fires on startup / resume / clear / compaction).</td></tr>
+            <tr><td>Issue #80 / 2026-06-19 research</td><td>The gap: reading could be faked; the direction: enforce at the hook layer.</td></tr>
+            <tr><td><code>agent-context/agent-core-context.json</code> + measurement</td><td>Ten alwaysRead files, 51,075 source bytes; hook run verified injecting ~54,000 characters (~13.5k tokens).</td></tr>
+            <tr><td>Artifact 0058 (PR #73)</td><td>The hook layer this extends (policy → generator → gate verification pattern).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · Owner review artifact</p>
+  </main>
+</body>
+</html>
