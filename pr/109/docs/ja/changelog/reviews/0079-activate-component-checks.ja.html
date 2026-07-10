@@ -94,6 +94,7 @@
           <tr><td><code>scripts/check.ps1</code></td><td>呼び出しを 1 つ配線：<code>-Id backend-checks -Parameters @{ ComponentType = @("backend") }</code>。</td></tr>
           <tr><td><code>.github/workflows/ci.yml</code></td><td><code>check</code> ジョブで uv を導入（astral-sh/setup-uv@v5、キャッシュ有効）。条件付きゲートが CI で走る。</td></tr>
           <tr><td><code>monitor/registry.json</code></td><td>ENV-04 を enforcedBy 付きの条件付きゲートへ昇格。ENV-04 / ENV-05 の note を書き直し。</td></tr>
+          <tr><td><code>scripts/guardrails/check-application-monitor.ps1</code></td><td>相互チェックを追加：アーキテクチャ記録と契約の双方に宣言されたコンポーネントは同じ <code>type</code> を持たねばならない（付け替えるとゲートの対象から外れる）。</td></tr>
           <tr><td><code>scripts/guardrails/check-application-monitor.ps1</code>・<code>scripts/generate/build-application-monitor.ps1</code></td><td>廃止 controlType 語彙と古い CSS を削除。</td></tr>
           <tr><td><code>docs/{en,ja}/rules/guardrails/development.md</code></td><td>新節「宣言した check の実行」：実行契約。</td></tr>
           <tr><td><code>docs/{en,ja}/rules/guardrails/layering.md</code></td><td>有効化を記録。バックエンドの導入連鎖は完了。</td></tr>
@@ -105,7 +106,7 @@
     <section>
       <p class="kicker">リスク</p>
       <div class="risk">
-        <p>中。本ゲートは追跡ファイルから読んだコマンドテキストを実行します——それがコンポーネント契約の目的であり、保護は <code>project-components.json</code> が他の制御ファイルと同様にレビューゲートを通ること、および component path がリポジトリ内に閉じ込められることです。ゲートの初版はプログラム名を集めるためコマンドを <code>&amp;&amp;</code> / <code>;</code> で分割していましたが、これは <code>python -c</code> の引用符内の <code>sys.exit(3)</code> を「存在しないプログラム」と誤認し、<b>成功を報告しながら check を黙ってスキップ</b>していました（fail-open）。コミット前に負のテストが捕捉し、現在は先頭トークンのみを見て、後続プログラム欠落では fail-closed に倒れます。残余：Dev Container / Bash レーンには uv が無いため（可視の）スキップとなり、PowerShell の CI レーンより強制が弱いままです。</p>
+        <p>中。本ゲートは追跡ファイルから読んだコマンドテキストを実行します——それがコンポーネント契約の目的であり、保護は <code>project-components.json</code> が他の制御ファイルと同様にレビューゲートを通ること、および component path がリポジトリ内に閉じ込められることです。ゲートの初版はプログラム名を集めるためコマンドを <code>&amp;&amp;</code> / <code>;</code> で分割していましたが、これは <code>python -c</code> の引用符内の <code>sys.exit(3)</code> を「存在しないプログラム」と誤認し、<b>成功を報告しながら check を黙ってスキップ</b>していました（fail-open）。コミット前に負のテストが捕捉し、現在は先頭トークンのみを見て、後続プログラム欠落では fail-closed に倒れます。レビューでさらに 2 つの fail-open 経路が見つかり、本 PR で塞ぎました：契約側だけでコンポーネントを<b>付け替える</b>（backend → worker）とゲートの対象から黙って外れる——アーキテクチャ記録と契約は <code>type</code> が一致しなければならなくなりました。また component path の封じ込め検査は字句的で、コミットされた<b>シンボリックリンク</b>（パス自身または祖先）によって作業ディレクトリがリポジトリ外に置かれえた——ゲートはリンクを辿って正規化し、外部を指す場合は拒否します。残余：Dev Container / Bash レーンには uv が無いため（可視の）スキップとなり、PowerShell の CI レーンより強制が弱いままです。</p>
       </div>
     </section>
 
