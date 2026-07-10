@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>レビュー 0036 - 見えるエージェント文脈</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.2; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">レビュー資料 0036。状態: オーナーレビュー用ドラフト。日付: 2026-06-17。</p>
+  <h1>見えるエージェント文脈</h1>
+  <p><span class="tag">推奨</span><span class="tag">統制</span><span class="tag">エージェント文脈</span></p>
+
+  <section>
+    <h2>判断サマリー</h2>
+    <p>project-specific control metadata を root hidden path から出し、許可されていない root dot-prefixed path を失敗させる guardrail を追加する。</p>
+  </section>
+
+  <section>
+    <h2>オーナーに承認してほしいこと</h2>
+    <div class="box">共有の visible agent manifest location として <code>agent-context/</code> を承認し、不要になった secret-scan allowlist の削除を承認し、root hidden path には tool または ecosystem reason を必須にする方針を承認する。</div>
+  </section>
+
+  <section>
+    <h2>推奨</h2>
+    <p>進めてよい。repository を確認しやすくし、命名ルールを好みではなく executable check にする。</p>
+  </section>
+
+  <section>
+    <h2>リスクと軽減策</h2>
+    <table>
+      <tr><th>リスク</th><th>軽減策</th></tr>
+      <tr><td>agent が古い hidden manifest を探し続ける。</td><td><code>AGENTS.md</code>、<code>CLAUDE.md</code>、<code>GEMINI.md</code> を追加し、すべて <code>agent-context/agent-core-context.json</code> へ誘導する。</td></tr>
+      <tr><td>future contributor が慣れで project-specific dotfile を追加する。</td><td><code>scripts/guardrails/check-root-hidden-paths.ps1</code> が、明示許可されていない path を失敗させる。</td></tr>
+      <tr><td>local secrets と tracked control files が混同される。</td><td>方針では <code>.env</code> のような ignored local runtime files を許可しつつ、tracked または unignored の hidden control paths をブロックする。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>用語</th><th>ここでの使い方</th></tr>
+      <tr><td>Root hidden path</td><td>repository root にあり、名前が dot で始まる file または directory。</td></tr>
+      <tr><td>Adapter file</td><td>rules を重複させず、共有 manifest へ誘導する薄い tool-specific entry point。</td></tr>
+      <tr><td>Project-specific control metadata</td><td>agent behavior または guardrail checks を制御する repository-owned data。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>runtime は変わらない。既存の local / CI check suite に PowerShell guardrail を追加するだけで、新しい host tool や development environment は要求しない。</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><code>docs/ja/changelog/0042-visible-agent-context.md</code></td><td>この layout change の implementation record。</td></tr>
+      <tr><td><code>docs/ja/rules/observability/repository-layout.md</code></td><td>visible project-specific paths と allowed root hidden paths の方針。</td></tr>
+      <tr><td><code>scripts/guardrails/check-root-hidden-paths.ps1</code></td><td>hidden-path policy の executable gate。</td></tr>
+      <tr><td><code>monitor/registry.json</code></td><td>machine-readable guardrail registry entry。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>次のステップ</h2>
+    <p><code>monitor/*.html</code> を再生成し、<code>pwsh scripts/check.ps1</code> を実行する。</p>
+  </section>
+</main>
+</body>
+</html>
