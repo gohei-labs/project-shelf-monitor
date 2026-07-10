@@ -131,13 +131,13 @@
       <h2 class="deckhead">申し合わせ・予定・外部</h2>
       <h3 class="cathead">ビルド・開発環境</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-04" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-04" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="api component は project-components.json で宣言済み（stack backend-python、commands.check = uv run ruff check &amp;&amp; uv run pytest、変更記録 0068）。まだ将来統制：宣言した check は scripts/check.ps1 と CI に未配線。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-04</span>
               <span class="cnm">バックエンドの lint とテスト</span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-05" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-05" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="frontend component はまだ宣言されていない。web component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-05</span>
               <span class="cnm">フロントエンドのビルド</span>

@@ -786,11 +786,11 @@
       "behavior": "none",
       "guidance": "planned",
       "runsAt": "advisory",
-      "scope": "product",
+      "scope": "stack",
       "enforcedBy": null,
       "note": {
-        "en": "No backend stack exists yet. Backend checks become a real gate only after the backend component is declared in project-components.json with stack-specific commands.",
-        "ja": "backend stack はまだ存在しない。backend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
+        "en": "The api component is declared in project-components.json (stack backend-python, commands.check = uv run ruff check && uv run pytest, change record 0068). Still a future control: the declared check is not yet wired into scripts/check.ps1 or CI.",
+        "ja": "api component は project-components.json で宣言済み（stack backend-python、commands.check = uv run ruff check && uv run pytest、変更記録 0068）。まだ将来統制：宣言した check は scripts/check.ps1 と CI に未配線。"
       }
     },
     {
@@ -812,11 +812,11 @@
       "behavior": "none",
       "guidance": "planned",
       "runsAt": "advisory",
-      "scope": "product",
+      "scope": "stack",
       "enforcedBy": null,
       "note": {
-        "en": "No frontend stack exists yet. Frontend build checks become a real gate only after the frontend component is declared in project-components.json with stack-specific commands.",
-        "ja": "frontend stack はまだ存在しない。frontend component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
+        "en": "No frontend component is declared yet. Frontend build checks become a real gate only after the web component is declared in project-components.json with stack-specific commands.",
+        "ja": "frontend component はまだ宣言されていない。web component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
       }
     },
     {
