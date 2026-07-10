@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0065: 必読コンテキストをセッション開始時に決定的に配達する</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0 0 10px;} .risk p:last-child{margin-bottom:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナー承認レビュー</span><span class="dot"></span><span class="num">0065</span><span><b>Draft</b></span><span><b>2026-07-09</b></span></p>
+      <h1>必読コンテキストをセッション開始時に決定的に配達する</h1>
+      <p class="lead">この資料は、<b>「エージェントが必読文書を読んだか」を信頼する代わりに、読むべき内容そのものをセッション開始時に強制注入する</b>ことの承認を求めます。品質ゲート3部作の最終弾（#80）です。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認のお願い（Requested Approval）</p>
+      <ol class="asks">
+        <li><b>SessionStart フックによる全文注入。</b><code>scripts/hooks/session-start-context.ps1</code> が、セッション開始時（再開・<code>/clear</code>・コンテキスト圧縮後を含む）に <code>agent-context/agent-core-context.json</code> の全 <code>alwaysRead</code> ファイル（10件・注入量 約53KB）の全文を注入します。「読んだフリ」は構造的に不可能になります — 読む/読まないの選択自体が消えるためです。</li>
+        <li><b>コストの妥当性を承認する。</b>注入は毎セッション約13.5kトークンですが、これは従順なエージェントが Read ツールで消費する量と同等（ツール呼び出しのオーバーヘッド分はむしろ安い）です。ルールに従った場合と同じコストで、従わない可能性をゼロにします。</li>
+        <li><b>ゲート化とレジストリ昇格。</b>フック配線は policy.json から生成し、既存ゲート（check-agent-policy）がフラグ有効とスクリプト追跡を検証。<code>core-context-reading</code> を advisory（名目）から active（hard-gate）へ昇格します。<code>readWhenRelevant</code>（条件付き必読）はトリガー付き一覧として注入され、該当時の読了はエージェント責任のまま — この残余も正直に記録します。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容（What Changed）</p>
+      <p class="sub">承認のお願いを実現する、具体的な変更ファイルの一覧です。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/hooks/session-start-context.ps1</code></td><td>新規。SessionStart フック本体。manifest を実行時に読み、alwaysRead 全文＋readWhenRelevant 一覧を注入。manifest 欠損時は沈黙せず警告を注入（フェイルラウド）。レジストリトグルに従う。</td></tr>
+          <tr><td><code>agent-policy/policy.json</code></td><td><code>hooks.sessionStartInjectsCoreContext: true</code> を追加。</td></tr>
+          <tr><td><code>scripts/generate/build-agent-config.ps1</code> ／ <code>.claude/settings.json</code></td><td>SessionStart フックの配線を生成・再生成。</td></tr>
+          <tr><td><code>scripts/guardrails/check-agent-policy.ps1</code></td><td>フラグ有効＋スクリプト追跡の検証を追加。</td></tr>
+          <tr><td><code>monitor/registry.json</code> ほか生成ページ</td><td><code>core-context-reading</code> を advisory から active（hard-gate）へ昇格。モニター再生成。</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/agent-context/core-context.md</code> ／ <code>guardrails/agent-policy.md</code></td><td>「決定的な配達」の節と SessionStart の説明を追加（日英）。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0065-*.html</code></td><td>この資料（日英対）。レビュー索引も再生成。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク（Risk）</p>
+      <div class="risk">
+        <p><b>コンテキスト常時消費。</b>毎セッション約13.5kトークンを固定で使います。alwaysRead が肥大化すると負担も増えるため、manifest の整合ゲート（既存）に加え、肥大化はレビューで抑える運用です。将来問題になれば要約版の注入へ切り替え可能（レジストリトグルで即時停止も可能）。</p>
+        <p><b>適用範囲。</b>配達は Claude Code ハーネスのみ。他ハーネス（Codex 等）はエミッター追加まで manifest ベースの手動読了のまま — 非対称は文書とレジストリ note に明記しました。</p>
+        <p><b>条件付き必読は残余。</b>readWhenRelevant の読了は依然エージェント責任です（全文注入するとコストが常時2倍以上になるため、意図的に一覧のみ）。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">決めないこと（Not Decided Here）</p>
+      <ul class="scope">
+        <li>他ハーネス向けの SessionStart 相当のエミッター。</li>
+        <li>alwaysRead の要約版注入への切り替え基準。</li>
+        <li>readWhenRelevant の決定的強制。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">資料チェック（Author Checks）</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>用語チェック（Terminology Check）</h3>
+        <p>この資料で業界標準の用語を使い、独自表現は標準語へ対応付けたか。</p>
+        <table>
+          <thead><tr><th>この資料の言葉</th><th>標準用語・意味</th></tr></thead>
+          <tbody>
+            <tr><td>決定的な配達</td><td>deterministic delivery / context injection。ハーネスの SessionStart フックで環境側が保証する情報供給。</td></tr>
+            <tr><td>フェイルラウド</td><td>fail-loud。失敗時に沈黙せず、目立つ警告を出して続行する設計（fail-open だが可視）。</td></tr>
+            <tr><td>名目 → hard-gate 昇格</td><td>本プロジェクトのレジストリ用語。honor-system ルールから機械強制への格上げ。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>一次情報チェック（References / Primary Sources）</h3>
+        <p>判断の根拠について、大元の一次情報（公式ドキュメント・正本）に当たったか。</p>
+        <table>
+          <thead><tr><th>当たった一次情報</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://code.claude.com/docs/en/hooks">Claude Code hooks リファレンス</a></td><td>SessionStart フックの <code>additionalContext</code> 出力（startup / resume / clear / compaction で発火）。</td></tr>
+            <tr><td>Issue #80 ／ 2026-06-19 研究</td><td>「読んだフリが可能」という名目ルールのギャップと、フック層での決定的強制の方針。</td></tr>
+            <tr><td><code>agent-context/agent-core-context.json</code>＋実測</td><td>alwaysRead 10件・原文計51,075バイト。フック実行で約54,000文字（約13.5kトークン）の注入を確認。</td></tr>
+            <tr><td>資料 0058（PR #73）</td><td>拡張元のフック層（policy → 生成 → ゲート検証のパターン）。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー資料</p>
+  </main>
+</body>
+</html>

