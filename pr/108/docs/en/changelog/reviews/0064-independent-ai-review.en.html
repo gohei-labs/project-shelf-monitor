@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0064: Enforce independent-context AI review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0 0 10px;} .risk p:last-child{margin-bottom:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0064</span><span><b>Draft</b></span><span><b>2026-07-09</b></span></p>
+      <h1>Enforce independent-context AI review</h1>
+      <p class="lead">This review asks for approval to <b>make self-review — the author context approving its own code — impossible at the audit-record level</b>. Part 2 of the quality-gate trilogy (#81).</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>Build the independence requirement into the record format.</b> The same AI Review Record section must declare both <code>Author context:</code> (the identifier of the context that wrote the change) and <code>Reviewer context:</code> (the review-only context), and the gate enforces that they differ. The check runs on the record that passed the freshness check (head-commit match), so independence cannot be borrowed from an older record.</li>
+        <li><b>Approve the honest positioning.</b> Declared identities are structured attestation, not cryptographic proof. But a violation now requires an explicit false statement in a durable audit record — accidental or creeping self-review becomes structurally impossible.</li>
+        <li><b>Formalize a practice already proven live.</b> This format was exercised on PR #84: a fresh-context agent separate from the implementation session ran four adversarial review passes, found 11 issues (including two P1s), and every fix became a committed test case. This PR itself was reviewed by yet another fresh reviewer.</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <p class="sub">The concrete files that implement the requested approval.</p>
+      <table>
+        <thead><tr><th>Changed file</th><th>What changed</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrails/check-ai-review-record.ps1</code></td><td>Independence check added to the record section that passes freshness (both fields present, normalized values differ). The <code>independent-ai-review</code> registry toggle can relax independence alone (the record requirement stays).</td></tr>
+          <tr><td><code>monitor/registry.json</code></td><td>New entry <code>independent-ai-review</code> (decision-records, hard-gate, runsAt ci); monitor regenerated (20 process rules).</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/code-review/ai-review-protocol.md</code></td><td>Record template gains Author/Reviewer context lines; rules and CI Enforcement updated (both languages).</td></tr>
+          <tr><td><code>.github/pull_request_template.md</code></td><td>Checkbox wording gains the independence requirement (both languages).</td></tr>
+          <tr><td><code>scripts/tests/check-ai-review-record.tests.ps1</code></td><td>Three independence cases added (missing fields fail; identical identities fail case-insensitively; a Reviewer context outside the record section does not count); passing fixtures gained identities. 20 cases, all passing.</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0064-*.html</code></td><td>This artifact (Japanese primary, English pair); reviews index regenerated.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p><b>Attestation limits.</b> A malicious agent could technically write a fake Reviewer context. The control's value is eliminating accident and drift (casual self-review becomes structurally impossible) and making violations visible (faking requires an explicit false statement in the audit record). Cryptographic identity proof was judged disproportionate for this repository and the limit is documented honestly.</p>
+        <p><b>Operating cost.</b> Every implementation PR now requires an actual independent review (2-6 minutes per pass, per the #84 experience). This is the intended cost — it is the point of the trilogy.</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>Deterministic required-reading enforcement — part 3, #80.</li>
+        <li>Technical verification of reviewer identifiers (session-ID cross-checks).</li>
+        <li>Automated assessment of review quality or depth.</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>Does this artifact use industry-standard terms, mapping any project-specific wording to standard vocabulary?</p>
+        <table>
+          <thead><tr><th>Term in this artifact</th><th>Standard term / meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Independent review</td><td>Separation of duties: the maker and the approver must differ — a foundational control principle.</td></tr>
+            <tr><td>Attestation</td><td>A structured declaration by a party; a recognized form of audit evidence (distinct from signatures/proofs).</td></tr>
+            <tr><td>Self-review</td><td>The pattern vendor guidance (and this project's protocol "Weak" list) flags as the weakest link.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>Were the primary sources behind this decision consulted directly?</p>
+        <table>
+          <thead><tr><th>Source consulted</th><th>What it supports</th></tr></thead>
+          <tbody>
+            <tr><td><code>docs/{en,ja}/rules/code-review/ai-review-protocol.md</code> (Review Independence Rules)</td><td>The existing policy of separate implementation and review-only threads — this change makes it enforced.</td></tr>
+            <tr><td>Issue #81 / 2026-06-19 research</td><td>The top remaining quality gap: records prove a review happened, not that it was independent.</td></tr>
+            <tr><td>PR #84 (artifact 0063)</td><td>Live proof of the format: four independent adversarial passes found 11 issues (2 P1s), all fixed and test-cased.</td></tr>
+            <tr><td>Local verification log</td><td>20 gate test cases (3 independence cases included) all passing.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · Owner review artifact</p>
+  </main>
+</body>
+</html>
