@@ -119,6 +119,15 @@
     <div class="layout">
     <div class="registry">
       <h2 class="deckhead">Guardrails - enforced gates</h2>
+      <h3 class="cathead">Build &amp; environment</h3>
+      <div class="deck">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="Build &amp; environment" data-code="ENV-04" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="scripts/guardrails/check-component-checks.ps1" data-venue="Conditional" data-status="Conditional gate" data-guidance="Mandatory" data-note="Runs the commands.check declared for each backend component in project-components.json, with the working directory set to the component path (change record 0070). Conditional: a host without the component's toolchain reports a visible skip; CI installs uv, so the api check runs there on every pull request.">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">ENV-04</span>
+              <span class="cnm">Backend lint and tests</span>
+              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
+            </button>
+      </div>
       <h3 class="cathead">Application monitoring</h3>
       <div class="deck">
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Application monitoring" data-code="APP-01" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="The application monitor presents product requirements, features, and architecture as separate pages, generated from product/application-monitor.json. Application development rules are not tracked here; they live in the registry and appear on the Project rules view.">
@@ -131,13 +140,7 @@
       <h2 class="deckhead">Working agreements / planned / external</h2>
       <h3 class="cathead">Build &amp; environment</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Build &amp; environment" data-code="ENV-04" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="The api component is declared in project-components.json (stack backend-python, commands.check = uv run ruff check &amp;&amp; uv run pytest, change record 0068). Still a future control: the declared check is not yet wired into scripts/check.ps1 or CI.">
-              <span class="cbar" style="background:#BCE000"></span>
-              <span class="ccat ccode">ENV-04</span>
-              <span class="cnm">Backend lint and tests</span>
-              <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
-            </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Build &amp; environment" data-code="ENV-05" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="No frontend component is declared yet. Frontend build checks become a real gate only after the web component is declared in project-components.json with stack-specific commands.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Build &amp; environment" data-code="ENV-05" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="No frontend component is declared yet. The gate script already exists (check-component-checks.ps1, change record 0070); the same change that declares a frontend component wires a frontend-scoped invocation into scripts/check.ps1 and flips this rule to a conditional gate.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-05</span>
               <span class="cnm">Frontend build</span>

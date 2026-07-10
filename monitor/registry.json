@@ -782,15 +782,20 @@
         "ja": "バックエンドの lint とテストが通る。"
       },
       "pillar": "guardrails",
-      "status": "advisory",
-      "behavior": "none",
-      "guidance": "planned",
-      "runsAt": "advisory",
+      "status": "conditional",
+      "behavior": "conditional-gate",
+      "guidance": "mandatory",
+      "runsAt": "conditional",
       "scope": "stack",
-      "enforcedBy": null,
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-component-checks.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
       "note": {
-        "en": "The api component is declared in project-components.json (stack backend-python, commands.check = uv run ruff check && uv run pytest, change record 0068). Still a future control: the declared check is not yet wired into scripts/check.ps1 or CI.",
-        "ja": "api component は project-components.json で宣言済み（stack backend-python、commands.check = uv run ruff check && uv run pytest、変更記録 0068）。まだ将来統制：宣言した check は scripts/check.ps1 と CI に未配線。"
+        "en": "Runs the commands.check declared for each backend component in project-components.json, with the working directory set to the component path (change record 0070). Conditional: a host without the component's toolchain reports a visible skip; CI installs uv, so the api check runs there on every pull request.",
+        "ja": "project-components.json で宣言された各 backend component の commands.check を、作業ディレクトリを component path にして実行する（変更記録 0070）。条件付き：component のツールチェーンがないホストでは可視のスキップを報告する。CI は uv を導入するため、api の check は全プルリクエストで実行される。"
       }
     },
     {
@@ -815,8 +820,8 @@
       "scope": "stack",
       "enforcedBy": null,
       "note": {
-        "en": "No frontend component is declared yet. Frontend build checks become a real gate only after the web component is declared in project-components.json with stack-specific commands.",
-        "ja": "frontend component はまだ宣言されていない。web component を project-components.json で宣言し、stack-specific commands を持たせてから実ゲート化する。"
+        "en": "No frontend component is declared yet. The gate script already exists (check-component-checks.ps1, change record 0070); the same change that declares a frontend component wires a frontend-scoped invocation into scripts/check.ps1 and flips this rule to a conditional gate.",
+        "ja": "frontend component はまだ宣言されていない。ゲートスクリプトは既にある（check-component-checks.ps1、変更記録 0070）。frontend component を宣言する変更で、frontend スコープの呼び出しを scripts/check.ps1 に配線し、本ルールを条件付きゲートへ切り替える。"
       }
     },
     {
