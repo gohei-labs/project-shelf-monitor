@@ -1142,6 +1142,37 @@
         "en": "Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.",
         "ja": "現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。"
       }
+    },
+    {
+      "id": "backlog-monitor",
+      "code": "GOV-06",
+      "enabled": true,
+      "domain": "process-quality",
+      "category": "governance-meta",
+      "title": {
+        "en": "Backlog monitor freshness",
+        "ja": "バックログモニター鮮度"
+      },
+      "rule": {
+        "en": "The backlog monitor is generated from monitor/backlog.json; every item declares a valid type, impact, and status, and the pages stay in sync with the source.",
+        "ja": "バックログモニターは monitor/backlog.json から生成し、各項目は妥当な type・impact・status を持ち、ページはソースと同期する。"
+      },
+      "pillar": "visualization",
+      "status": "active",
+      "behavior": "hard-gate",
+      "guidance": "mandatory",
+      "runsAt": "both",
+      "scope": "generic",
+      "enforcedBy": {
+        "script": "scripts/guardrails/check-backlog.ps1",
+        "wiredIn": [
+          "scripts/check.ps1"
+        ]
+      },
+      "note": {
+        "en": "The backlog is the pre-Issue staging area for candidate work items surfaced during development; the owner and agent triage it and decide which become GitHub Issues. type is a single controlled vocabulary (bug/feature/enhancement/refactor/docs/task/question); impact, area, status, and tags are separate axes (deep-research 2026-07-10).",
+        "ja": "バックログは、開発中に湧いた候補作業項目の Issue 化前の一時置き場。オーナーとエージェントが仕分けし、どれを GitHub Issue にするか決める。type は単一の統制語彙（bug/feature/enhancement/refactor/docs/task/question）で、impact・area・status・tags は別の軸（deep-research 2026-07-10）。"
+      }
     }
   ]
 }

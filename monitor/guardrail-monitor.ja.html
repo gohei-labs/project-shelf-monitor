@@ -111,6 +111,7 @@
       <a href="application-features.ja.html">機能</a>
       <a href="application-architecture.ja.html">アーキテクチャ</a>
       <a href="reviews.ja.html">レビュー</a>
+      <a href="backlog.ja.html">バックログ</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Rule monitor</p>
@@ -173,6 +174,12 @@
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-02</span>
               <span class="cnm">ガードレール・レジストリ整合</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-06" data-name="バックログモニター鮮度" data-rule="バックログモニターは monitor/backlog.json から生成し、各項目は妥当な type・impact・status を持ち、ページはソースと同期する。" data-enf="scripts/guardrails/check-backlog.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="バックログは、開発中に湧いた候補作業項目の Issue 化前の一時置き場。オーナーとエージェントが仕分けし、どれを GitHub Issue にするか決める。type は単一の統制語彙（bug/feature/enhancement/refactor/docs/task/question）で、impact・area・status・tags は別の軸（deep-research 2026-07-10）。">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">GOV-06</span>
+              <span class="cnm">バックログモニター鮮度</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
       </div>

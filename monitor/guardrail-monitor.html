@@ -111,6 +111,7 @@
       <a href="application-features.html">Features</a>
       <a href="application-architecture.html">Architecture</a>
       <a href="reviews.html">Reviews</a>
+      <a href="backlog.html">Backlog</a>
     </nav>
     <header class="pagehead">
       <p class="eyebrow">Rule monitor</p>
@@ -173,6 +174,12 @@
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-02</span>
               <span class="cnm">Guardrail registry integrity</span>
+              <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
+            </button>
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-code="GOV-06" data-name="Backlog monitor freshness" data-rule="The backlog monitor is generated from monitor/backlog.json; every item declares a valid type, impact, and status, and the pages stay in sync with the source." data-enf="scripts/guardrails/check-backlog.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="The backlog is the pre-Issue staging area for candidate work items surfaced during development; the owner and agent triage it and decide which become GitHub Issues. type is a single controlled vocabulary (bug/feature/enhancement/refactor/docs/task/question); impact, area, status, and tags are separate axes (deep-research 2026-07-10).">
+              <span class="cbar" style="background:#BCE000"></span>
+              <span class="ccat ccode">GOV-06</span>
+              <span class="cnm">Backlog monitor freshness</span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
       </div>
