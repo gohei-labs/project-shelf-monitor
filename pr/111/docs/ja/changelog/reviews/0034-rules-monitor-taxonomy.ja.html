@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>レビュー 0034 - ルールとモニターの分類整理</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 32px; color: #1f2933; }
+    main { max-width: 920px; margin: 0 auto; }
+    h1, h2 { line-height: 1.25; }
+    .meta, .tag { color: #52606d; }
+    .tag { display: inline-block; border: 1px solid #bcccdc; border-radius: 999px; padding: 2px 10px; margin-right: 6px; font-size: 13px; }
+    .box { border-left: 4px solid #2563eb; background: #f8fafc; padding: 12px 16px; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #d9e2ec; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="meta">レビュー成果物 0034。Status: owner review draft。Date: 2026-06-17.</p>
+  <h1>ルールとモニターの分類整理</h1>
+  <p><span class="tag">推奨</span><span class="tag">Governance</span><span class="tag">Naming</span></p>
+
+  <section>
+    <h2>Decision Summary</h2>
+    <p>live source-document layer の名前を <code>playbook</code> から <code>rules</code> に変え、生成された browser-visible layer の root <code>playbook</code> を <code>monitor</code> に変える。</p>
+  </section>
+
+  <section>
+    <h2>What The Owner Needs To Approve</h2>
+    <div class="box">repository taxonomy を承認する。<code>docs/</code> はルールの正本、<code>monitor/</code> は生成された表示、<code>scripts/</code> は guardrails の強制層。</div>
+  </section>
+
+  <section>
+    <h2>Recommendation</h2>
+    <p>進める。docs は六法全書のようにルールを保持し、monitor が表示の仕方を決める、というオーナーの整理と一致する。</p>
+  </section>
+
+  <section>
+    <h2>Risks And Mitigations</h2>
+    <table>
+      <tr><th>Risk</th><th>Mitigation</th></tr>
+      <tr><td>rename 後に既存 links が壊れる。</td><td>live docs、scripts、registry paths、indexes を更新し、monitor pages を再生成する。</td></tr>
+      <tr><td>historical records に古い名前が残る。</td><td>古い記録は履歴として保持し、過去 state の説明だと明記する。</td></tr>
+      <tr><td>AI agents が古い required-reading manifest を読む。</td><td><code>.agents/agent-core-context.json</code> を <code>docs/en/rules/</code> に更新する。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>What Is Not Decided Here</h2>
+    <p>monitor UI の再設計、新しい docs portal、将来の application architecture は決めない。repository の命名と責務境界だけを直す。</p>
+  </section>
+
+  <section data-guardrail="standard-terminology">
+    <h2>Terminology Check</h2>
+    <table>
+      <tr><th>Term</th><th>Use here</th></tr>
+      <tr><td>Rules</td><td><code>docs/{en,ja}/rules/</code> に置く恒久 source documents。</td></tr>
+      <tr><td>Monitor</td><td><code>monitor/</code> 配下の generated browser-visible pages と machine-readable registry。</td></tr>
+      <tr><td>Scripts</td><td><code>scripts/</code> 配下の executable guardrail checks と generators。</td></tr>
+    </table>
+  </section>
+
+  <section data-guardrail="runtime-boundary">
+    <h2>Runtime Boundary Check</h2>
+    <p>変わる runtime boundary は file path だけ。generator と check scripts が <code>monitor/</code> を読む/書くようになる。新しい server、external service、secret、network dependency は追加しない。</p>
+  </section>
+
+  <section data-guardrail="primary-references">
+    <h2>References / Primary Sources</h2>
+    <table>
+      <tr><th>Source</th><th>Supports</th></tr>
+      <tr><td><code>docs/ja/changelog/0040-rules-monitor-taxonomy.md</code></td><td>taxonomy change の実装記録。</td></tr>
+      <tr><td><code>docs/ja/rules/observability/documentation-system.md</code></td><td>docs、rules、changelog、review artifacts、monitor pages の canonical folder roles。</td></tr>
+      <tr><td><code>scripts/generate/build-guardrail-map.ps1</code> と <code>scripts/generate/build-reviews-page.ps1</code></td><td>generated monitor page locations。</td></tr>
+      <tr><td><code>monitor/registry.json</code></td><td>generators と checks が使う machine-readable guardrail registry。</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Next Step</h2>
+    <p><code>monitor/*.html</code> を再生成し、required-reading manifest を更新し、<code>pwsh scripts/check.ps1</code> を実行する。</p>
+  </section>
+</main>
+</body>
+</html>
