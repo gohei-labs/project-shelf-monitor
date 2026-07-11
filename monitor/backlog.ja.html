@@ -91,11 +91,11 @@
       <p class="lead">開発中に湧いた候補作業項目。オーナーがどれを GitHub Issue にするか決める前の一時置き場です。	ype は作業の種類で、impact・area・status・tags は別の軸です。</p>
       <div class="controls">
         <span class="lab">絞り込み</span>
-        <button class="pill" data-f="all" aria-pressed="true">すべて <span class="c">28</span></button>
+        <button class="pill" data-f="all" aria-pressed="true">すべて <span class="c">31</span></button>
         <button class="pill" data-f="P1" aria-pressed="false">P1 <span class="c">6</span></button>
-        <button class="pill" data-f="P2" aria-pressed="false">P2 <span class="c">17</span></button>
-        <button class="pill" data-f="P3" aria-pressed="false">P3 <span class="c">5</span></button>
-        <button class="pill" data-f="candidate" aria-pressed="false">候補 <span class="c">26</span></button>
+        <button class="pill" data-f="P2" aria-pressed="false">P2 <span class="c">19</span></button>
+        <button class="pill" data-f="P3" aria-pressed="false">P3 <span class="c">6</span></button>
+        <button class="pill" data-f="candidate" aria-pressed="false">候補 <span class="c">29</span></button>
         <button class="pill" data-f="accepted" aria-pressed="false">採用 <span class="c">2</span></button>
       </div>
     </header>
@@ -216,6 +216,16 @@
         <span class="chips"><span class="chip imp">P2</span><span class="chip type">バグ</span></span>
         <span><span class="btitle">テキストファイルのホワイトリストが、追跡対象のテキストファイル(.toml、.lock、.env.example、.python-version)をエンコーディングルールの対象から暗黙的に除外している</span><span class="barea">text-encoding</span></span>
       </button>
+      <button type="button" class="bitem imp-P2" data-impact="P2" data-status="candidate" data-title="ミラーへの root 公開が pr/&lt;n&gt;/ ライブプレビューを全て消してしまう" data-impact-label="P2" data-type-label="バグ" data-status-label="候補" data-area="monitor-mirror" data-loc="scripts/ci/publish-monitor-mirror.ps1" data-tags="preview,publish" data-issue="" data-detail="main ブランチの公開（'Publish monitor root'）が pr/ ディレクトリを保存せずミラーのツリーを置き換えるため、main へのマージのたびにオープン中の全 PR のライブプレビューが 404 になる。2026-07-10 に観測: ミラー履歴では 15:33 に 'Publish monitor pr/111'、15:56 に 'Publish monitor root'、その後 pr/111 が消え、pr/ 配下は後に 112 のみだった。" data-proposal="root 公開時に既存の pr/ ディレクトリを保存する（新しいツリーへコピーし直す、または pr/ を消さずに root のファイルだけ公開する）。" data-evidence="2026-07-10 のミラーコミット履歴（15:33 pr/111 公開、15:56 root 公開、その後 pr/111 が 404。contents API で pr/ = [112] のみ）。" data-source="pr-112-preview-incident-2026-07-11" data-raised="2026-07-11">
+        <span class="bid">BL-029</span>
+        <span class="chips"><span class="chip imp">P2</span><span class="chip type">バグ</span></span>
+        <span><span class="btitle">ミラーへの root 公開が pr/&lt;n&gt;/ ライブプレビューを全て消してしまう</span><span class="barea">monitor-mirror</span></span>
+      </button>
+      <button type="button" class="bitem imp-P2" data-impact="P2" data-status="candidate" data-title="プレビューリンクの HTTP 検証がミラーの Pages ビルドと競争し、配信遅延で失敗する" data-impact-label="P2" data-type-label="バグ" data-status-label="候補" data-area="monitor-preview" data-loc="scripts/ci/build-pr-preview-links.ps1" data-tags="preview,flaky" data-issue="" data-detail="コメントステップはミラーへの push の約1分後にプレビュー URL を HEAD 検証するが、ミラー側の GitHub Pages ビルドは未配信のことが多い - しかも 2026-07-10 はビルドが 'building' のまま固まり、API で再ビルドを要求するまで動かなかった。検証は「未配信」と「本当に壊れている」を区別できず、通常の配信遅延でもステップが失敗する（PR #112: 公開自体は成功していたのに、成果物リンク2件が 'not live' 警告で exit 1）。" data-proposal="リトライは既に存在する（5回×6秒、URLあたり約30秒、固定間隔）。バックオフ付きで窓を延長し（例: 数分まで）、ミラーの Pages ビルド状態を参照する（GET /pages/builds/latest。'building' に加え 'errored' も処理）。ビルドが停滞・失敗している場合は失敗の前に再ビルドを要求（POST /pages/builds）し、配信済みビルドにもファイルが無い場合にのみ失敗させる。" data-evidence="Monitor Preview 実行 29108434232（公開ステップ成功、コメントステップは 'Preview link not live' 警告2件で exit 1）。ミラーの Pages ビルドは 16:44:21Z から 'building' のまま停滞し、API での再ビルド要求で解消（その後 HTTP 200）。" data-source="pr-112-preview-incident-2026-07-11" data-raised="2026-07-11">
+        <span class="bid">BL-030</span>
+        <span class="chips"><span class="chip imp">P2</span><span class="chip type">バグ</span></span>
+        <span><span class="btitle">プレビューリンクの HTTP 検証がミラーの Pages ビルドと競争し、配信遅延で失敗する</span><span class="barea">monitor-preview</span></span>
+      </button>
       <button type="button" class="bitem imp-P3" data-impact="P3" data-status="candidate" data-title="存在チェックが、読み取り可能なファイルを指していないマニフェストエントリを通してしまう（空文字列/'.'/'./' はリポジトリルートに収束し、ディレクトリも受理される）" data-impact-label="P3" data-type-label="バグ" data-status-label="候補" data-area="agent-core-context" data-loc="scripts/guardrails/check-agent-core-context.ps1:64" data-tags="fail-open,cwe-636" data-issue="" data-detail="CTX-01 は「every required-reading path exists（required-reading の全パスが存在すること）」を保証するとされている。しかし実際の強制は 64 行目の Test-Path -LiteralPath (Join-Path $repoRoot $entry.Path) のみであり、これは「読み取り可能なリーフファイルが存在すること」ではなく「何らかのファイルシステムオブジェクトが存在すること」を検証しているにすぎない。Normalize-PathText（11〜16 行目）は空白をトリムし先頭の './' を除去するため、' '、'./'、'' はいずれも空文字列に収束する。不正エントリ用のガード `-not $Entry.path`（26 行目）は正規化前の RAW 値に対して走るため、これら（真と評価される）文字列は決して弾かれない。Join-Path $repoRoot '' はリポジトリルートそのものを返し、既存のディレクトリ（リポジトリルート、あるいは docs/en のような実在する任意のディレクトリ）に対する Test-Path は $true を返す。したがってエントリは $missing に追加されず、$missing.Count は 0 のままとなり、実在する required-reading ファイルについて何も検証しないまま、ゲートは `exit 0`（109 行目）に到達する。空白/ホワイトスペースのパス、'.'/'./'、あるいはディレクトリに付け替えられたパスは、いずれもグリーンのまま通過してしまう。" data-proposal="正規化後にパスが空/ホワイトスペースとなるエントリを拒否し（RAW 値ではなく正規化後の値を検証する）、解決されたターゲットが repoRoot 配下の実在するファイルであることを要求する。たとえば Test-Path -LiteralPath $fullPath -PathType Leaf に加え、'.'/'./'/空文字列 に対する明示的なガードを設ける。オプションとして、解決後のパスが repoRoot 内に留まることを確認してもよい。" data-evidence="3-skeptic による敵対的検証（fail-open 監査）で確認済み。" data-source="fail-open-audit-2026-07-10" data-raised="2026-07-10">
         <span class="bid">BL-024</span>
         <span class="chips"><span class="chip imp">P3</span><span class="chip type">バグ</span></span>
@@ -240,6 +250,11 @@
         <span class="bid">BL-028</span>
         <span class="chips"><span class="chip imp">P3</span><span class="chip type">バグ</span></span>
         <span><span class="btitle">check-text-encoding.ps1 が NUL や C0 制御文字を検出しないため、バイナリを含むテキストファイルが通過してしまう</span><span class="barea">text-encoding</span></span>
+      </button>
+      <button type="button" class="bitem imp-P3" data-impact="P3" data-status="candidate" data-title="PR 本文に手書きするプレビュー URL は誰にも検証されない" data-impact-label="P3" data-type-label="改善" data-status-label="候補" data-area="human-review-artifact" data-loc="scripts/guardrails/check-human-review-artifact.ps1" data-tags="preview,process" data-issue="" data-detail="慣習では、レビュー成果物のある PR は本文に pr/&lt;n&gt;/ のライブプレビュー URL を載せるが、それを検証するゲートは無い。REV-01 はリポジトリ内パスのみを検証し、Monitor Preview ワークフローは自分の自動コメントのリンクだけを HTTP 検証する。PR #112 ではオーナーが本文の死にリンクを踏み、失敗は（ブロックしない）Monitor Preview 実行にしか現れなかった。" data-proposal="どちらかに決める: (a) 本文への手書き URL をやめ、ワークフローの検証済みコメントへ誘導する。(b) プレビュー公開後に、PR 本文中の pr/&lt;n&gt;/ URL を HEAD 検証する CI ゲートを追加する。" data-evidence="PR #112 の本文リンクは CI が緑のまま 404 だった。プロジェクトの慣習「レビュー成果物のある PR は本文に pr/&lt;n&gt;/ ライブプレビュー URL を載せる」。" data-source="pr-112-preview-incident-2026-07-11" data-raised="2026-07-11">
+        <span class="bid">BL-031</span>
+        <span class="chips"><span class="chip imp">P3</span><span class="chip type">改善</span></span>
+        <span><span class="btitle">PR 本文に手書きするプレビュー URL は誰にも検証されない</span><span class="barea">human-review-artifact</span></span>
       </button>
     </div>
     <aside class="detail" id="md" aria-live="polite" data-labels="{&quot;impact&quot;:&quot;影響度&quot;,&quot;type&quot;:&quot;種別&quot;,&quot;status&quot;:&quot;状態&quot;,&quot;area&quot;:&quot;領域&quot;,&quot;where&quot;:&quot;場所&quot;,&quot;issue&quot;:&quot;Issue&quot;,&quot;tags&quot;:&quot;タグ&quot;,&quot;detail&quot;:&quot;機序&quot;,&quot;proposal&quot;:&quot;対応方針&quot;,&quot;evidence&quot;:&quot;根拠&quot;,&quot;source&quot;:&quot;出所&quot;}">
