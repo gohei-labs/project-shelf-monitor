@@ -1010,8 +1010,8 @@
         "ja": "AI レビュー記録"
       },
       "rule": {
-        "en": "A PR that changes implementation or control files must carry an AI Review Record (PR body or comment) that states its findings and cites the PR's CURRENT head commit - a record for an older commit fails until the review is re-run on the final code.",
-        "ja": "実装ファイルまたは統制ファイルを変更する PR は、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。"
+        "en": "Every pull request must carry an AI Review Record (PR body or comment) that states its findings and cites the PR's CURRENT head commit - a record for an older commit fails until the review is re-run on the final code.",
+        "ja": "全てのプルリクエストは、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。"
       },
       "prevents": {
         "en": "Unreviewed changes merging - or a review 'passing' that actually looked at an older commit than the one being merged.",
@@ -1031,8 +1031,8 @@
         "ciJob": "human-review-artifact"
       },
       "note": {
-        "en": "Guardrail tooling is deliberately NOT exempt: control code is exactly what needs independent eyes. Docs-only PRs are exempt. Disabling this entry also disables independent-ai-review, which runs inside this gate.",
-        "ja": "ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。このエントリを無効化すると、このゲート内で動く independent-ai-review も無効になる。"
+        "en": "No change type is exempt: the former docs-only exemption was retired by owner decision (change record 0075); guardrail tooling was never exempt - control code is exactly what needs independent eyes. Disabling this entry also disables independent-ai-review, which runs inside this gate.",
+        "ja": "例外となる変更種別は無い: docs のみの除外はオーナー決定で廃止（変更記録 0075）。ガードレールツールは元々除外しない — 統制コードこそ独立の目が必要。このエントリを無効化すると、このゲート内で動く independent-ai-review も無効になる。"
       }
     },
     {

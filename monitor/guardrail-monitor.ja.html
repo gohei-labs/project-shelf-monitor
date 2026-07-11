@@ -252,7 +252,7 @@
       </div>
       <h3 class="cathead">決定記録</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="決定記録" data-code="DEC-01" data-name="AI レビュー記録" data-rule="実装ファイルまたは統制ファイルを変更する PR は、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。" data-prevents="レビューされていない変更のマージ — あるいはマージ対象より古いコミットしか見ていないレビューが「通った」ことになること。" data-enf="scripts/guardrails/check-ai-review-record.ps1" data-venue="CI" data-status="強制ゲート" data-guidance="必須" data-note="ガードレールツールは意図的に除外しない — 統制コードこそ独立の目が必要。docs のみの PR は対象外。このエントリを無効化すると、このゲート内で動く independent-ai-review も無効になる。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="決定記録" data-code="DEC-01" data-name="AI レビュー記録" data-rule="全てのプルリクエストは、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。" data-prevents="レビューされていない変更のマージ — あるいはマージ対象より古いコミットしか見ていないレビューが「通った」ことになること。" data-enf="scripts/guardrails/check-ai-review-record.ps1" data-venue="CI" data-status="強制ゲート" data-guidance="必須" data-note="例外となる変更種別は無い: docs のみの除外はオーナー決定で廃止（変更記録 0075）。ガードレールツールは元々除外しない — 統制コードこそ独立の目が必要。このエントリを無効化すると、このゲート内で動く independent-ai-review も無効になる。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">DEC-01</span>
               <span class="cmain"><span class="cnm">AI レビュー記録</span><span class="cwhy">レビューされていない変更のマージ — あるいはマージ対象より古いコミットしか見ていないレビューが「通った」ことになること。</span></span>
