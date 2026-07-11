@@ -46,7 +46,9 @@
     .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
     .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
     .ccat { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
-    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cmain { min-width:0; }
+    .cnm { display:block; font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cwhy { display:block; font-size:.78rem; color:var(--muted); line-height:1.45; margin-top:2px; overflow-wrap:anywhere; }
     .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
     .cmk { width:6px; height:6px; flex:0 0 auto; border-radius:50%; }
     .cmk.enf { background:var(--green); }
@@ -74,7 +76,9 @@
     .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
     .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0 36px 0 0; }
     .mname { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:1.2rem; letter-spacing:0; line-height:1.28; margin:8px 0 0; }
-    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mwhyk { font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--muted); margin:16px 0 0; }
+    .mwhy { font-size:.94rem; line-height:1.6; margin:5px 0 0; padding:2px 0 2px 10px; border-left:3px solid var(--accent); }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:5px 0 0; }
     .mdiv { height:1px; background:var(--line); margin:16px 0; }
     .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
     .mmeta dt { color:var(--muted); letter-spacing:0; }
@@ -122,50 +126,50 @@
       <h2 class="deckhead">Guardrails - enforced gates</h2>
       <h3 class="cathead">Secret management</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Secret management" data-code="SEC-01" data-name="Credential exfiltration boundary" data-rule="The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes)." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Secret management" data-code="SEC-01" data-name="Credential exfiltration boundary" data-rule="The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes)." data-prevents="An agent reading stored credentials (~/.aws, .env) and sending them out via gist, curl upload, or a push to a foreign remote - a path the commit-time secret scan cannot see." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">SEC-01</span>
-              <span class="cnm">Credential exfiltration boundary</span>
+              <span class="cmain"><span class="cnm">Credential exfiltration boundary</span><span class="cwhy">An agent reading stored credentials (~/.aws, .env) and sending them out via gist, curl upload, or a push to a foreign remote - a path the commit-time secret scan cannot see.</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Secret management" data-code="SEC-02" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Secret management" data-code="SEC-02" data-name="Secret / token leak scan" data-rule="No token-shaped secrets appear in diffs, PR bodies, or review artifacts." data-prevents="A token or API key landing in a commit, PR body, or review page - and from there reaching the public monitor mirror." data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="Scans changed-file content and the PR body for known token shapes; CI passes the PR body through GUARDRAIL_PULL_REQUEST_BODY; fails closed on git errors; values are redacted.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">SEC-02</span>
-              <span class="cnm">Secret / token leak scan</span>
+              <span class="cmain"><span class="cnm">Secret / token leak scan</span><span class="cwhy">A token or API key landing in a commit, PR body, or review page - and from there reaching the public monitor mirror.</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
       </div>
       <h3 class="cathead">Governance</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-code="GOV-03" data-name="Agent permission boundary" data-rule="An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-code="GOV-03" data-name="Agent permission boundary" data-rule="An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy." data-prevents="An AI agent executing destructive or irreversible commands (force-push, rm -rf, hard reset), and the harness config silently drifting from the approved policy." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-03</span>
-              <span class="cnm">Agent permission boundary</span>
+              <span class="cmain"><span class="cnm">Agent permission boundary</span><span class="cwhy">An AI agent executing destructive or irreversible commands (force-push, rm -rf, hard reset), and the harness config silently drifting from the approved policy.</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-code="GOV-04" data-name="Agent pre-execution hooks" data-rule="Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Governance" data-code="GOV-04" data-name="Agent pre-execution hooks" data-rule="Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled." data-prevents="Damage landing before any check runs: protected files edited without a human pause, or an agent turn ending while hard gates are red." data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-04</span>
-              <span class="cnm">Agent pre-execution hooks</span>
+              <span class="cmain"><span class="cnm">Agent pre-execution hooks</span><span class="cwhy">Damage landing before any check runs: protected files edited without a human pause, or an agent turn ending while hard gates are red.</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
       </div>
       <h2 class="deckhead">Working agreements / planned / external</h2>
       <h3 class="cathead">Build &amp; environment</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-cat="Build &amp; environment" data-code="ENV-01" data-name="Agent execution sandbox" data-rule="Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow." data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="External" data-status="External control" data-guidance="Mandatory" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-cat="Build &amp; environment" data-code="ENV-01" data-name="Agent execution sandbox" data-rule="Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow." data-prevents="A prompt-injected agent sending data to arbitrary hosts or touching host credentials - the OS boundary holds even when the model's judgment fails." data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="External" data-status="External control" data-guidance="Mandatory" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-01</span>
-              <span class="cnm">Agent execution sandbox</span>
+              <span class="cmain"><span class="cnm">Agent execution sandbox</span><span class="cwhy">A prompt-injected agent sending data to arbitrary hosts or touching host credentials - the OS boundary holds even when the model's judgment fails.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">External</span><span class="cstatus status-external-control">External control</span></span>
             </button>
       </div>
       <h3 class="cathead">Governance</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Governance" data-code="GOV-05" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Governance" data-code="GOV-05" data-name="Branch protection" data-rule="Required status checks; no direct push or force-push to the default branch." data-prevents="A red pull request being merged, or commits pushed straight to main with no gate at all." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="Not verified as active for the current private repository plan. Until branch protection or rulesets are available, use PR-only merge discipline with required checks as an operational rule.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-05</span>
-              <span class="cnm">Branch protection</span>
+              <span class="cmain"><span class="cnm">Branch protection</span><span class="cwhy">A red pull request being merged, or commits pushed straight to main with no gate at all.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
       </div>
@@ -177,6 +181,9 @@
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
         <p class="meb" id="meb"></p>
         <h3 class="mname" id="mnm"></h3>
+        <p class="mwhyk">Prevents</p>
+        <p class="mwhy" id="mwy"></p>
+        <p class="mwhyk">Rule</p>
         <p class="mrule" id="mrl"></p>
         <div class="mdiv"></div>
         <dl class="mmeta" id="mmeta"></dl>
@@ -191,7 +198,7 @@
       var bd = document.getElementById('bd');
       var md = document.getElementById('md');
       if (md) {
-        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mwy = document.getElementById('mwy'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
         var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), guidance: md.getAttribute('data-l-guidance'), note: md.getAttribute('data-l-note') };
         function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
         function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -200,6 +207,7 @@
           mbar.style.background = acc;
           meb.textContent = c.getAttribute('data-code') + ' · ' + c.getAttribute('data-cat');
           mnm.textContent = c.getAttribute('data-name');
+          mwy.textContent = c.getAttribute('data-prevents') || '';
           mrl.textContent = c.getAttribute('data-rule') || '';
           var h = '';
           var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }

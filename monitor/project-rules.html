@@ -46,7 +46,9 @@
     .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
     .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
     .ccat { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
-    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cmain { min-width:0; }
+    .cnm { display:block; font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cwhy { display:block; font-size:.78rem; color:var(--muted); line-height:1.45; margin-top:2px; overflow-wrap:anywhere; }
     .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
     .cmk { width:6px; height:6px; flex:0 0 auto; border-radius:50%; }
     .cmk.enf { background:var(--green); }
@@ -74,7 +76,9 @@
     .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
     .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0 36px 0 0; }
     .mname { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:1.2rem; letter-spacing:0; line-height:1.28; margin:8px 0 0; }
-    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mwhyk { font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--muted); margin:16px 0 0; }
+    .mwhy { font-size:.94rem; line-height:1.6; margin:5px 0 0; padding:2px 0 2px 10px; border-left:3px solid var(--accent); }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:5px 0 0; }
     .mdiv { height:1px; background:var(--line); margin:16px 0; }
     .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
     .mmeta dt { color:var(--muted); letter-spacing:0; }
@@ -122,56 +126,56 @@
       <h2 class="deckhead">Guardrails - enforced gates</h2>
       <h3 class="cathead">Build &amp; environment</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="Build &amp; environment" data-code="ENV-04" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-enf="scripts/guardrails/check-component-checks.ps1" data-venue="Conditional" data-status="Conditional gate" data-guidance="Mandatory" data-note="Runs the commands.check declared for each backend component in project-components.json, with the working directory set to the component path (change record 0070). Conditional: a host without the component's toolchain reports a visible skip; CI installs uv, so the api check runs there on every pull request.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="Build &amp; environment" data-code="ENV-04" data-name="Backend lint and tests" data-rule="Backend lint and tests pass." data-prevents="A broken backend merging to main - lint errors or failing tests in a declared component going unnoticed." data-enf="scripts/guardrails/check-component-checks.ps1" data-venue="Conditional" data-status="Conditional gate" data-guidance="Mandatory" data-note="Runs the commands.check declared for each backend component in project-components.json, with the working directory set to the component path (change record 0070). Conditional: a host without the component's toolchain reports a visible skip; CI installs uv, so the api check runs there on every pull request.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-04</span>
-              <span class="cnm">Backend lint and tests</span>
+              <span class="cmain"><span class="cnm">Backend lint and tests</span><span class="cwhy">A broken backend merging to main - lint errors or failing tests in a declared component going unnoticed.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Conditional</span><span class="cstatus status-conditional-gate">Conditional gate</span></span>
             </button>
       </div>
       <h3 class="cathead">Application monitoring</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Application monitoring" data-code="APP-01" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="The application monitor presents product requirements, features, and architecture as separate pages, generated from product/application-monitor.json. Application development rules are not tracked here; they live in the registry and appear on the Project rules view.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="Application monitoring" data-code="APP-01" data-name="Application monitor freshness" data-rule="The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages." data-prevents="The application pages (requirements, features, architecture) showing stale or hand-edited state that no longer matches the tracked source." data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="Local + CI" data-status="Hard gate" data-guidance="Mandatory" data-note="The application monitor presents product requirements, features, and architecture as separate pages, generated from product/application-monitor.json. Application development rules are not tracked here; they live in the registry and appear on the Project rules view.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">APP-01</span>
-              <span class="cnm">Application monitor freshness</span>
+              <span class="cmain"><span class="cnm">Application monitor freshness</span><span class="cwhy">The application pages (requirements, features, architecture) showing stale or hand-edited state that no longer matches the tracked source.</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">Local + CI</span><span class="cstatus status-hard-gate">Hard gate</span></span>
             </button>
       </div>
       <h2 class="deckhead">Working agreements / planned / external</h2>
       <h3 class="cathead">Build &amp; environment</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Build &amp; environment" data-code="ENV-05" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="No frontend component is declared yet. The gate script already exists (check-component-checks.ps1, change record 0070); the same change that declares a frontend component wires a frontend-scoped invocation into scripts/check.ps1 and flips this rule to a conditional gate.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Build &amp; environment" data-code="ENV-05" data-name="Frontend build" data-rule="The frontend installs with a frozen lockfile and builds." data-prevents="A frontend that no longer installs or builds reproducibly - dependency drift hiding until someone else tries to run it." data-enf="" data-venue="Advisory" data-status="No wired gate" data-guidance="Planned" data-note="No frontend component is declared yet. The gate script already exists (check-component-checks.ps1, change record 0070); the same change that declares a frontend component wires a frontend-scoped invocation into scripts/check.ps1 and flips this rule to a conditional gate.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-05</span>
-              <span class="cnm">Frontend build</span>
+              <span class="cmain"><span class="cnm">Frontend build</span><span class="cwhy">A frontend that no longer installs or builds reproducibly - dependency drift hiding until someone else tries to run it.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Advisory</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
       </div>
       <h3 class="cathead">Application rules</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-01" data-name="Phase 1 is read-only" data-rule="The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Mandatory" data-note="Product decision. Becomes testable once the first component exists.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-01" data-name="Phase 1 is read-only" data-rule="The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first." data-prevents="The application modifying or deleting the user's real shelf files before write-safety has been designed and the owner has approved it." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Mandatory" data-note="Product decision. Becomes testable once the first component exists.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-01</span>
-              <span class="cnm">Phase 1 is read-only</span>
+              <span class="cmain"><span class="cnm">Phase 1 is read-only</span><span class="cwhy">The application modifying or deleting the user's real shelf files before write-safety has been designed and the owner has approved it.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-02" data-name="Managed-root path boundary" data-rule="Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Planned" data-note="Becomes a hard gate with the first component's boundary tests (requirement REQ-002).">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-02" data-name="Managed-root path boundary" data-rule="Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests." data-prevents="Path traversal or a symlink walking the application out of its managed folder into the rest of the user's disk." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Planned" data-note="Becomes a hard gate with the first component's boundary tests (requirement REQ-002).">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-02</span>
-              <span class="cnm">Managed-root path boundary</span>
+              <span class="cmain"><span class="cnm">Managed-root path boundary</span><span class="cwhy">Path traversal or a symlink walking the application out of its managed folder into the rest of the user's disk.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-03" data-name="Structured operation logging" data-rule="Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Planned" data-note="Project application of the core logging rules; gated once log-assertion tests exist.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-03" data-name="Structured operation logging" data-rule="Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events." data-prevents="Being unable to reconstruct afterwards what the app did to the user's files - and logs that leak secrets or private file contents." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Planned" data-note="Project application of the core logging rules; gated once log-assertion tests exist.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-03</span>
-              <span class="cnm">Structured operation logging</span>
+              <span class="cmain"><span class="cnm">Structured operation logging</span><span class="cwhy">Being unable to reconstruct afterwards what the app did to the user's files - and logs that leak secrets or private file contents.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span><span class="cstatus status-planned">Planned</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-04" data-name="Architecture changes decided by record" data-rule="A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Mandatory" data-note="Application-level counterpart of spec-before-implementation, tied to the requirement IDs.">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="Application rules" data-code="PROJ-04" data-name="Architecture changes decided by record" data-rule="A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation." data-prevents="Architecture changing inside the code while the records still describe the old design - decisions made by implementation instead of by the owner." data-enf="" data-venue="Honor" data-status="No wired gate" data-guidance="Mandatory" data-note="Application-level counterpart of spec-before-implementation, tied to the requirement IDs.">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-04</span>
-              <span class="cnm">Architecture changes decided by record</span>
+              <span class="cmain"><span class="cnm">Architecture changes decided by record</span><span class="cwhy">Architecture changing inside the code while the records still describe the old design - decisions made by implementation instead of by the owner.</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">Honor</span><span class="cstatus status-none">No wired gate</span></span>
             </button>
       </div>
@@ -183,6 +187,9 @@
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
         <p class="meb" id="meb"></p>
         <h3 class="mname" id="mnm"></h3>
+        <p class="mwhyk">Prevents</p>
+        <p class="mwhy" id="mwy"></p>
+        <p class="mwhyk">Rule</p>
         <p class="mrule" id="mrl"></p>
         <div class="mdiv"></div>
         <dl class="mmeta" id="mmeta"></dl>
@@ -197,7 +204,7 @@
       var bd = document.getElementById('bd');
       var md = document.getElementById('md');
       if (md) {
-        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mwy = document.getElementById('mwy'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
         var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), guidance: md.getAttribute('data-l-guidance'), note: md.getAttribute('data-l-note') };
         function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
         function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -206,6 +213,7 @@
           mbar.style.background = acc;
           meb.textContent = c.getAttribute('data-code') + ' · ' + c.getAttribute('data-cat');
           mnm.textContent = c.getAttribute('data-name');
+          mwy.textContent = c.getAttribute('data-prevents') || '';
           mrl.textContent = c.getAttribute('data-rule') || '';
           var h = '';
           var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }

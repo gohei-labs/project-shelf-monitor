@@ -46,7 +46,9 @@
     .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
     .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
     .ccat { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
-    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cmain { min-width:0; }
+    .cnm { display:block; font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cwhy { display:block; font-size:.78rem; color:var(--muted); line-height:1.45; margin-top:2px; overflow-wrap:anywhere; }
     .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
     .cmk { width:6px; height:6px; flex:0 0 auto; border-radius:50%; }
     .cmk.enf { background:var(--green); }
@@ -74,7 +76,9 @@
     .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
     .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0 36px 0 0; }
     .mname { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:1.2rem; letter-spacing:0; line-height:1.28; margin:8px 0 0; }
-    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mwhyk { font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--muted); margin:16px 0 0; }
+    .mwhy { font-size:.94rem; line-height:1.6; margin:5px 0 0; padding:2px 0 2px 10px; border-left:3px solid var(--accent); }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:5px 0 0; }
     .mdiv { height:1px; background:var(--line); margin:16px 0; }
     .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
     .mmeta dt { color:var(--muted); letter-spacing:0; }
@@ -122,56 +126,56 @@
       <h2 class="deckhead">ガードレール（強制ゲート）</h2>
       <h3 class="cathead">ビルド・開発環境</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="ビルド・開発環境" data-code="ENV-04" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-enf="scripts/guardrails/check-component-checks.ps1" data-venue="条件付き" data-status="条件付きゲート" data-guidance="必須" data-note="project-components.json で宣言された各 backend component の commands.check を、作業ディレクトリを component path にして実行する（変更記録 0070）。条件付き：component のツールチェーンがないホストでは可視のスキップを報告する。CI は uv を導入するため、api の check は全プルリクエストで実行される。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="conditional-gate" data-cat="ビルド・開発環境" data-code="ENV-04" data-name="バックエンドの lint とテスト" data-rule="バックエンドの lint とテストが通る。" data-prevents="壊れたバックエンドが main に入ること — 宣言済みコンポーネントの lint エラーやテスト失敗の見逃し。" data-enf="scripts/guardrails/check-component-checks.ps1" data-venue="条件付き" data-status="条件付きゲート" data-guidance="必須" data-note="project-components.json で宣言された各 backend component の commands.check を、作業ディレクトリを component path にして実行する（変更記録 0070）。条件付き：component のツールチェーンがないホストでは可視のスキップを報告する。CI は uv を導入するため、api の check は全プルリクエストで実行される。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-04</span>
-              <span class="cnm">バックエンドの lint とテスト</span>
+              <span class="cmain"><span class="cnm">バックエンドの lint とテスト</span><span class="cwhy">壊れたバックエンドが main に入ること — 宣言済みコンポーネントの lint エラーやテスト失敗の見逃し。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">条件付き</span><span class="cstatus status-conditional-gate">条件付きゲート</span></span>
             </button>
       </div>
       <h3 class="cathead">アプリケーション監視</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="アプリケーション監視" data-code="APP-01" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="アプリケーションモニターは product/application-monitor.json から生成し、製品の要求・機能・アーキテクチャをページ分割して表示する。アプリ開発ルールはここでは追跡せず、レジストリが保持して Project rules ビューに表示する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="アプリケーション監視" data-code="APP-01" data-name="アプリケーションモニター鮮度" data-rule="アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。" data-prevents="アプリのページ（要求・機能・アーキテクチャ）が、正本ソースと一致しない古い・手編集の状態を表示すること。" data-enf="scripts/guardrails/check-application-monitor.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="アプリケーションモニターは product/application-monitor.json から生成し、製品の要求・機能・アーキテクチャをページ分割して表示する。アプリ開発ルールはここでは追跡せず、レジストリが保持して Project rules ビューに表示する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">APP-01</span>
-              <span class="cnm">アプリケーションモニター鮮度</span>
+              <span class="cmain"><span class="cnm">アプリケーションモニター鮮度</span><span class="cwhy">アプリのページ（要求・機能・アーキテクチャ）が、正本ソースと一致しない古い・手編集の状態を表示すること。</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
       </div>
       <h2 class="deckhead">申し合わせ・予定・外部</h2>
       <h3 class="cathead">ビルド・開発環境</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-05" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="frontend component はまだ宣言されていない。ゲートスクリプトは既にある（check-component-checks.ps1、変更記録 0070）。frontend component を宣言する変更で、frontend スコープの呼び出しを scripts/check.ps1 に配線し、本ルールを条件付きゲートへ切り替える。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ビルド・開発環境" data-code="ENV-05" data-name="フロントエンドのビルド" data-rule="フロントエンドが lockfile 固定で install してビルドできる。" data-prevents="フロントエンドが再現可能に install・build できなくなること — 他の人が動かすまで隠れる依存関係のズレ。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="frontend component はまだ宣言されていない。ゲートスクリプトは既にある（check-component-checks.ps1、変更記録 0070）。frontend component を宣言する変更で、frontend スコープの呼び出しを scripts/check.ps1 に配線し、本ルールを条件付きゲートへ切り替える。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-05</span>
-              <span class="cnm">フロントエンドのビルド</span>
+              <span class="cmain"><span class="cnm">フロントエンドのビルド</span><span class="cwhy">フロントエンドが再現可能に install・build できなくなること — 他の人が動かすまで隠れる依存関係のズレ。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
       </div>
       <h3 class="cathead">アプリケーションルール</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-01" data-name="Phase 1 は読み取り専用" data-rule="アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="必須" data-note="製品判断。最初のコンポーネントが出来た時点でテスト可能になる。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-01" data-name="Phase 1 は読み取り専用" data-rule="アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。" data-prevents="書込みの安全設計とオーナー承認が済む前に、アプリがユーザーの実ファイル（棚）を変更・削除してしまうこと。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="必須" data-note="製品判断。最初のコンポーネントが出来た時点でテスト可能になる。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-01</span>
-              <span class="cnm">Phase 1 は読み取り専用</span>
+              <span class="cmain"><span class="cnm">Phase 1 は読み取り専用</span><span class="cwhy">書込みの安全設計とオーナー承認が済む前に、アプリがユーザーの実ファイル（棚）を変更・削除してしまうこと。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-02" data-name="managed-root パス境界" data-rule="アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="予定" data-note="最初のコンポーネントの境界テストと同時にハードゲート化する（要求 REQ-002）。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-02" data-name="managed-root パス境界" data-rule="アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。" data-prevents="パス走査やシンボリックリンクで、アプリが管理フォルダの外＝ユーザーのディスク全域へ抜け出すこと。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="予定" data-note="最初のコンポーネントの境界テストと同時にハードゲート化する（要求 REQ-002）。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-02</span>
-              <span class="cnm">managed-root パス境界</span>
+              <span class="cmain"><span class="cnm">managed-root パス境界</span><span class="cwhy">パス走査やシンボリックリンクで、アプリが管理フォルダの外＝ユーザーのディスク全域へ抜け出すこと。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-03" data-name="構造化された操作ログ" data-rule="アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="予定" data-note="コアのログ規則のプロジェクト適用。ログ検証テストが出来た時点でゲート化する。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-03" data-name="構造化された操作ログ" data-rule="アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。" data-prevents="アプリがユーザーのファイルに何をしたか後から再構成できないこと。ログに秘密情報や私的ファイル内容が漏れること。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="予定" data-note="コアのログ規則のプロジェクト適用。ログ検証テストが出来た時点でゲート化する。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-03</span>
-              <span class="cnm">構造化された操作ログ</span>
+              <span class="cmain"><span class="cnm">構造化された操作ログ</span><span class="cwhy">アプリがユーザーのファイルに何をしたか後から再構成できないこと。ログに秘密情報や私的ファイル内容が漏れること。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-04" data-name="アーキテクチャ変更は記録で決める" data-rule="アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="必須" data-note="spec-before-implementation のアプリ版。要求 ID への紐付けを担う。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="アプリケーションルール" data-code="PROJ-04" data-name="アーキテクチャ変更は記録で決める" data-rule="アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。" data-prevents="コード側でアーキテクチャが変わり、記録が旧設計のままになること — オーナーではなく実装が意思決定してしまうこと。" data-enf="" data-venue="名目" data-status="ゲート未配線" data-guidance="必須" data-note="spec-before-implementation のアプリ版。要求 ID への紐付けを担う。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">PROJ-04</span>
-              <span class="cnm">アーキテクチャ変更は記録で決める</span>
+              <span class="cmain"><span class="cnm">アーキテクチャ変更は記録で決める</span><span class="cwhy">コード側でアーキテクチャが変わり、記録が旧設計のままになること — オーナーではなく実装が意思決定してしまうこと。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">名目</span><span class="cstatus status-none">ゲート未配線</span></span>
             </button>
       </div>
@@ -183,6 +187,9 @@
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
         <p class="meb" id="meb"></p>
         <h3 class="mname" id="mnm"></h3>
+        <p class="mwhyk">防ぎたいこと</p>
+        <p class="mwhy" id="mwy"></p>
+        <p class="mwhyk">ルール</p>
         <p class="mrule" id="mrl"></p>
         <div class="mdiv"></div>
         <dl class="mmeta" id="mmeta"></dl>
@@ -197,7 +204,7 @@
       var bd = document.getElementById('bd');
       var md = document.getElementById('md');
       if (md) {
-        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mwy = document.getElementById('mwy'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
         var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), guidance: md.getAttribute('data-l-guidance'), note: md.getAttribute('data-l-note') };
         function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
         function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -206,6 +213,7 @@
           mbar.style.background = acc;
           meb.textContent = c.getAttribute('data-code') + ' · ' + c.getAttribute('data-cat');
           mnm.textContent = c.getAttribute('data-name');
+          mwy.textContent = c.getAttribute('data-prevents') || '';
           mrl.textContent = c.getAttribute('data-rule') || '';
           var h = '';
           var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }

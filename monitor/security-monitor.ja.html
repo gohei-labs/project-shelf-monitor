@@ -46,7 +46,9 @@
     .monitor-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
     .cbar { position:absolute; top:0; bottom:0; left:0; width:3px; }
     .ccat { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; overflow-wrap:anywhere; }
-    .cnm { font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cmain { min-width:0; }
+    .cnm { display:block; font-weight:620; font-size:.92rem; line-height:1.38; letter-spacing:0; color:var(--ink); overflow-wrap:anywhere; }
+    .cwhy { display:block; font-size:.78rem; color:var(--muted); line-height:1.45; margin-top:2px; overflow-wrap:anywhere; }
     .cfoot { display:flex; align-items:center; justify-content:flex-end; gap:8px; min-width:0; }
     .cmk { width:6px; height:6px; flex:0 0 auto; border-radius:50%; }
     .cmk.enf { background:var(--green); }
@@ -74,7 +76,9 @@
     .mclose:hover { background:var(--panel-soft); color:var(--ink); border-color:var(--line); }
     .meb { font-size:.72rem; letter-spacing:0; text-transform:uppercase; font-weight:700; margin:0 36px 0 0; }
     .mname { font-family:"Space Grotesk", system-ui, sans-serif; font-weight:500; font-size:1.2rem; letter-spacing:0; line-height:1.28; margin:8px 0 0; }
-    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:12px 0 0; }
+    .mwhyk { font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--muted); margin:16px 0 0; }
+    .mwhy { font-size:.94rem; line-height:1.6; margin:5px 0 0; padding:2px 0 2px 10px; border-left:3px solid var(--accent); }
+    .mrule { font-size:.94rem; color:#3F4650; line-height:1.62; margin:5px 0 0; }
     .mdiv { height:1px; background:var(--line); margin:16px 0; }
     .mmeta { margin:0; display:grid; grid-template-columns:120px 1fr; gap:8px 14px; font-size:.84rem; }
     .mmeta dt { color:var(--muted); letter-spacing:0; }
@@ -122,50 +126,50 @@
       <h2 class="deckhead">ガードレール（強制ゲート）</h2>
       <h3 class="cathead">機密情報管理</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="機密情報管理" data-code="SEC-01" data-name="認証情報の持ち出し境界" data-rule="コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="機密情報管理" data-code="SEC-01" data-name="認証情報の持ち出し境界" data-rule="コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。" data-prevents="エージェントが保存済み認証情報（~/.aws、.env）を読み、gist・curl 送信・許可外リモートへの push で外へ送ること。コミット時スキャンには見えない経路。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">SEC-01</span>
-              <span class="cnm">認証情報の持ち出し境界</span>
+              <span class="cmain"><span class="cnm">認証情報の持ち出し境界</span><span class="cwhy">エージェントが保存済み認証情報（~/.aws、.env）を読み、gist・curl 送信・許可外リモートへの push で外へ送ること。コミット時スキャンには見えない経路。</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="機密情報管理" data-code="SEC-02" data-name="秘密情報／トークン漏れスキャン" data-rule="差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。" data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="変更ファイルの内容と PR 本文を既知のトークン形状で走査。CI は GUARDRAIL_PULL_REQUEST_BODY 経由で PR 本文を渡す。git 失敗時は fail-closed。値は伏字化。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="機密情報管理" data-code="SEC-02" data-name="秘密情報／トークン漏れスキャン" data-rule="差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。" data-prevents="トークンや API キーがコミット・PR 本文・レビューページに入り、そこから公開ミラーまで出てしまうこと。" data-enf="scripts/guardrails/check-secret-leak.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="変更ファイルの内容と PR 本文を既知のトークン形状で走査。CI は GUARDRAIL_PULL_REQUEST_BODY 経由で PR 本文を渡す。git 失敗時は fail-closed。値は伏字化。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">SEC-02</span>
-              <span class="cnm">秘密情報／トークン漏れスキャン</span>
+              <span class="cmain"><span class="cnm">秘密情報／トークン漏れスキャン</span><span class="cwhy">トークンや API キーがコミット・PR 本文・レビューページに入り、そこから公開ミラーまで出てしまうこと。</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
       </div>
       <h3 class="cathead">ガバナンス</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-03" data-name="エージェント権限境界" data-rule="AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-03" data-name="エージェント権限境界" data-rule="AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。" data-prevents="AIエージェントが破壊的・不可逆コマンド（force-push、rm -rf、hard reset）を実行すること。ハーネス設定が承認済みポリシーから静かにズレること。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-03</span>
-              <span class="cnm">エージェント権限境界</span>
+              <span class="cmain"><span class="cnm">エージェント権限境界</span><span class="cwhy">AIエージェントが破壊的・不可逆コマンド（force-push、rm -rf、hard reset）を実行すること。ハーネス設定が承認済みポリシーから静かにズレること。</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-04" data-name="エージェント実行前フック" data-rule="決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="ガバナンス" data-code="GOV-04" data-name="エージェント実行前フック" data-rule="決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。" data-prevents="チェックが走る前に被害が確定すること — 保護ファイルが人間の確認なしに書き換えられる、ハードゲートが赤のままターンが終わる。" data-enf="scripts/guardrails/check-agent-policy.ps1" data-venue="ローカル＋CI" data-status="強制ゲート" data-guidance="必須" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-04</span>
-              <span class="cnm">エージェント実行前フック</span>
+              <span class="cmain"><span class="cnm">エージェント実行前フック</span><span class="cwhy">チェックが走る前に被害が確定すること — 保護ファイルが人間の確認なしに書き換えられる、ハードゲートが赤のままターンが終わる。</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">ローカル＋CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
       </div>
       <h2 class="deckhead">申し合わせ・予定・外部</h2>
       <h3 class="cathead">ビルド・開発環境</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-cat="ビルド・開発環境" data-code="ENV-01" data-name="エージェント実行サンドボックス" data-rule="エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。" data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="外部" data-status="外部統制" data-guidance="必須" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="external-control" data-cat="ビルド・開発環境" data-code="ENV-01" data-name="エージェント実行サンドボックス" data-rule="エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。" data-prevents="プロンプトインジェクションを受けたエージェントが任意のホストへデータを送る・ホストの認証情報に触れること。モデルの判断が破られても OS 境界で守る。" data-enf="scripts/guardrails/check-sandbox-config.ps1" data-venue="外部" data-status="外部統制" data-guidance="必須" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">ENV-01</span>
-              <span class="cnm">エージェント実行サンドボックス</span>
+              <span class="cmain"><span class="cnm">エージェント実行サンドボックス</span><span class="cwhy">プロンプトインジェクションを受けたエージェントが任意のホストへデータを送る・ホストの認証情報に触れること。モデルの判断が破られても OS 境界で守る。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">外部</span><span class="cstatus status-external-control">外部統制</span></span>
             </button>
       </div>
       <h3 class="cathead">ガバナンス</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ガバナンス" data-code="GOV-05" data-name="ブランチ保護" data-rule="必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="none" data-cat="ガバナンス" data-code="GOV-05" data-name="ブランチ保護" data-rule="必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。" data-prevents="CI が赤の PR がマージされること。ゲートを一切通らず main へ直接 push されること。" data-enf="" data-venue="方針" data-status="ゲート未配線" data-guidance="予定" data-note="現在の private repository plan では active と確認できていない。branch protection / rulesets が使えるまで、PR 経由・チェック必須の運用ルールとして扱う。">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">GOV-05</span>
-              <span class="cnm">ブランチ保護</span>
+              <span class="cmain"><span class="cnm">ブランチ保護</span><span class="cwhy">CI が赤の PR がマージされること。ゲートを一切通らず main へ直接 push されること。</span></span>
               <span class="cfoot"><span class="cmk oth"></span><span class="cv">方針</span><span class="cstatus status-none">ゲート未配線</span><span class="cstatus status-planned">予定</span></span>
             </button>
       </div>
@@ -177,6 +181,9 @@
         <button type="button" class="mclose" id="mx" aria-label="close">&times;</button>
         <p class="meb" id="meb"></p>
         <h3 class="mname" id="mnm"></h3>
+        <p class="mwhyk">防ぎたいこと</p>
+        <p class="mwhy" id="mwy"></p>
+        <p class="mwhyk">ルール</p>
         <p class="mrule" id="mrl"></p>
         <div class="mdiv"></div>
         <dl class="mmeta" id="mmeta"></dl>
@@ -191,7 +198,7 @@
       var bd = document.getElementById('bd');
       var md = document.getElementById('md');
       if (md) {
-        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
+        var mbar = document.getElementById('mbar'), meb = document.getElementById('meb'), mnm = document.getElementById('mnm'), mwy = document.getElementById('mwy'), mrl = document.getElementById('mrl'), mmeta = document.getElementById('mmeta');
         var L = { enf: md.getAttribute('data-l-enf'), venue: md.getAttribute('data-l-venue'), status: md.getAttribute('data-l-status'), guidance: md.getAttribute('data-l-guidance'), note: md.getAttribute('data-l-note') };
         function row(dt, dd, code) { return '<dt>' + dt + '</dt><dd>' + (code ? '<code>' + dd + '</code>' : dd) + '</dd>'; }
         function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -200,6 +207,7 @@
           mbar.style.background = acc;
           meb.textContent = c.getAttribute('data-code') + ' · ' + c.getAttribute('data-cat');
           mnm.textContent = c.getAttribute('data-name');
+          mwy.textContent = c.getAttribute('data-prevents') || '';
           mrl.textContent = c.getAttribute('data-rule') || '';
           var h = '';
           var enf = c.getAttribute('data-enf'); if (enf) { h += row(L.enf, esc(enf), true); }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "title": "Rule registry",
   "description": "Authoritative list of the rules in effect; entries whose gate is wired are the guardrails. The rule monitor pages (monitor/guardrail-monitor.html and guardrail-monitor.ja.html) are generated from this file; do not edit monitor output by hand. scripts/guardrails/check-registry.ps1 verifies that every active guardrail names a real, wired gate, that each rule has both languages, and that the monitor output is up to date.",
   "pillars": {
@@ -121,6 +121,10 @@
         "en": "All tracked text files are UTF-8 without BOM, valid, and free of mojibake markers.",
         "ja": "追跡対象のテキストは全て UTF-8（BOM なし）で、妥当かつ文字化けマーカーが無い。"
       },
+      "prevents": {
+        "en": "Garbled or corrupted text (mojibake) slipping into the repository unnoticed - e.g. an agent writing Japanese in the wrong encoding on Windows.",
+        "ja": "文字化け・壊れたテキストが気づかれずにリポジトリへ入ること。例: Windows 上でエージェントが誤ったエンコーディングで日本語を書く。"
+      },
       "pillar": "guardrails",
       "status": "active",
       "behavior": "hard-gate",
@@ -147,6 +151,10 @@
       "rule": {
         "en": "A documentation file name must not repeat its parent folder name.",
         "ja": "ドキュメントのファイル名は親フォルダ名を繰り返さない。"
+      },
+      "prevents": {
+        "en": "Redundant paths like rules/rules.md that make links ambiguous and file search confusing.",
+        "ja": "rules/rules.md のような冗長パスで、リンクが紛らわしくなり検索しづらくなること。"
       },
       "pillar": "guardrails",
       "status": "active",
@@ -175,6 +183,10 @@
         "en": "The diff has no trailing whitespace or conflict markers.",
         "ja": "差分に行末空白や衝突マーカーが無い。"
       },
+      "prevents": {
+        "en": "Unresolved merge-conflict markers or trailing-whitespace noise getting committed and polluting every future diff.",
+        "ja": "未解決の衝突マーカーや行末空白のノイズがコミットされ、以後の差分を汚し続けること。"
+      },
       "pillar": "guardrails",
       "status": "active",
       "behavior": "hard-gate",
@@ -202,6 +214,10 @@
       "rule": {
         "en": "Root dot-prefixed paths are limited to documented external tool conventions or ignored local runtime files.",
         "ja": "root の dot-prefixed path は、文書化済みの外部ツール慣習または ignored local runtime files に限る。"
+      },
+      "prevents": {
+        "en": "Project control files hiding in invisible dot-folders where the owner never sees them, and the repository root silently filling with tool litter.",
+        "ja": "統制ファイルが不可視の dot フォルダに隠れてオーナーの目に入らないこと。ルート直下がツールの残骸で静かに散らかること。"
       },
       "pillar": "guardrails",
       "status": "active",
@@ -234,6 +250,10 @@
         "en": "Every required-reading path in the core-context manifest exists and is unique.",
         "ja": "コアコンテキスト manifest の必読パスが全て実在し、重複が無い。"
       },
+      "prevents": {
+        "en": "The required-reading list silently pointing at deleted or moved files, so a new agent session starts from broken onboarding.",
+        "ja": "必読リストが削除・移動済みのファイルを指したままになり、新しいエージェントセッションが壊れたオンボーディングから始まること。"
+      },
       "pillar": "human-orchestration",
       "status": "active",
       "behavior": "hard-gate",
@@ -260,6 +280,10 @@
       "rule": {
         "en": "Every active guardrail names a real, wired gate, and the rule monitor is up to date with this registry.",
         "ja": "全ての active ガードレールが実在・配線済みのゲートを指し、ルールモニターがレジストリと一致している。"
+      },
+      "prevents": {
+        "en": "Paper rules: the registry claiming a gate that does not exist or is not wired, and the monitor showing a state that is no longer true.",
+        "ja": "紙の上だけのルール — レジストリが実在しない・配線されていないゲートを主張すること。モニターが実態と違う状態を表示すること。"
       },
       "pillar": "guardrails",
       "status": "active",
@@ -288,6 +312,10 @@
         "en": "An AI coding agent's permissions are defined in agent-policy/policy.json and compiled into each harness config (e.g. .claude/settings.json); destructive or irreversible commands are denied at the harness, and the generated configs stay in sync with the policy.",
         "ja": "AIコーディングエージェントの権限は agent-policy/policy.json で定義し、各ハーネス設定（例: .claude/settings.json）に生成する。破壊的・不可逆コマンドはハーネスで deny し、生成された設定は正本と同期している。"
       },
+      "prevents": {
+        "en": "An AI agent executing destructive or irreversible commands (force-push, rm -rf, hard reset), and the harness config silently drifting from the approved policy.",
+        "ja": "AIエージェントが破壊的・不可逆コマンド（force-push、rm -rf、hard reset）を実行すること。ハーネス設定が承認済みポリシーから静かにズレること。"
+      },
       "pillar": "guardrails",
       "status": "active",
       "behavior": "hard-gate",
@@ -314,6 +342,10 @@
       "rule": {
         "en": "Agent runs execute inside the hardened devcontainer: outbound network is default-deny at the OS level (iptables applied at container start, allowlist generated from the policy egressAllowlist) and host credentials are never mounted. This holds even if prompt injection bypasses the model's judgment. A config gate verifies the sandbox pieces stay present, wired, and narrow.",
         "ja": "エージェント実行は強化 devcontainer 内で行う。外向きネットワークは OS レベルで既定 deny（コンテナ起動時に iptables を適用し、allowlist はポリシーの egressAllowlist から生成）、ホストの認証情報はマウントしない。プロンプトインジェクションがモデルの判断を回避しても境界が保たれる。設定ゲートがサンドボックス構成の存在・配線・狭さを検証する。"
+      },
+      "prevents": {
+        "en": "A prompt-injected agent sending data to arbitrary hosts or touching host credentials - the OS boundary holds even when the model's judgment fails.",
+        "ja": "プロンプトインジェクションを受けたエージェントが任意のホストへデータを送る・ホストの認証情報に触れること。モデルの判断が破られても OS 境界で守る。"
       },
       "pillar": "guardrails",
       "status": "external",
@@ -342,6 +374,10 @@
         "en": "The commit-time secret scan cannot see an agent READING existing credentials and sending them out. That path is closed at the harness: credential paths are deny-read (Read tool rules plus a hook guard on commands), and external-send channels are denied (gist sharing, request-body uploads via curl/wget, git push to remotes outside the allowed prefixes).",
         "ja": "コミット時のシークレットスキャンは、エージェントが既存の認証情報を【読んで】外部送信する経路を見えない。この経路はハーネスで塞ぐ: 認証情報パスは読み取り拒否（Read ツールの deny ルール＋コマンドに対するフックガード）、外部送信チャネルは deny（gist 共有、curl/wget のリクエストボディ送信、許可プレフィックス外リモートへの git push）。"
       },
+      "prevents": {
+        "en": "An agent reading stored credentials (~/.aws, .env) and sending them out via gist, curl upload, or a push to a foreign remote - a path the commit-time secret scan cannot see.",
+        "ja": "エージェントが保存済み認証情報（~/.aws、.env）を読み、gist・curl 送信・許可外リモートへの push で外へ送ること。コミット時スキャンには見えない経路。"
+      },
       "pillar": "guardrails",
       "status": "active",
       "behavior": "hard-gate",
@@ -368,6 +404,10 @@
       "rule": {
         "en": "Deterministic hooks fire BEFORE the agent acts: a PreToolUse guard denies or escalates writes to protected paths and destructive commands, and a Stop hook runs the check suite so a turn cannot end while hard gates fail. Hook wiring is generated from agent-policy/policy.json and the tracked hook scripts must stay present and enabled.",
         "ja": "決定的フックがエージェントの行動の【前】に作動する。PreToolUse ガードが保護パスへの書込と破壊的コマンドを deny または人間へエスカレーションし、Stop フックがチェックスイートを実行してハードゲートが失敗したままターンを終了できないようにする。フック配線は agent-policy/policy.json から生成され、追跡対象のフックスクリプトは常に存在・有効でなければならない。"
+      },
+      "prevents": {
+        "en": "Damage landing before any check runs: protected files edited without a human pause, or an agent turn ending while hard gates are red.",
+        "ja": "チェックが走る前に被害が確定すること — 保護ファイルが人間の確認なしに書き換えられる、ハードゲートが赤のままターンが終わる。"
       },
       "pillar": "guardrails",
       "status": "active",
@@ -396,6 +436,10 @@
         "en": "docs/en and docs/ja hold the same set of relative Markdown paths.",
         "ja": "docs/en と docs/ja が同じ相対 Markdown パス集合を持つ。"
       },
+      "prevents": {
+        "en": "One language silently falling behind: a document that exists in English but has no Japanese counterpart, or vice versa.",
+        "ja": "片方の言語だけ静かに欠けること — 英語にはあるのに日本語には無いドキュメント（その逆も）。"
+      },
       "pillar": "visualization",
       "status": "active",
       "behavior": "hard-gate",
@@ -422,6 +466,10 @@
       "rule": {
         "en": "All Markdown lives under a configured language root.",
         "ja": "全ての Markdown が設定された言語ルート配下にある。"
+      },
+      "prevents": {
+        "en": "Documents scattering outside docs/en and docs/ja, where the bilingual pairing can no longer be checked.",
+        "ja": "ドキュメントが docs/en・docs/ja の外に散らばり、二言語ペアの検査が届かなくなること。"
       },
       "pillar": "visualization",
       "status": "active",
@@ -450,6 +498,10 @@
         "en": "Each language tree actually contains that language; no untranslated copy is left behind.",
         "ja": "各言語ツリーが実際にその言語で書かれている（未翻訳の写しが残っていない）。"
       },
+      "prevents": {
+        "en": "A 'translation' that is actually an untranslated copy - English text sitting in the Japanese tree and counting as done.",
+        "ja": "翻訳のつもりが未翻訳の写しであること — 日本語ツリーに英語本文が置かれたまま完了扱いになること。"
+      },
       "pillar": "visualization",
       "status": "active",
       "behavior": "hard-gate",
@@ -476,6 +528,10 @@
       "rule": {
         "en": "The application monitor is generated from product/application-monitor.json and separates application requirements, features, and architecture pages.",
         "ja": "アプリケーションモニターは product/application-monitor.json から生成し、アプリの要求、機能、アーキテクチャをページ分割する。"
+      },
+      "prevents": {
+        "en": "The application pages (requirements, features, architecture) showing stale or hand-edited state that no longer matches the tracked source.",
+        "ja": "アプリのページ（要求・機能・アーキテクチャ）が、正本ソースと一致しない古い・手編集の状態を表示すること。"
       },
       "pillar": "visualization",
       "status": "active",
@@ -508,6 +564,10 @@
         "en": "The application implements no write, move, or delete operations against the managed shelf in Phase 1; write-capable features require owner approval of a Phase 2 decision record first.",
         "ja": "アプリケーションは Phase 1 では管理対象の棚に対する書込・移動・削除を実装しない。書込系機能は、先に Phase 2 の決定記録へのオーナー承認を必要とする。"
       },
+      "prevents": {
+        "en": "The application modifying or deleting the user's real shelf files before write-safety has been designed and the owner has approved it.",
+        "ja": "書込みの安全設計とオーナー承認が済む前に、アプリがユーザーの実ファイル（棚）を変更・削除してしまうこと。"
+      },
       "pillar": "human-orchestration",
       "status": "advisory",
       "behavior": "none",
@@ -533,6 +593,10 @@
       "rule": {
         "en": "Every filesystem access in the application stays inside the declared managed root; path traversal and symlink escape are blocked and covered by boundary tests.",
         "ja": "アプリケーションのファイルアクセスは宣言された managed root 配下に限る。パス走査とシンボリックリンク越えは遮断し、境界テストで担保する。"
+      },
+      "prevents": {
+        "en": "Path traversal or a symlink walking the application out of its managed folder into the rest of the user's disk.",
+        "ja": "パス走査やシンボリックリンクで、アプリが管理フォルダの外＝ユーザーのディスク全域へ抜け出すこと。"
       },
       "pillar": "human-orchestration",
       "status": "advisory",
@@ -560,6 +624,10 @@
         "en": "Every user-visible shelf operation in the application (requirements REQ-003/REQ-004) emits a structured JSONL log event (stable topic/action/data) with no secrets or private file contents, and tests assert the key events.",
         "ja": "アプリケーションのユーザー可視の棚操作（要求 REQ-003／REQ-004）は、すべて構造化 JSONL ログイベント（安定した topic/action/data）を出す。秘密情報・私的ファイル内容は含めず、主要イベントはテストで検証する。"
       },
+      "prevents": {
+        "en": "Being unable to reconstruct afterwards what the app did to the user's files - and logs that leak secrets or private file contents.",
+        "ja": "アプリがユーザーのファイルに何をしたか後から再構成できないこと。ログに秘密情報や私的ファイル内容が漏れること。"
+      },
       "pillar": "human-orchestration",
       "status": "advisory",
       "behavior": "none",
@@ -586,6 +654,10 @@
         "en": "A change to the application's architecture or to requirement linkage updates product/application-monitor.json (architecture / requirements) and the relevant decision record BEFORE implementation.",
         "ja": "アプリケーションのアーキテクチャや要求の紐付けを変える場合は、実装の【前】に product/application-monitor.json（アーキテクチャ／要求）と該当する決定記録を更新する。"
       },
+      "prevents": {
+        "en": "Architecture changing inside the code while the records still describe the old design - decisions made by implementation instead of by the owner.",
+        "ja": "コード側でアーキテクチャが変わり、記録が旧設計のままになること — オーナーではなく実装が意思決定してしまうこと。"
+      },
       "pillar": "human-orchestration",
       "status": "advisory",
       "behavior": "none",
@@ -611,6 +683,10 @@
       "rule": {
         "en": "PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact.",
         "ja": "承認を求める／高リスクな統制ファイルに触れる PR は、ブラウザで読めるレビュー成果物をリンクする。"
+      },
+      "prevents": {
+        "en": "The owner approving a high-risk governance change blind - from chat scrollback instead of a readable, durable review page.",
+        "ja": "オーナーが高リスクな統制変更を、読みやすく残るレビューページではなくチャットの流れで盲目的に承認してしまうこと。"
       },
       "pillar": "visualization",
       "status": "active",
@@ -640,6 +716,10 @@
         "en": "Changed review artifacts carry a visible Terminology Check section.",
         "ja": "変更済みレビュー成果物に、見える形の用語チェックの節がある。"
       },
+      "prevents": {
+        "en": "Ad-hoc invented wording in decision documents that hides which industry-standard concept is actually being approved.",
+        "ja": "決定文書の場当たり的な造語のせいで、実際にはどの業界標準概念を承認しているのか分からなくなること。"
+      },
       "pillar": "visualization",
       "status": "active",
       "behavior": "hard-gate",
@@ -668,6 +748,10 @@
         "en": "No review artifact keeps the template's placeholder title, number placeholder, or usage comment; every title carries the artifact's own number.",
         "ja": "レビュー成果物にテンプレートのプレースホルダー題名・番号プレースホルダー・使い方コメントが残っておらず、全ての題名に資料自身の番号が入っている。"
       },
+      "prevents": {
+        "en": "A half-finished template copy - placeholder title or number still in place - passing as a completed review document.",
+        "ja": "プレースホルダーの題名や番号が残ったテンプレートの写しかけが、完成済みレビュー文書として通ってしまうこと。"
+      },
       "pillar": "visualization",
       "status": "active",
       "behavior": "hard-gate",
@@ -694,6 +778,10 @@
       "rule": {
         "en": "Changed review artifacts carry a References / primary-sources section that explains each source.",
         "ja": "変更済みレビュー成果物に、各情報源を説明する参考情報／一次情報の節がある。"
+      },
+      "prevents": {
+        "en": "Decisions justified by unverified claims - an approval page with no traceable primary sources behind its facts.",
+        "ja": "検証されていない主張で意思決定されること — 事実の裏に辿れる一次情報が無い承認ページ。"
       },
       "pillar": "visualization",
       "status": "active",
@@ -723,6 +811,10 @@
         "en": "The reproducible Dev Container builds and passes the Bash check suite.",
         "ja": "再現可能な Dev Container がビルドでき、Bash チェック一式が通る。"
       },
+      "prevents": {
+        "en": "The development environment rotting into 'works only on this machine' - a container definition nobody can actually rebuild.",
+        "ja": "開発環境が「この PC でしか動かない」状態に腐ること — 実際には誰も再構築できないコンテナ定義。"
+      },
       "pillar": "guardrails",
       "status": "active",
       "behavior": "hard-gate",
@@ -749,6 +841,10 @@
       "rule": {
         "en": "Implementation component directories must be declared with a stack and check command before product code is added.",
         "ja": "実装コンポーネントのディレクトリを追加する前に、stack と check command を宣言する。"
+      },
+      "prevents": {
+        "en": "Stray code with no known way to test it: an app folder appearing because the agent guessed a stack from its name, with no declared check command.",
+        "ja": "検証方法が不明な野良コードの混入 — フォルダ名からスタックを推測した勝手な実装が、check command の宣言なしに現れること。"
       },
       "pillar": "guardrails",
       "status": "active",
@@ -781,6 +877,10 @@
         "en": "Backend lint and tests pass.",
         "ja": "バックエンドの lint とテストが通る。"
       },
+      "prevents": {
+        "en": "A broken backend merging to main - lint errors or failing tests in a declared component going unnoticed.",
+        "ja": "壊れたバックエンドが main に入ること — 宣言済みコンポーネントの lint エラーやテスト失敗の見逃し。"
+      },
       "pillar": "guardrails",
       "status": "conditional",
       "behavior": "conditional-gate",
@@ -812,6 +912,10 @@
         "en": "The frontend installs with a frozen lockfile and builds.",
         "ja": "フロントエンドが lockfile 固定で install してビルドできる。"
       },
+      "prevents": {
+        "en": "A frontend that no longer installs or builds reproducibly - dependency drift hiding until someone else tries to run it.",
+        "ja": "フロントエンドが再現可能に install・build できなくなること — 他の人が動かすまで隠れる依存関係のズレ。"
+      },
       "pillar": "guardrails",
       "status": "advisory",
       "behavior": "none",
@@ -837,6 +941,10 @@
       "rule": {
         "en": "The Docker Compose configuration validates.",
         "ja": "Docker Compose 設定が検証できる。"
+      },
+      "prevents": {
+        "en": "A broken Docker Compose file discovered only when someone tries to start the stack.",
+        "ja": "壊れた Docker Compose 設定が、起動しようとした時に初めて発覚すること。"
       },
       "pillar": "guardrails",
       "status": "conditional",
@@ -870,6 +978,10 @@
         "en": "The full content of every alwaysRead file is injected into the agent's context by a deterministic SessionStart hook - required reading happens by construction, not by the agent's choice. readWhenRelevant entries are listed with their triggers for on-demand reading.",
         "ja": "決定的な SessionStart フックが、全 alwaysRead ファイルの全文をエージェントのコンテキストへ注入する — 必読はエージェントの選択ではなく構造として成立する。readWhenRelevant はトリガー付きで一覧され、必要時に読む。"
       },
+      "prevents": {
+        "en": "An agent starting work without the project's constraints in mind - required reading skipped or lost to compaction, protected only by goodwill.",
+        "ja": "エージェントがプロジェクトの制約を知らずに作業を始めること — 必読の読み飛ばしや compaction 後の忘却を、善意頼みにしない。"
+      },
       "pillar": "human-orchestration",
       "status": "active",
       "behavior": "hard-gate",
@@ -900,6 +1012,10 @@
       "rule": {
         "en": "A PR that changes implementation or control files must carry an AI Review Record (PR body or comment) that states its findings and cites the PR's CURRENT head commit - a record for an older commit fails until the review is re-run on the final code.",
         "ja": "実装ファイルまたは統制ファイルを変更する PR は、AI レビュー記録（PR 本文またはコメント）を持たなければならない。記録は指摘事項を明記し、PR の【現在の】head コミットを引用する。古いコミットの記録では、最終コードの再レビューまで fail する。"
+      },
+      "prevents": {
+        "en": "Unreviewed changes merging - or a review 'passing' that actually looked at an older commit than the one being merged.",
+        "ja": "レビューされていない変更のマージ — あるいはマージ対象より古いコミットしか見ていないレビューが「通った」ことになること。"
       },
       "pillar": "human-orchestration",
       "status": "active",
@@ -933,6 +1049,10 @@
         "en": "The AI Review Record must establish independence: the same record section declares BOTH the authoring context and the reviewing context, and they differ - the context that wrote a change may not review its own diff. Declared identities are structured attestation in the audit record, not cryptographic proof.",
         "ja": "AI レビュー記録は独立性を立証しなければならない: 同一の記録セクションに作成コンテキストとレビューコンテキストの【両方】を宣言し、両者が異なること。変更を書いたコンテキストは自分の差分をレビューできない。宣言された識別子は監査記録上の構造化された表明であり、暗号学的証明ではない。"
       },
+      "prevents": {
+        "en": "Self-review: the same context that wrote a change quietly approving its own diff.",
+        "ja": "自己レビュー — 変更を書いた本人（同一コンテキスト）が自分の差分をこっそり承認すること。"
+      },
       "pillar": "human-orchestration",
       "status": "active",
       "behavior": "hard-gate",
@@ -965,6 +1085,10 @@
         "en": "Implementation PRs link a prior decision or spec record.",
         "ja": "実装 PR は事前の決定／仕様記録をリンクする。"
       },
+      "prevents": {
+        "en": "Code landing with no recorded reason - months later nobody can say why the change was made or what it was supposed to do.",
+        "ja": "理由の記録なしにコードが入ること — 数ヶ月後、なぜその変更をしたのか誰にも説明できなくなる。"
+      },
       "pillar": "human-orchestration",
       "status": "active",
       "behavior": "hard-gate",
@@ -995,6 +1119,10 @@
       "rule": {
         "en": "No token-shaped secrets appear in diffs, PR bodies, or review artifacts.",
         "ja": "差分・PR 本文・レビュー成果物に token 形状の秘密情報が含まれない。"
+      },
+      "prevents": {
+        "en": "A token or API key landing in a commit, PR body, or review page - and from there reaching the public monitor mirror.",
+        "ja": "トークンや API キーがコミット・PR 本文・レビューページに入り、そこから公開ミラーまで出てしまうこと。"
       },
       "pillar": "guardrails",
       "status": "active",
@@ -1027,6 +1155,10 @@
         "en": "Partial content is labeled partial; uncertainty is surfaced, not hidden.",
         "ja": "部分的な内容は部分的と明記し、不確実性を隠さない。"
       },
+      "prevents": {
+        "en": "Partial work being mistaken for finished work - gaps and uncertainty the reader only discovers much later.",
+        "ja": "部分的な成果物が完成品と誤解されること — 読み手がずっと後になって欠落や不確実性に気づく。"
+      },
       "pillar": "human-orchestration",
       "status": "advisory",
       "behavior": "none",
@@ -1052,6 +1184,10 @@
       "rule": {
         "en": "Approval requests, reusable documentation, implementation notes, and background are separated or labeled by purpose.",
         "ja": "承認依頼・再利用文書・実装メモ・背景説明は分離するか、目的をラベルで明示する。"
+      },
+      "prevents": {
+        "en": "One document mixing an approval request with notes and background, so the reader cannot tell what they are being asked to decide.",
+        "ja": "承認依頼・メモ・背景説明が1つの文書に混ざり、読み手が何を判断させられているのか分からなくなること。"
       },
       "pillar": "human-orchestration",
       "status": "advisory",
@@ -1079,6 +1215,10 @@
         "en": "Current work state is inspectable in a browser, not only by asking the LLM.",
         "ja": "現在の作業状態を、LLM に尋ねるのではなくブラウザで確認できる。"
       },
+      "prevents": {
+        "en": "The project's state existing only in an LLM's answers - nothing the owner can open and verify without asking the agent.",
+        "ja": "プロジェクトの状態が LLM の回答の中にしか存在しないこと — エージェントに聞かずに開いて確かめられるものが無い。"
+      },
       "pillar": "visualization",
       "status": "advisory",
       "behavior": "none",
@@ -1104,6 +1244,10 @@
       "rule": {
         "en": "Do not open GitHub issues without owner confirmation.",
         "ja": "オーナーの確認なしに GitHub Issue を作らない。"
+      },
+      "prevents": {
+        "en": "The issue tracker filling with agent-created tickets the owner never asked for - losing control of what counts as tracked work.",
+        "ja": "オーナーが頼んでいないエージェント作の Issue でトラッカーが埋まること — 何が正式な作業かの統制を失う。"
       },
       "pillar": "human-orchestration",
       "status": "advisory",
@@ -1131,6 +1275,10 @@
         "en": "Required status checks; no direct push or force-push to the default branch.",
         "ja": "必須ステータスチェック。既定ブランチへの直接 push／force-push 禁止。"
       },
+      "prevents": {
+        "en": "A red pull request being merged, or commits pushed straight to main with no gate at all.",
+        "ja": "CI が赤の PR がマージされること。ゲートを一切通らず main へ直接 push されること。"
+      },
       "pillar": "guardrails",
       "status": "advisory",
       "behavior": "none",
@@ -1156,6 +1304,10 @@
       "rule": {
         "en": "The backlog monitor is generated from monitor/backlog.json; every item declares a valid type, impact, and status, and the pages stay in sync with the source.",
         "ja": "バックログモニターは monitor/backlog.json から生成し、各項目は妥当な type・impact・status を持ち、ページはソースと同期する。"
+      },
+      "prevents": {
+        "en": "Work items surfaced mid-task evaporating into chat logs - found problems that are neither fixed nor tracked anywhere.",
+        "ja": "作業中に見つかった課題がチャットログへ蒸発すること — 発見されたのに修正も追跡もされない問題。"
       },
       "pillar": "visualization",
       "status": "active",
