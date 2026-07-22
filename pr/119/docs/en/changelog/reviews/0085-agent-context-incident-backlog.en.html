@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review 0085: Three backlog items from the 2026-07-22 agent-context incident</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0085</span><span><b>Draft</b></span><span><b>2026-07-22</b></span></p>
+      <h1>Three backlog items from the 2026-07-22 agent-context incident</h1>
+      <p class="lead">This review asks for approval to <b>record three candidate items (BL-032, BL-033, BL-034) in the pre-Issue backlog</b> — recording them for triage. Merging PR #117 adopts none of the fixes the items propose.</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>Record BL-032 (bug, P2, fail-open).</b> The session-start required-reading injection silently degrades to a 2KB preview when the rendered alwaysRead pack exceeds the harness inline limit. Measured: 51,198 bytes (50.0KiB) at this PR's head; 49.4KiB replayed at the incident tree. The "required reading happens by construction" guarantee of <code>core-context.md</code> quietly becomes a pointer the agent must notice.</li>
+        <li><b>Record BL-033 (task, P3, process).</b> No rule requires agent status reports to be based on freshly fetched remote state. In the incident, a squash-merged branch (PR #111, main <code>83a3a82</code>) was reported as "awaiting PR creation" from stale refs, and GitHub access was twice reported unavailable despite the documented token wrappers.</li>
+        <li><b>Record BL-034 (bug, P3, hygiene).</b> The backlog monitor generator's double-quoted lead strings expand backtick-t into a literal TAB on both generated pages. Found by this PR's independent AI review; reproduced against the source and the rendered pages. The fix is deferred to a follow-up so this PR stays data-only.</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <table>
+        <thead><tr><th>Changed file</th><th>What changed</th></tr></thead>
+        <tbody>
+          <tr><td><code>monitor/backlog.json</code></td><td>Three items appended (backlog grows 31 → 34); no existing item modified beyond the review-driven BL-032 wording fixes inside this PR.</td></tr>
+          <tr><td><code>monitor/backlog{,.ja}.html</code></td><td>Regenerated: count chips and one entry per new item; byte-verified against the source by the GOV-06 gate.</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0085-*</code></td><td>This artifact pair, plus the regenerated reviews index pages.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>Low. Recording candidates changes no enforcement; a wrong item is corrected or declined at triage. The content risk is accuracy: parts of the evidence are session testimony (attested in the item text and the PR's AI Review Record), and BL-032's harness numbers are version-dependent observations. Mitigation: an independent review-only pass fact-checked every repository-verifiable claim across its review passes (its factual findings — a stale size figure in BL-032 and an overstated bullet in this artifact — were corrected before approval), and the harness-dependent numbers are dated in the items themselves.</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>Whether any of the three items becomes a GitHub Issue, is declined, or stays a candidate — the owner-led triage on the backlog monitor.</li>
+        <li>The fixes the items propose: BL-032's size-budget gate and hook fallback, BL-033's fetch-first working agreement, BL-034's generator quoting fix — each is a separate future change with its own review.</li>
+        <li>Two further candidates surfaced while shipping this PR and not yet recorded, pending owner direction: the PR template's own headings trip the REV-01 approval markers, and the monitor-page links in the preview auto-comment are a fixed set, so changed monitor pages (this PR's backlog monitor, for example) get no direct link — changed review artifacts do get generated, verified links.</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>Does this artifact use industry-standard terms, mapping any project-specific wording to standard vocabulary?</p>
+        <table>
+          <thead><tr><th>Term in this artifact</th><th>Standard term / meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Fail-open</td><td>CWE-636 (Not Failing Securely): a control that degrades by allowing rather than blocking. Kept as a tag on <code>type: bug</code>, per the backlog's axis model.</td></tr>
+            <tr><td>Working agreement</td><td>This registry's term for an adopted but unenforced rule: <code>behavior: none</code> with <code>guidance: mandatory</code> — what BL-033 proposes to add.</td></tr>
+            <tr><td>Attestation</td><td>A declared, auditable statement (here: session narrative in evidence fields and the AI Review Record) as distinct from a repository-verifiable fact.</td></tr>
+            <tr><td>Inline limit / persisted output</td><td>Claude Code harness behavior: oversized hook output is saved to a session file and only a short preview enters the agent's context.</td></tr>
+            <tr><td>Candidate / triage</td><td>Backlog lifecycle per GOV-06: surfaced items await the owner's accept / decline / Issue-graduation decision.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>Were the primary sources behind this decision consulted directly?</p>
+        <table>
+          <thead><tr><th>Source consulted</th><th>What it supports</th></tr></thead>
+          <tbody>
+            <tr><td><code>monitor/backlog.json</code> (this PR's head)</td><td>The full bilingual text of BL-032/033/034 — the exact content being approved for recording.</td></tr>
+            <tr><td><code>scripts/hooks/session-start-context.ps1</code>, run directly</td><td>BL-032's numbers: 51,198 bytes at head; 49.4KiB replayed at the incident tree (measurement detailed in the PR's AI Review Record).</td></tr>
+            <tr><td><code>docs/en/rules/agent-context/core-context.md</code></td><td>The deterministic-delivery claim BL-032 qualifies, and the adjust-the-pack rule its proposal builds on.</td></tr>
+            <tr><td><code>scripts/generate/build-backlog-monitor.ps1</code> + both rendered pages</td><td>BL-034's mechanism (double-quoted backtick-t) and the literal TAB present in the output, reproduced independently.</td></tr>
+            <tr><td>PR #111 (main <code>83a3a82</code>), PR #113, change record 0072</td><td>BL-033's misreported-merge fact, and the data-only GOV-06 mechanism this PR follows.</td></tr>
+            <tr><td>AI Review Record comment on PR #117</td><td>The independent two-pass verification of every repository-verifiable claim, with author/reviewer contexts declared (change records 0074/0075).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · Owner review artifact</p>
+  </main>
+</body>
+</html>
