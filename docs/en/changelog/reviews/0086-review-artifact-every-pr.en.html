@@ -93,6 +93,7 @@
           <tr><td><code>docs/{en,ja}/rules/code-review/review-artifacts.md</code></td><td>Required-artifact and CI Enforcement sections rewritten: every PR, depth scales with risk, retired-predicate history recorded.</td></tr>
           <tr><td><code>docs/{en,ja}/rules/code-review/standards.md</code></td><td>The artifact-link rule updated from "PRs that request approval" to every PR.</td></tr>
           <tr><td><code>docs/{en,ja}/changelog/0077-review-artifact-every-pr.md</code></td><td>Change note recording the owner decision and the doctrine: a failing gate is satisfied in substance, never un-triggered by reshaping input.</td></tr>
+          <tr><td><code>scripts/local/save-local-precheck.ps1</code></td><td>The local precheck also passes <code>-RequireArtifact</code>, keeping local PR simulation in parity with CI (this PR's independent review found the drift).</td></tr>
         </tbody>
       </table>
     </section>

@@ -681,12 +681,12 @@
         "ja": "人間レビュー成果物のリンク"
       },
       "rule": {
-        "en": "PRs that request approval or touch high-risk governance files link an existing browser-readable review artifact.",
-        "ja": "承認を求める／高リスクな統制ファイルに触れる PR は、ブラウザで読めるレビュー成果物をリンクする。"
+        "en": "Every pull request links an existing browser-readable review artifact.",
+        "ja": "すべての PR は、ブラウザで読めるレビュー成果物をリンクする。"
       },
       "prevents": {
-        "en": "The owner approving a high-risk governance change blind - from chat scrollback instead of a readable, durable review page.",
-        "ja": "オーナーが高リスクな統制変更を、読みやすく残るレビューページではなくチャットの流れで盲目的に承認してしまうこと。"
+        "en": "The owner approving a change blind - and the artifact requirement being reworded away: the former conditional predicate read agent-authored PR text, so the gated agent could silence it (2026-07-22).",
+        "ja": "オーナーが変更を盲目的に承認してしまうこと。そして成果物要件が言い換えで消されること — 旧来の条件付き判定はエージェント自身が書く PR 本文を読んでいたため、縛られる側が判定を黙らせることができた（2026-07-22）。"
       },
       "pillar": "visualization",
       "status": "active",

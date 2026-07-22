@@ -93,6 +93,7 @@
           <tr><td><code>docs/{en,ja}/rules/code-review/review-artifacts.md</code></td><td>必須条件と CI Enforcement を書き直し: 全 PR 必須、深さはリスクで調整、廃止した判定の経緯を記録。</td></tr>
           <tr><td><code>docs/{en,ja}/rules/code-review/standards.md</code></td><td>成果物リンクのルールを「承認を求める PR」から「すべての PR」に更新。</td></tr>
           <tr><td><code>docs/{en,ja}/changelog/0077-review-artifact-every-pr.md</code></td><td>オーナー決定と原則（ゲートの NG は実体で満たす。入力を作り替えて判定を外さない）を記録する変更ノート。</td></tr>
+          <tr><td><code>scripts/local/save-local-precheck.ps1</code></td><td>ローカル precheck も <code>-RequireArtifact</code> を渡し、ローカルの PR シミュレーションを CI と一致させる（本 PR の独立レビューが乖離を発見）。</td></tr>
         </tbody>
       </table>
     </section>

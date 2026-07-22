@@ -210,10 +210,10 @@
       </div>
       <h3 class="cathead">レビュー資料</h3>
       <div class="deck">
-            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー資料" data-code="REV-01" data-name="人間レビュー成果物のリンク" data-rule="承認を求める／高リスクな統制ファイルに触れる PR は、ブラウザで読めるレビュー成果物をリンクする。" data-prevents="オーナーが高リスクな統制変更を、読みやすく残るレビューページではなくチャットの流れで盲目的に承認してしまうこと。" data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="強制ゲート" data-guidance="必須" data-note="">
+            <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー資料" data-code="REV-01" data-name="人間レビュー成果物のリンク" data-rule="すべての PR は、ブラウザで読めるレビュー成果物をリンクする。" data-prevents="オーナーが変更を盲目的に承認してしまうこと。そして成果物要件が言い換えで消されること — 旧来の条件付き判定はエージェント自身が書く PR 本文を読んでいたため、縛られる側が判定を黙らせることができた（2026-07-22）。" data-enf="scripts/guardrails/check-human-review-artifact.ps1" data-venue="CI" data-status="強制ゲート" data-guidance="必須" data-note="">
               <span class="cbar" style="background:#BCE000"></span>
               <span class="ccat ccode">REV-01</span>
-              <span class="cmain"><span class="cnm">人間レビュー成果物のリンク</span><span class="cwhy">オーナーが高リスクな統制変更を、読みやすく残るレビューページではなくチャットの流れで盲目的に承認してしまうこと。</span></span>
+              <span class="cmain"><span class="cnm">人間レビュー成果物のリンク</span><span class="cwhy">オーナーが変更を盲目的に承認してしまうこと。そして成果物要件が言い換えで消されること — 旧来の条件付き判定はエージェント自身が書く PR 本文を読んでいたため、縛られる側が判定を黙らせることができた（2026-07-22）。</span></span>
               <span class="cfoot"><span class="cmk enf"></span><span class="cv">CI</span><span class="cstatus status-hard-gate">強制ゲート</span></span>
             </button>
             <button type="button" class="monitor-item" data-acc="#BCE000" data-status-key="hard-gate" data-cat="レビュー資料" data-code="REV-02" data-name="レビュー成果物の用語チェック" data-rule="変更済みレビュー成果物に、見える形の用語チェックの節がある。" data-prevents="決定文書の場当たり的な造語のせいで、実際にはどの業界標準概念を承認しているのか分からなくなること。" data-enf="scripts/guardrails/check-review-artifact-terminology.ps1" data-venue="CI" data-status="強制ゲート" data-guidance="必須" data-note="">
