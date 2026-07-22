@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0081: Issue 化前のバックログとブラウザモニター</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0081</span><span><b>Draft</b></span><span><b>2026-07-10</b></span></p>
+      <h1>Issue 化前のバックログとブラウザモニター</h1>
+      <p class="lead">このレビューは、<b>バックログ — 候補作業項目の、ブラウザで見える一時置き場。追跡ソースから既存の Pages/ミラーパイプラインで生成</b> — の承認を求めます。作業中に湧いたものを記録し、一緒に眺めて、GitHub Issue にするかを決める場所です。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認のお願い</p>
+      <ol class="asks">
+        <li><b>バックログの採用。</b>ソース <code>monitor/backlog.json</code> → 生成 <code>monitor/backlog.html</code> / <code>.ja.html</code>。既存の Pages サイトと公開ミラーで配信。申し合わせ <code>no-unilateral-issues</code> を運用可能にする：何を Issue に昇格させるかはオーナーが決める。</li>
+        <li><b>type 語彙の採用（調査に基づく）。</b>GitHub Issue Types・Azure DevOps・Google Issue Tracker・Mozilla BMO・Conventional Commits の deep research で、一貫した規則が判明：<code>type</code>・severity・area・status・tags は<i>別々の軸</i>。<code>type</code> 集合は <code>bug / feature / enhancement / refactor / docs / task / question</code> — GitHub デフォルト整合・Conventional Commits 写像可能。fail-open は <code>type: bug</code> に <code>fail-open</code>/<code>cwe-636</code> タグで、type ではない。<code>security</code> も tag で、ルールレジストリが <code>domain: security</code> をルールの仕組みと分けているのと同じ。</li>
+        <li><b>監査で初期投入。</b>確定した 27 件の fail-open 所見＋本レビューで浮上した 1 件が最初の項目になる（計 28：2 件 <code>accepted</code>、PR #110 が対応。26 件 <code>candidate</code>）。まだ何も Issue にはしていない — それが次の、オーナー主導のステップ。</li>
+        <li><b>ゲートで守る。</b><code>check-backlog.ps1</code>（レジストリ <code>GOV-06</code>）がソースを検証しモニターを同期させる — 集合外の type/impact/status を持つ候補は表示できず、ページはソースからドリフトできない。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>monitor/backlog.json</code></td><td>新規ソース：schemaVersion 1、type＋status 語彙、28 件の初期項目。</td></tr>
+          <tr><td><code>scripts/generate/build-backlog-monitor.ps1</code></td><td>新規生成器 → 詳細ペイン付きの絞り込み可能な二言語クロームモニター。<code>-Verify</code> 鮮度。</td></tr>
+          <tr><td><code>scripts/guardrails/check-backlog.ps1</code></td><td>新規ゲート：スキーマ＋閉集合 enum＋presence チェック＋モニター鮮度。GOV-06 登録、check.ps1 に配線。</td></tr>
+          <tr><td><code>scripts/generate/build-pages-site.ps1</code></td><td>バックログを配信 Pages サイトに組み込む。</td></tr>
+          <tr><td><code>build-{guardrail-monitor,reviews-page,application-monitor}.ps1</code></td><td>共有トップナビに「Backlog」を追加。全モニターページ再生成。</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/observability/backlog.md</code>＋索引</td><td>バックログの運用規律、軸分離、Issue 昇格基準。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク</p>
+      <div class="risk">
+        <p>低。監視面と検証ゲートを追加するもので、既存ルールの強制は変えない。ゲートは今セッションの教訓を適用して作った — 必須キーは presence で判定（削除キーで 1 になる <code>@($x).Count</code> ではなく）、列挙フィールドはすべて閉集合 — 8 つの負のテストが fail-closed を確認済み。判断のリスクは別のところにある：バックログは仕分け材料であり、Issue 昇格基準はゲートではなくルーブリック。Issue の過剰登録も、実在する欠陥を chat で失うことも、バックログが可視化すべき失敗だが、各項目はオーナーの判断が決める。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">ここでは決めないこと</p>
+      <ul class="scope">
+        <li>26 件の候補のどれを GitHub Issue にし、どの優先度にするか — このボードに対する次の、オーナー主導の仕分け。</li>
+        <li>機械翻訳した日本語項目本文に人手を入れるか — 英語が一次で、翻訳→検証パスで日本語を生成した。</li>
+        <li>今後の項目の取り込みツール — 当面は <code>monitor/backlog.json</code> に手で追加。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">著者チェック</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>このアーティファクトは業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙に対応付けているか？</p>
+        <table>
+          <thead><tr><th>本アーティファクトの用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>バックログ</td><td>アジャイル/スクラム：保留中作業の順序付き一覧。ここでは特に、項目をトラッカーに登録する前の Issue 化前ステージング領域。</td></tr>
+            <tr><td>work-item type（直交軸）</td><td>「作業の種類」フィールドを severity/priority/status/area と分けたもの。GitHub Issue Types・Azure DevOps・Google Issue Tracker が採る model。</td></tr>
+            <tr><td>トリアージ / 昇格</td><td>項目の処遇（採用/見送り/先送り）を決め、採用した項目を追跡 Issue に昇格させること。</td></tr>
+            <tr><td>fail-open は type ではなく tag</td><td>CWE-636（Not Failing Securely）は CWE 軸の弱点分類で、work-item type とは直交する — ゆえに <code>type</code> 値ではなく tag/本文の記述。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>この決定の裏付けとなる一次ソースを直接確認したか？</p>
+        <table>
+          <thead><tr><th>確認したソース</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/managing-issue-types-in-an-organization">GitHub Issue Types</a></td><td>ラベルと別の統制フィールドとしての type（bug/task/feature）。語彙の整合先。</td></tr>
+            <tr><td><a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a></td><td>バックログ type が写像する compact な type 語彙（feat/fix/docs/refactor/…）。コミットまで持ち越せる。</td></tr>
+            <tr><td><a href="https://learn.microsoft.com/en-us/azure/devops/boards/work-items/about-work-items">Azure DevOps work items</a> / <a href="https://developers.google.com/issue-tracker/concepts/issues">Google Issue Tracker</a></td><td>type / status / area / priority / severity を別フィールドにする最も明確な実例。</td></tr>
+            <tr><td><a href="https://cwe.mitre.org/data/definitions/636.html">CWE-636</a></td><td>「fail-open」は別の分類軸上の独立した弱点 — ゆえに type ではなく tag。</td></tr>
+            <tr><td>fail-open 監査＋ローカル検証ログ</td><td>初期投入した 27 件（3 名の懐疑者が検証）とバックログゲートの 8 負のテスト。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · Owner review artifact</p>
+  </main>
+</body>
+</html>

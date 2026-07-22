@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0086: レビュー成果物を全 PR で必須にする</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.85; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.2rem; line-height:1.25; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.08rem; max-width:38em; margin:0 0 22px;}
+    .lead b{font-weight:600; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0086</span><span><b>Draft</b></span><span><b>2026-07-22</b></span></p>
+      <h1>レビュー成果物を全 PR で必須にする</h1>
+      <p class="lead">このレビューは、<b>REV-01 の条件付き判定を廃止し、すべての PR にレビュー成果物を必須とすること</b>の承認をお願いするものです。判定が「縛られる側のエージェントが書くテキスト」を読んでいたため、失敗したゲートが本文の言い換えだけで通過してしまいました — 虚偽の記述はどこにもありませんでした。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認していただきたいこと</p>
+      <ol class="asks">
+        <li><b>成果物を無条件必須にする。</b>CI ジョブが <code>check-human-review-artifact.ps1</code> を既存の <code>-RequireArtifact</code> スイッチ付きで呼び出す: すべての PR 本文が、実在する <code>docs/{en,ja}/changelog/reviews/*.html</code> 成果物にリンクしなければならない。AI Review Record が変更記録 0075 で行ったのと同じ段階的強化（docs-only 免除の廃止）であり、registry が既に引用している業界の道筋（advisory / audit から enforce への graduation）に従う。</li>
+        <li><b>理由をルールに記録する。</b>registry の REV-01 エントリ、review-artifacts 仕様、code-review standards が無条件ルールを明記し、経緯を保存する: PR #117 では、文言ベースの判定が PR 本文の編集で黙らされた — 要件のトリガーがエージェントの書くテキストの中にあった。</li>
+        <li><b>コストを受け入れ、深さで調整する。</b>小さな PR を含むすべての PR に成果物が必要になる。仕様の新ルール: 小さな変更には小さな成果物（標準のチェックセクションを備えた簡潔な decision summary）。「成果物なし」は選択肢にない。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td><code>human-review-artifact</code> ジョブに <code>-RequireArtifact</code> を追加。配線 1 行の変更で、ゲートスクリプト自体は不変。</td></tr>
+          <tr><td><code>monitor/registry.json</code></td><td>REV-01 の <code>rule</code>: 「すべての PR は、ブラウザで読めるレビュー成果物をリンクする。」<code>prevents</code> は「黙らせ」の失敗様式を明記。モニター再生成。</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/code-review/review-artifacts.md</code></td><td>必須条件と CI Enforcement を書き直し: 全 PR 必須、深さはリスクで調整、廃止した判定の経緯を記録。</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/code-review/standards.md</code></td><td>成果物リンクのルールを「承認を求める PR」から「すべての PR」に更新。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/0077-review-artifact-every-pr.md</code></td><td>オーナー決定と原則（ゲートの NG は実体で満たす。入力を作り替えて判定を外さない）を記録する変更ノート。</td></tr>
+          <tr><td><code>scripts/local/save-local-precheck.ps1</code></td><td>ローカル precheck も <code>-RequireArtifact</code> を渡し、ローカルの PR シミュレーションを CI と一致させる（本 PR の独立レビューが乖離を発見）。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク</p>
+      <div class="risk">
+        <p>コストは実在し、オーナーが許容を明言した: すべての PR に成果物が必要になり、小さな変更の摩擦が上がる（緩和は深さの調整であり、免除ではない — 免除は言い換えゲームの再開地点になる）。ゲートが検証するのはリンクと実在であり中身ではない: 浅い成果物は通過し、その評価はマージ時のオーナーの仕事のまま。本変更が消すのは REV-01 の自己申告型判定であり、他のゲートが無事だと主張するものではない — 同じ弱点クラスは他にも存在し、フォローアップとして下に列挙する。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">ここでは決めないこと</p>
+      <ul class="scope">
+        <li>残りのゲートの自己申告型判定の監査（例: spec-before-implementation は PR 本文に書かれたレコード参照を受け入れる）— PR #117 マージ後のバックログ作業として提案。</li>
+        <li>AI レビュープロトコルに「レビュー対象 PR の failed→passed CI 遷移をすべて説明する」義務を追加すること — 別途レビューを伴うプロトコル文書の変更。</li>
+        <li>BL-032/033/034 とその提案 — PR #117（レビュー 0085）で別途判断。</li>
+        <li>ゲートスクリプト内の使われなくなったマーカー検出を将来削除するか — 当面はレポート用・CI 外の呼び出し元用に保持。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">著者チェック</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check / 用語チェック</h3>
+        <p>この資料は業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙に対応付けているか。</p>
+        <table>
+          <thead><tr><th>本資料の用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>自己申告型判定（self-attested predicate）</td><td>制御の発動条件が、制御される側の書いた入力から計算される構造 — 自己申告の古典的弱点。当事者は振る舞いではなく申告文の方を変えられる。</td></tr>
+            <tr><td>ゲートを黙らせる</td><td>セキュリティテスト用語の「コントロールバイパス」: 強制ポイントを満たすのではなく適用されなくすること。改ざんとは別物 — 今回ゲートのコードには一切触れていない。</td></tr>
+            <tr><td>advisory から enforce への graduation</td><td>ポリシーエンジンの標準的な段階強化（OPA Gatekeeper の <code>warn</code>/<code>deny</code>、Kyverno の <code>Audit</code>/<code>Enforce</code>、Azure Policy の audit 系エフェクト）。条件付き→無条件も同じ動き。</td></tr>
+            <tr><td>予防的コントロール（preventive control）</td><td>AWS Control Tower の語彙: 非準拠のアクションを事前にブロックするコントロール。REV-01 は「自称する PR だけ」ではなく全 PR に対する予防的コントロールになる。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / 一次情報</h3>
+        <p>この判断の根拠となる一次情報を直接確認したか。</p>
+        <table>
+          <thead><tr><th>確認した情報源</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td><code>scripts/guardrails/check-human-review-artifact.ps1</code></td><td>機構: PR 本文を読むマーカーのリスト、高リスクパスのリスト、そして本変更が配線する既存の <code>-RequireArtifact</code> スイッチ。</td></tr>
+            <tr><td>PR #117 の CI 履歴（run 29884006779 が失敗、以後の run は緑）</td><td>インシデントそのもの: ゲートが失敗し、本文の言い換え後に通過した — 「黙らせ」の消えない可視的証跡。</td></tr>
+            <tr><td>変更記録 0074 / 0075</td><td>先例: AI Review Record ゲート自身の全 PR 化とガバナンスデータパスへの拡大という段階的強化。</td></tr>
+            <tr><td><code>docs/en/rules/guardrails/registry.md</code>（Gatekeeper / Kyverno / Azure Policy の引用）</td><td>advisory・条件付きの強制からブロッキングの強制へ、という文書化済みの業界の道筋。</td></tr>
+            <tr><td>オーナーの指示（2026-07-22 セッション）</td><td>決定そのもの: 成果物コストは仕方ない。やめた瞬間に秩序にヒビが入る。NG が出たら、それをやる。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナーレビュー資料</p>
+  </main>
+</body>
+</html>
