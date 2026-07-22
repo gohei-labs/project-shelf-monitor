@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0084: 全プルリクエストに AI レビュー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.85; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.7rem; line-height:1.15; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナーレビュー</span><span class="dot"></span><span class="num">0084</span><span><b>Draft</b></span><span><b>2026-07-11</b></span></p>
+      <h1>全プルリクエストに AI レビュー</h1>
+      <p class="lead">このレビューは、<b>全てのプルリクエストに AI レビュー記録を必須とし、docs のみの除外を廃止する</b>承認を求めるものです — 分類ルールを単純ルールに置き換えます。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>単純ルールの採用。</b>コード・governance データ・ドキュメントを問わず、全ての PR が新鮮な AI レビュー記録（現在の head・明示的な所見・異なる作成者/レビュアーコンテキスト）を持つ。記録ゲートは「この PR にレビューが要るか」を判定せず、記録の検証だけを行う。</li>
+        <li><b>docs のみの除外を廃止。</b>DEC-01 のルール文・プロトコル文書・ゲートの全てから除外を撤去。パス分類（変更 0074 の governance データ一覧を含む）は報告用として維持。</li>
+        <li><b>コストの受け入れ。</b>誤字修正の PR でも独立レビュー1回分を払う。対象範囲の問いが2度続き、分類ルールが実運用で意外だと分かった上での、オーナーの明示的な選択。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <p class="sub">承認内容を実装する具体ファイル。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrails/check-ai-review-record.ps1</code></td><td>記録要件を無条件に。分類は報告用として維持。メッセージは変更記録 0075 を引用。</td></tr>
+          <tr><td><code>monitor/registry.json</code></td><td>DEC-01 ルール文を「全てのプルリクエストは AI レビュー記録を…」に。note の除外の一文を廃止。</td></tr>
+          <tr><td><code>monitor/guardrail-monitor.html</code> + <code>.ja</code></td><td>更新後の DEC-01 文言で再生成（セキュリティ／プロジェクトビューは DEC-01 を含まず不変）。</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/code-review/ai-review-protocol.md</code></td><td>Protocol A「使う場面」・マージ規則・ゲート説明・レビュー方針表を更新。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/0075-*.md</code> / <code>reviews/0084-*.html</code></td><td>変更ノートと本成果物。レビュー索引を再生成。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>低・厳格化のみ — 緩める要件は無い。運用上の注意: CI が PR を評価する時点で記録が存在する必要があるため、実務は PR 作成時に本文へ記録を入れる（push 後コメントの既知のタイミング失敗を回避）。両方向で確認済み: docs のみの変更は従来「記録不要」（exit 0）で通過したが、いまは記録なしで失敗（exit 1）。実装パスの挙動は従来どおり。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>些細な PR のレビューを浅い深度で行ってよいか — 記録の形式は不変。深度はプロトコル内の裁量のまま。</li>
+        <li>push 後に投稿された記録の CI タイミング改善（保留。作成時に本文へ入れれば回避可能）。</li>
+        <li>報告用分類への governance データ追加（0074 の保守ルールを継続）。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>本成果物は業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙へ対応づけているか。</p>
+        <table>
+          <thead><tr><th>本成果物の用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>無条件の要件（分類スコープとの対比）</td><td>ルールの適用条件述語を除去して全インスタンスに適用すること — 精密さと引き換えに予測可能性を得る。</td></tr>
+            <tr><td>AI レビュー記録</td><td>本プロジェクトにおける独立 AI レビューの監査記録: head SHA・所見・作成者/レビュアーコンテキスト（構造化された表明）。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>本決定の根拠となる一次情報を直接確認したか。</p>
+        <table>
+          <thead><tr><th>確認した情報源</th><th>裏づける内容</th></tr></thead>
+          <tbody>
+            <tr><td>オーナー決定（2026-07-11 セッション）</td><td>「どのみち、プルリク時には必ず AI レビューを入れる」— #113 と 0074 の対象範囲の問いを経て。</td></tr>
+            <tr><td><code>scripts/guardrails/check-ai-review-record.ps1</code>（前後の実行）</td><td>docs のみは従来 exit 0「記録不要」→ いまは記録なしで exit 1。</td></tr>
+            <tr><td>変更記録 0074／#113 の経緯</td><td>単純ルールを選ぶ動機となった、直前2回の対象範囲の問い。</td></tr>
+            <tr><td>ローカル検証ログ</td><td>緑のスイート。再生成したモニター。両方向の挙動を取得。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー成果物</p>
+  </main>
+</body>
+</html>

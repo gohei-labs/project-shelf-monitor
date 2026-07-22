@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0085: 2026-07-22 エージェント文脈インシデントからのバックログ 3 件</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.85; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.2rem; line-height:1.25; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.08rem; max-width:38em; margin:0 0 22px;}
+    .lead b{font-weight:600; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0085</span><span><b>Draft</b></span><span><b>2026-07-22</b></span></p>
+      <h1>2026-07-22 エージェント文脈インシデントからのバックログ 3 件</h1>
+      <p class="lead">このレビューは、<b>候補 3 件（BL-032、BL-033、BL-034）を Issue 化前バックログへ記録すること</b>の承認をお願いするものです。記録＝トリアージの素材化であり、PR #117 をマージしても各項目が提案する修正は何も採用されません。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認していただきたいこと</p>
+      <ol class="asks">
+        <li><b>BL-032 を記録する（bug、P2、フェイルオープン）。</b>セッション開始の必読注入は、レンダリング後の alwaysRead パックがハーネスのインライン上限を超えると 2KB のプレビューへ静かに縮退する。実測: この PR の head で 51,198 バイト（50.0KiB）、インシデント時のツリーの再現で 49.4KiB。<code>core-context.md</code> の「必読は構造的に完了する」という保証が、エージェントが気づくべき「ポインタ」に静かに変わる。</li>
+        <li><b>BL-033 を記録する（task、P3、プロセス）。</b>エージェントの状況報告に fetch 済みのリモート実状態を求めるルールが無い。インシデントでは、squash マージ済みブランチ（PR #111、main の <code>83a3a82</code>）が古い ref から「PR 作成待ち」と報告され、文書化されたトークンラッパーがあるのに GitHub アクセスが二度「不可」と報告された。</li>
+        <li><b>BL-034 を記録する（bug、P3、ハイジーン）。</b>バックログモニター生成スクリプトの二重引用符文字列が backtick-t をリテラル TAB に展開し、生成された両ページに出力される。本 PR の独立 AI レビューが発見し、ソースと描画結果の両方で再現を確認済み。修正はこの PR をデータのみに保つためフォローアップに委ねる。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>monitor/backlog.json</code></td><td>3 項目を追記（バックログは 31 → 34 件）。既存項目の変更は、レビュー指摘による BL-032 の文言修正のみ。</td></tr>
+          <tr><td><code>monitor/backlog{,.ja}.html</code></td><td>再生成: 件数チップと新項目のエントリ。GOV-06 ゲートがソースとの一致をバイト単位で検証。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0085-*</code></td><td>本レビュー資料ペアと、再生成したレビュー索引ページ。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク</p>
+      <div class="risk">
+        <p>低。候補の記録は既存ルールの執行を一切変えず、誤った項目はトリアージで修正・却下できる。リスクは内容の正確性にある: evidence の一部はセッションの証言（項目本文と PR の AI Review Record に宣言として明記）であり、BL-032 のハーネス数値はバージョン依存の観測値。緩和策: 独立のレビュー専用パスが複数のパスでリポジトリ検証可能な主張を全件照合済み（事実に関する指摘 = BL-032 の古いサイズ数値と本資料内の過大な記述は、承認前に修正済み）で、ハーネス依存の数値は項目内に日付付きで記録している。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">ここでは決めないこと</p>
+      <ul class="scope">
+        <li>3 項目それぞれを Issue 化するか、却下するか、候補のまま置くか — バックログモニター上のオーナー主導トリアージ。</li>
+        <li>各項目が提案する修正そのもの: BL-032 のサイズ予算ゲートとフックのフォールバック、BL-033 の fetch 先行 working agreement、BL-034 の生成スクリプト修正 — いずれも別途レビューを伴う将来の変更。</li>
+        <li>この PR の作業中に見つかり、まだ記録していない候補 2 件（PR テンプレートの見出し自体が REV-01 の承認マーカーに一致する問題／プレビュー自動コメントのモニターページリンクが固定セットのため、PR が実際に変更したモニターページ（本 PR ではバックログモニター）に直接リンクが付かない問題。変更されたレビュー資料への直接リンクは自動生成・検証される）— オーナーの指示待ち。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">著者チェック</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check / 用語チェック</h3>
+        <p>この資料は業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙に対応付けているか。</p>
+        <table>
+          <thead><tr><th>本資料の用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>フェイルオープン</td><td>CWE-636（Not Failing Securely）: 劣化時に遮断ではなく通過してしまう制御。バックログの軸モデルに従い <code>type: bug</code> のタグとして保持。</td></tr>
+            <tr><td>working agreement</td><td>本レジストリで「採用済みだが未執行のルール」を指す用語: <code>behavior: none</code> ＋ <code>guidance: mandatory</code>。BL-033 が追加を提案しているもの。</td></tr>
+            <tr><td>宣言（attestation）</td><td>監査記録における申告済みの供述（ここでは evidence 欄のセッション経緯と AI Review Record）。リポジトリで検証可能な事実と区別する。</td></tr>
+            <tr><td>インライン上限 / 退避出力</td><td>Claude Code ハーネスの挙動: 大きすぎるフック出力はセッションファイルへ保存され、短いプレビューのみがエージェントの文脈に入る。</td></tr>
+            <tr><td>candidate / トリアージ</td><td>GOV-06 のバックログライフサイクル: 浮上した項目は、オーナーの採用・却下・Issue 昇格の判断を待つ。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / 一次情報</h3>
+        <p>この判断の根拠となる一次情報を直接確認したか。</p>
+        <table>
+          <thead><tr><th>確認した情報源</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td><code>monitor/backlog.json</code>（本 PR の head）</td><td>BL-032/033/034 の全文（二言語）— 記録の承認対象そのもの。</td></tr>
+            <tr><td><code>scripts/hooks/session-start-context.ps1</code> の直接実行</td><td>BL-032 の数値: head で 51,198 バイト、インシデント時ツリーの再現で 49.4KiB（測定の詳細は PR の AI Review Record）。</td></tr>
+            <tr><td><code>docs/en/rules/agent-context/core-context.md</code></td><td>BL-032 が限定を付ける「決定論的配達」の記述と、提案が依拠する「パックを調整する」ルール。</td></tr>
+            <tr><td><code>scripts/generate/build-backlog-monitor.ps1</code> と描画済み両ページ</td><td>BL-034 の機構（二重引用符内の backtick-t）と出力中のリテラル TAB。独立に再現済み。</td></tr>
+            <tr><td>PR #111（main の <code>83a3a82</code>）、PR #113、変更記録 0072</td><td>BL-033 の誤報告されたマージの事実と、本 PR が踏襲するデータのみの GOV-06 機構。</td></tr>
+            <tr><td>PR #117 の AI Review Record コメント</td><td>リポジトリ検証可能な全主張の独立 2 パス照合と、作成者・レビュアー文脈の宣言（変更記録 0074/0075）。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナーレビュー資料</p>
+  </main>
+</body>
+</html>

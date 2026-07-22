@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0088: プロダクトビジョンを「生きた下書き」として残す</title>
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:ui-rounded,"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;
+      --body:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.85; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+    .topmeta{font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num,.topmeta b{color:var(--ink); font-weight:600;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+    h1{font-family:var(--display); font-weight:700; font-size:1.9rem; line-height:1.25; margin:0 0 18px; text-wrap:balance;}
+    .lead{font-size:1.06rem; max-width:40em; margin:0 0 22px;}
+    .lead b{font-weight:600; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.4);}
+    section{margin:52px 0 0;}
+    .kicker{font-weight:600; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.4rem; color:var(--lime-ink);}
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); font-weight:600;}
+    tbody td:first-child{font-weight:600;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace,Menlo,monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+    h3{font-family:var(--display); font-weight:600; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check>p{color:var(--mute); margin:0 0 12px;}
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:64px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>Owner review</span><span class="dot"></span><span class="num">0088</span><span><b>Draft</b></span><span><b>2026-07-22</b></span></p>
+      <h1>プロダクトビジョンを「生きた下書き」として残す</h1>
+      <p class="lead">このレビューは、<b>Project Shelf のプロダクトビジョンを「生きた下書き」として記録すること</b>の承認をお願いするものです。豊かな設計会話が、このプロダクトが防ごうとしている当の「死ぬ burst」になってしまわないように。方向性を捕まえるだけで、実装は何も約束しません。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認していただきたいこと</p>
+      <ol class="asks">
+        <li><b>ビジョン下書きを採用する。</b>ソース <code>docs/{en,ja}/product/vision.md</code>、両言語の索引からリンク。北極星: <i>擬似的な自分の頭の中を作り、見えるようにして、育て、最強にする。</i></li>
+        <li><b>「生きた下書き」という位置づけを受け入れる。</b>凍結ではなく、育て・書き換えるためのもの。荷重のかかる設計の問い 5 つを、あえて開いたまま残している。</li>
+        <li><b>スコープはドキュメントのみに留める。</b>これは「拠って立つ方向」を採るだけ。開いた問いは決めないし、実装も始めない。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>docs/{en,ja}/product/vision.md</code></td><td>新規: 課題、「可視化＝鏡」という核、コアの循環、二つの敵（burst の死・都度修正）、安全なエンジンとしての既存ガードレール、5 つの未解決の問い。</td></tr>
+          <tr><td><code>docs/{en,ja}/index.md</code></td><td>「プロダクト」節からビジョンへリンク。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0088-*</code></td><td>本資料ペアと、再生成したレビュー索引。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク</p>
+      <div class="risk"><p>最小。ドキュメントのみで、執行も挙動も変えない。中身は一度の会話の、その時点での統合であり、設計上「下書き」で、その場で直せる。真のリスクは下書きを確定扱いすることで、明示的な「生きた下書き」の位置づけと未解決の問いの節がそれを防ぐ。</p></div>
+    </section>
+
+    <section>
+      <p class="kicker">ここでは決めないこと</p>
+      <ul class="scope">
+        <li>5 つの未解決の設計の問い（一次ビュー／本物の地図か感覚か／手直しはどこで起きるか／何が体系にするか／剪定）。</li>
+        <li>最初に作る具体物。別途検討中の AI実装検定 練習ツールを含む。</li>
+        <li>下書きが実装へ進むか、いつ進むか。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">著者チェック</p>
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check / 用語チェック</h3>
+        <p>この資料は業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙に対応付けているか。</p>
+        <table>
+          <thead><tr><th>用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>生きた下書き（living draft）</td><td>時間をかけて維持・改訂される文書。凍結された仕様の逆で、書きっぱなしのメモとも違う。</td></tr>
+            <tr><td>セカンドブレイン</td><td>外部記憶という PKM の概念。ここでは倉庫ではなく、手入れされ育つ「生きた」ものへと尖らせている。</td></tr>
+            <tr><td>burst の死</td><td>本プロジェクトの用語。一度きりで放置され枯れる成果物を指す（セキュリティではなく、注意・運用の失敗）。</td></tr>
+            <tr><td>可視化 → 制御</td><td>本リポジトリの原則（状態をブラウザで見えるようにし、人間が制御を握る）。ここではそれを自分の頭に向けている。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / 一次情報</h3>
+        <p>この判断の根拠となる一次情報を直接確認したか。</p>
+        <table>
+          <thead><tr><th>確認した情報源</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td><code>docs/{en,ja}/product/vision.md</code>（本 PR）</td><td>レビュー対象の全文 — 採用する方向そのもの。</td></tr>
+            <tr><td>オーナーとの設計会話（2026-07-22 セッション）</td><td>ビジョンの各主張は、その会話でのオーナー自身の言葉の統合（宣言的な証言であり、リポジトリでは検証不能）。</td></tr>
+            <tr><td><code>docs/en/rules/agent-context/onboarding.md</code></td><td>ビジョンが内側に向ける「状態を見えるようにして人間が制御を握る」原則。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="foot">Project Shelf · オーナーレビュー資料</p>
+  </main>
+</body>
+</html>
