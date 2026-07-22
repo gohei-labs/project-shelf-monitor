@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0032: Docusaurus の撤去</title>
+  <style>
+    :root { color-scheme: light; --bg: #f8fafc; --panel: #ffffff; --text: #111827; --muted: #4b5563; --line: #d1d5db; --blue: #2563eb; --green: #166534; --amber: #92400e; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 20px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { margin-top: 32px; font-size: 1.25rem; }
+    .lead { color: var(--muted); max-width: 860px; }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .ok { border-left: 5px solid var(--green); background: #f0fdf4; }
+    .risk { border-left: 5px solid var(--amber); background: #fffbeb; }
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Docusaurus の撤去</h1>
+      <p class="lead">この成果物は、Docusaurus ポータルを撤去し、コントロール面を自前ホストの editorial ページ群（ガードレール地図 + レビュー）にひとつのデザイン言語で統一することの承認を求める。詳細 Markdown は Markdown のまま。editorial ページが唯一のブラウザ可視な統制面。</p>
+    </header>
+
+    <section class="callout approval">
+      <h2>承認のお願い（Requested Approval）</h2>
+      <ol>
+        <li><code>docs-portal/</code> の Docusaurus 一式と、そのゲート・ビルド手順・CI の Node 手順・無視ルールを削除。</li>
+        <li>ガードレール地図とレビュー索引を共通トップナビで相互リンク（「ガードレールページからレビューに行ける」を完成）。</li>
+        <li><code>scripts/serve-site.ps1</code>（localhost 限定の静的サーバ）を追加し、editorial サイトを閲覧可能に。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>変更内容（What Changed）</h2>
+      <table>
+        <thead><tr><th>対象</th><th>変更</th></tr></thead>
+        <tbody>
+          <tr><td><code>docs-portal/</code>、<code>scripts/check-docs-portal.ps1</code></td><td>削除。</td></tr>
+          <tr><td><code>playbook/registry.json</code></td><td><code>docs-portal-build</code> を除去（24 ガードレールに）。地図を再生成。</td></tr>
+          <tr><td><code>scripts/check.ps1</code>、<code>check-spec-before-impl.ps1</code></td><td>docs-portal のビルド節とコードパスを削除。</td></tr>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td>check ジョブから Node セットアップ + docs-portal アーティファクトを削除。</td></tr>
+          <tr><td><code>scripts/build-guardrail-map.ps1</code></td><td>ガードレール / レビューのトップナビを追加。</td></tr>
+          <tr><td><code>scripts/serve-site.ps1</code></td><td>新しい localhost 静的サーバ。</td></tr>
+          <tr><td>documentation-system・index・引継ぎブリーフ（両言語）</td><td>Docusaurus ではなく editorial サイトを説明。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout risk">
+      <h2>リスク（Risk）</h2>
+      <p>「作ってから消す」順序で、撤去前に置換（レビュー editorial ページ）を用意したので空白期間は無い。公開／CI レンダリングのドキュメントサイトはもう無く、詳細ドキュメントは GitHub やエディタで Markdown として読む。将来公開サイトが必要なら editorial ソースから別途生成できる。<code>docs-portal</code> というレジストリのカテゴリは残る（advisory の browser-control-surface をまとめる）が無害。</p>
+    </section>
+
+    <section data-guardrail="standard-terminology">
+      <h2>用語チェック（Terminology Check / 標準用語チェック）</h2>
+      <table>
+        <thead><tr><th>用語</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>Docusaurus</td><td>これまでブラウザ向けドキュメントポータルに使っていた Node の静的サイト生成基盤。今回撤去。</td></tr>
+          <tr><td>editorial コントロールサイト</td><td>ブラウザ可視の統制面である、自前ホストの生成 HTML ページ（ガードレール地図 + レビュー）。</td></tr>
+          <tr><td>コントロール面</td><td>オーナーがブラウザで作業を見て舵を取るための面。</td></tr>
+          <tr><td>作ってから消す</td><td>置換を用意し動作確認してから、置き換える対象を消す。能力の空白を作らない。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-guardrail="runtime-boundary">
+      <h2>ランタイム境界チェック（Runtime Boundary Check）</h2>
+      <p>本変更はランタイムを足すのではなく外す：Node ベースの Docusaurus ビルドが、ローカル事前チェックと CI の <code>check</code> ジョブから無くなる（Node セットアップ削除）。ドキュメント面のガードレールスイートは PowerShell のみになる。Dev Container は一般機能として Node を依然保持（今はスイート未使用だが残置）。editorial ページは静的 HTML で、<code>scripts/serve-site.ps1</code>（Python の http.server、127.0.0.1 バインド——<code>.env</code> を含むリポジトリを LAN に晒さないため 0.0.0.0 にはしない）が <code>http://127.0.0.1</code> でローカル配信する。Google Fonts は従来どおりネットワークから読む。</p>
+    </section>
+
+    <section data-guardrail="primary-references">
+      <h2>参考情報（References）</h2>
+      <table>
+        <thead><tr><th>参照</th><th>裏付ける内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>playbook/registry.json</code></td><td>除去した <code>docs-portal-build</code> ガードレール（25→24）。</td></tr>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td>Node + アーティファクト手順を外した check ジョブ。</td></tr>
+          <tr><td><code>scripts/serve-site.ps1</code></td><td>Docusaurus 開発サーバを置き換える localhost 静的サーバ。</td></tr>
+          <tr><td><code>docs/ja/playbook/observability/documentation-system.md</code></td><td>editorial コントロールサイトのルール。</td></tr>
+          <tr><td><code>docs/ja/changelog/0038-remove-docusaurus.md</code></td><td>本撤去の変更ノート。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
