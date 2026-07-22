@@ -91,11 +91,11 @@
       <p class="lead">開発中に湧いた候補作業項目。オーナーがどれを GitHub Issue にするか決める前の一時置き場です。	ype は作業の種類で、impact・area・status・tags は別の軸です。</p>
       <div class="controls">
         <span class="lab">絞り込み</span>
-        <button class="pill" data-f="all" aria-pressed="true">すべて <span class="c">33</span></button>
+        <button class="pill" data-f="all" aria-pressed="true">すべて <span class="c">34</span></button>
         <button class="pill" data-f="P1" aria-pressed="false">P1 <span class="c">6</span></button>
         <button class="pill" data-f="P2" aria-pressed="false">P2 <span class="c">20</span></button>
-        <button class="pill" data-f="P3" aria-pressed="false">P3 <span class="c">7</span></button>
-        <button class="pill" data-f="candidate" aria-pressed="false">候補 <span class="c">31</span></button>
+        <button class="pill" data-f="P3" aria-pressed="false">P3 <span class="c">8</span></button>
+        <button class="pill" data-f="candidate" aria-pressed="false">候補 <span class="c">32</span></button>
         <button class="pill" data-f="accepted" aria-pressed="false">採用 <span class="c">2</span></button>
       </div>
     </header>
@@ -226,7 +226,7 @@
         <span class="chips"><span class="chip imp">P2</span><span class="chip type">バグ</span></span>
         <span><span class="btitle">プレビューリンクの HTTP 検証がミラーの Pages ビルドと競争し、配信遅延で失敗する</span><span class="barea">monitor-preview</span></span>
       </button>
-      <button type="button" class="bitem imp-P2" data-impact="P2" data-status="candidate" data-title="セッション開始の必読注入は、ハーネスのインライン上限を超えると 2KB のプレビューへ静かに縮退する" data-impact-label="P2" data-type-label="バグ" data-status-label="候補" data-area="agent-core-context" data-loc="scripts/hooks/session-start-context.ps1" data-tags="fail-open,agent-context" data-issue="" data-detail="SessionStart フックは、必読が構造的に完了するよう alwaysRead 全ファイルを注入する（core-context.md）。現在このパックは約 49KB あり、フック出力がハーネスのインライン上限を超えると、Claude Code はそれをセッションファイルへ退避して 2KB のプレビューだけを表示する。決定論的な配達は静かにポインタへ縮退し、エージェントが切り詰めに気づいて退避ファイルを Read しなければならない — まさにフックが排除するはずだった性善説の手順が復活する。" data-proposal="配達経路にサイズ予算を設ける: レンダリング後の alwaysRead パックが文書化されたインライン安全予算を超えたら（例えば check-agent-core-context.ps1 内で）チェックを失敗させ、core-context.md の「パックを調整する」ルールに従って縮小を強制する。さらにフックが予算超過を検知した場合は、ハーネスのプレビュー挙動に頼らず、コンパクトなマニフェスト（ファイル一覧と、退避出力を Read せよという明示指示）を出力する。" data-evidence="2026-07-22 のセッション: フック出力は 49.4KB で、ハーネスはこれを退避して 2KB のプレビューのみ表示した。エージェントは当初プレビューだけで作業し、必読を済ませたかオーナーに問われて初めて全文を読んだ。" data-source="agent-context-truncation-2026-07-22" data-raised="2026-07-22">
+      <button type="button" class="bitem imp-P2" data-impact="P2" data-status="candidate" data-title="セッション開始の必読注入は、ハーネスのインライン上限を超えると 2KB のプレビューへ静かに縮退する" data-impact-label="P2" data-type-label="バグ" data-status-label="候補" data-area="agent-core-context" data-loc="scripts/hooks/session-start-context.ps1" data-tags="fail-open,agent-context" data-issue="" data-detail="SessionStart フックは、必読が構造的に完了するよう alwaysRead 全ファイルを注入する（core-context.md）。現在このパックは約 50KB あり、フック出力がハーネスのインライン上限を超えると、Claude Code はそれをセッションファイルへ退避して 2KB のプレビューだけを表示する。決定論的な配達は静かにポインタへ縮退し、エージェントが切り詰めに気づいて退避ファイルを Read しなければならない — まさにフックが排除するはずだった性善説の手順が復活する。" data-proposal="配達経路にサイズ予算を設ける: レンダリング後の alwaysRead パックが文書化されたインライン安全予算を超えたら（例えば check-agent-core-context.ps1 内で）チェックを失敗させ、core-context.md の「パックを調整する」ルールに従って縮小を強制する。さらにフックが予算超過を検知した場合は、ハーネスのプレビュー挙動に頼らず、コンパクトなマニフェスト（alwaysRead のファイル一覧と、それらのファイルを直接 Read せよという明示指示）を出力する。" data-evidence="2026-07-22 のセッション: フック出力は 49.4KB で、ハーネスはこれを退避して 2KB のプレビューのみ表示した。エージェントは当初プレビューだけで作業し、必読を済ませたかオーナーに問われて初めて全文を読んだ。" data-source="agent-context-truncation-2026-07-22" data-raised="2026-07-22">
         <span class="bid">BL-032</span>
         <span class="chips"><span class="chip imp">P2</span><span class="chip type">バグ</span></span>
         <span><span class="btitle">セッション開始の必読注入は、ハーネスのインライン上限を超えると 2KB のプレビューへ静かに縮退する</span><span class="barea">agent-core-context</span></span>
@@ -265,6 +265,11 @@
         <span class="bid">BL-033</span>
         <span class="chips"><span class="chip imp">P3</span><span class="chip type">タスク</span></span>
         <span><span class="btitle">エージェントの状況報告に fetch 済みのリモート実状態を求めるルールが無い</span><span class="barea">agent-workflow</span></span>
+      </button>
+      <button type="button" class="bitem imp-P3" data-impact="P3" data-status="candidate" data-title="バックログモニターの導入文が `type` のコードスパンではなく、リテラルの TAB と 'ype' を描画している" data-impact-label="P3" data-type-label="バグ" data-status-label="候補" data-area="backlog-monitor" data-loc="scripts/generate/build-backlog-monitor.ps1" data-tags="hygiene" data-issue="" data-detail="生成される両ページの導入文文字列が PowerShell の二重引用符で書かれているため、`type` マークアップ内の backtick-t が TAB 文字に展開され、後続の backtick が直後の空白をエスケープして、生成スクリプト自身の正規表現が描画するはずのインラインコードスパンを壊している。monitor/backlog.html と monitor/backlog.ja.html の両方の導入文に、リテラルの TAB と 'ype' がそのまま出力されている。コミット済み HTML は生成出力とバイト一致なので同期検証は緑のままで、バックログゲートは TAB を意図的に許容しているため、どのゲートも検出しない。" data-proposal="build-backlog-monitor.ps1 の 2 つの導入文文字列を単一引用符にする（または backtick を二重にする）ことで `type` マークアップをインラインコードとして描画させ、両ページを再生成する。あわせて、生成スクリプトの固定文言に生の TAB や制御文字が含まれないことの検証を検討する。" data-evidence="PR #117 の独立 AI レビュー（2026-07-22）が発見し、再現を確認した: build-backlog-monitor.ps1 の英語・日本語の導入文文字列は二重引用符で backtick-t を含み、描画された両ページの 'ype' の前にリテラルの TAB が存在する。" data-source="pr-117-review-2026-07-22" data-raised="2026-07-22">
+        <span class="bid">BL-034</span>
+        <span class="chips"><span class="chip imp">P3</span><span class="chip type">バグ</span></span>
+        <span><span class="btitle">バックログモニターの導入文が `type` のコードスパンではなく、リテラルの TAB と 'ype' を描画している</span><span class="barea">backlog-monitor</span></span>
       </button>
     </div>
     <aside class="detail" id="md" aria-live="polite" data-labels="{&quot;impact&quot;:&quot;影響度&quot;,&quot;type&quot;:&quot;種別&quot;,&quot;status&quot;:&quot;状態&quot;,&quot;area&quot;:&quot;領域&quot;,&quot;where&quot;:&quot;場所&quot;,&quot;issue&quot;:&quot;Issue&quot;,&quot;tags&quot;:&quot;タグ&quot;,&quot;detail&quot;:&quot;機序&quot;,&quot;proposal&quot;:&quot;対応方針&quot;,&quot;evidence&quot;:&quot;根拠&quot;,&quot;source&quot;:&quot;出所&quot;}">
