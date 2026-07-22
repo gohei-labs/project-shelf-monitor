@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0063: AI レビュー記録を advisory からハードゲートへ昇格する</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.7; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.9rem; line-height:1.05; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0 0 10px;} .risk p:last-child{margin-bottom:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナー承認レビュー</span><span class="dot"></span><span class="num">0063</span><span><b>Draft</b></span><span><b>2026-07-09</b></span></p>
+      <h1>AI レビュー記録を advisory からハードゲートへ昇格する</h1>
+      <p class="lead">この資料は、<b>「実装 PR には AI レビュー記録を残す」という名目ルールを、記録の実在・指摘の明記・最終コミットとの一致を機械検証するハードゲートに変える</b>ことの承認を求めます。品質ゲート3部作（#79→#81→#80）の第1弾です。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">承認のお願い（Requested Approval）</p>
+      <ol class="asks">
+        <li><b>記録の実在を強制する。</b>実装・統制ファイルを変更する PR は、PR 本文または PR コメントに「AI Review Record」（旧 Codex Review Record 見出しも受理）が無ければ CI が fail します。docs のみの PR は対象外。</li>
+        <li><b>「最終コミットのレビュー」を強制する。</b>記録の <code>Reviewed commit:</code> は PR の【現在の】head コミットと一致しなければなりません。古いコミットの記録では fail — レビュー後に足したコードが未レビューのままマージされる穴を塞ぎます。あわせて明示的な <code>Findings</code> セクション（「指摘なし」も明記）を要求します。</li>
+        <li><b>統制コードを対象に含める。</b>spec-before-implementation と異なり、ガードレールスクリプト・ワークフロー・agent policy も対象です — 統制コードこそ独立の目が必要だからです。</li>
+        <li><b>CI 権限の最小追加。</b>PR コメントを読むため、human-review-artifact ジョブに read 権限（pull-requests / issues）を追加します。書き込み権限は追加しません。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">変更内容（What Changed）</p>
+      <p class="sub">承認のお願いを実現する、具体的な変更ファイルの一覧です。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrails/check-ai-review-record.ps1</code></td><td>新規ハードゲート。PR 本文＋コメントから記録を探し、見出し・Findings・head 一致を検証。レジストリの有効/無効トグルにも従う。</td></tr>
+          <tr><td><code>.github/workflows/ci.yml</code></td><td>human-review-artifact ジョブにゲートのステップと read 権限を追加。</td></tr>
+          <tr><td><code>monitor/registry.json</code></td><td><code>ai-review-record</code> を advisory（working-agreement）から active（hard-gate・runsAt: ci）へ昇格。</td></tr>
+          <tr><td><code>docs/{en,ja}/rules/code-review/ai-review-protocol.md</code></td><td>記録名を「AI Review Record」に一般化（旧見出しも受理）、PR 本文も記録場所として許可、CI Enforcement 節を追加（日英）。</td></tr>
+          <tr><td><code>.github/pull_request_template.md</code></td><td>チェックボックスの文言をゲートの実要件（Findings・Reviewed commit）に更新（日英）。</td></tr>
+          <tr><td><code>monitor/*.html</code> ／ <code>docs/{en,ja}/changelog/reviews/0063-*.html</code></td><td>モニター・レビュー索引を再生成。この資料（日英対）。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">リスク（Risk）</p>
+      <div class="risk">
+        <p><b>記録の中身までは保証しない。</b>このゲートが検証するのは構造（実在・Findings・コミット一致）であり、レビューの質そのものではありません。形だけの記録は書けます — それを塞ぐ独立性の強制は第2弾（#81）で行い、本ゲートはその土台です。</p>
+        <p><b>運用フローの変化。</b>実装 PR は「push → 最終コミットを独立レビュー → 記録を本文に入れて PR 作成」の順になります。PR 作成後にコミットを足した場合は、再レビューして記録コメントを追加しないと CI が赤のままです（意図された摩擦です）。</p>
+        <p><b>タイミング。</b>push 直後にコメントで記録を足す場合、CI のコメント取得と競走になりえます（数秒〜数分）。実運用では本文記載を推奨します。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">決めないこと（Not Decided Here）</p>
+      <ul class="scope">
+        <li>レビューの独立性（作成コンテキスト≠レビューコンテキスト）の強制 — 第2弾 #81。</li>
+        <li>必読文書の決定的強制 — 第3弾 #80。</li>
+        <li>特定のレビューツール（Codex／Claude／外部レビュアー）の選定。プロトコルはツール中立のまま。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">資料チェック（Author Checks）</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>用語チェック（Terminology Check）</h3>
+        <p>この資料で業界標準の用語を使い、独自表現は標準語へ対応付けたか。</p>
+        <table>
+          <thead><tr><th>この資料の言葉</th><th>標準用語・意味</th></tr></thead>
+          <tbody>
+            <tr><td>AI Review Record</td><td>レビュー実施の監査証跡（audit record）。Git の Reviewed-by トレーラー慣行に相当する構造化記録。</td></tr>
+            <tr><td>head コミット一致</td><td>レビュー対象と最終成果物の同一性保証。stale review（古いレビューの流用）の防止。</td></tr>
+            <tr><td>advisory → hard-gate 昇格</td><td>本プロジェクトのレジストリ用語。名目ルール（working-agreement）からマージ阻止ゲートへの格上げ。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>一次情報チェック（References / Primary Sources）</h3>
+        <p>判断の根拠について、大元の一次情報（公式ドキュメント・正本）に当たったか。</p>
+        <table>
+          <thead><tr><th>当たった一次情報</th><th>裏付ける内容</th></tr></thead>
+          <tbody>
+            <tr><td><code>docs/{en,ja}/rules/code-review/ai-review-protocol.md</code></td><td>既存の記録形式（Reviewed commit・Findings・英日併記）— ゲートはこの正本の形式をそのまま機械化。</td></tr>
+            <tr><td>Issue #79</td><td>昇格の目的・受け入れ条件。2026-07-09 のオーナー委任と「品質ゲート3部作」の指示。</td></tr>
+            <tr><td>2026-06-19 研究（deep-research w8b7b0f3v）</td><td>「レビューの記録はあるが実施と鮮度は強制されていない」というギャップ指摘（middle-priority #5 の前段）。</td></tr>
+            <tr><td>ローカル検証ログ</td><td>ゲート単体テスト6ケース（docs-only 通過／記録なし fail／新鮮な記録 通過／古い SHA fail／Findings なし fail／旧見出し受理）全パス。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー資料</p>
+  </main>
+</body>
+</html>

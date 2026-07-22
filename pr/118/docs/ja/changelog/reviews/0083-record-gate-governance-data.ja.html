@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レビュー 0083: governance データにも AI レビュー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#16161A; --mute:#6E6E76; --rule:#C9CCC4; --paper:#F4F2EC; --panel:#FBFAF6;
+      --lime:#B6E300; --lime-ink:#46590a;
+      --display:"Space Grotesk", system-ui, sans-serif;
+      --body:"Inter", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.85; font-feature-settings:"tnum" 1; -webkit-font-smoothing:antialiased;}
+    main{max-width:780px; margin:0 auto; padding:72px 28px 96px;}
+
+    .topmeta{font-family:var(--display); font-weight:500; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; margin:0 0 26px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+    .topmeta .num, .topmeta b{color:var(--ink); font-weight:500;}
+    .topmeta .dot{width:6px; height:6px; background:var(--lime); border-radius:50%;}
+
+    h1{font-family:var(--display); font-weight:700; font-size:2.7rem; line-height:1.15; letter-spacing:-.01em; margin:0 0 18px;}
+    .lead{font-size:1.12rem; max-width:60ch; margin:0 0 22px;}
+    .lead b{font-weight:500; box-shadow:inset 0 -.5em 0 rgba(182,227,0,.45);}
+
+    section{margin:54px 0 0;}
+    .kicker{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+    .kicker::before{content:""; width:18px; height:1px; background:var(--rule);}
+    .sub{color:var(--mute); margin:-6px 0 16px;}
+
+    .approval{border-top:2px solid var(--ink); padding-top:18px;}
+    .approval .kicker{color:var(--lime-ink);}
+    .approval .kicker::before{background:var(--lime); width:26px; height:2px;}
+    ol.asks{list-style:none; counter-reset:a; margin:0; padding:0;}
+    ol.asks li{counter-increment:a; position:relative; padding:16px 0 16px 46px; border-bottom:1px solid var(--rule);}
+    ol.asks li:last-child{border-bottom:0;}
+    ol.asks li::before{content:counter(a,decimal-leading-zero); position:absolute; left:0; top:16px; font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--lime-ink); line-height:1.15;}
+
+    table{width:100%; border-collapse:collapse; margin:0;}
+    th,td{text-align:left; vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--rule);}
+    thead th{font-family:var(--display); font-weight:500; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mute);}
+    tbody td:first-child{font-weight:500;}
+    tbody tr:last-child td{border-bottom:0;}
+    code{font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:.86em; background:rgba(0,0,0,.05); padding:2px 6px; border-radius:4px; overflow-wrap:anywhere;}
+
+    .risk{background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--ink); padding:18px 22px;}
+    .risk p{margin:0;}
+
+    ul.scope{list-style:none; margin:0; padding:0;}
+    ul.scope li{position:relative; padding:11px 0 11px 22px; border-bottom:1px solid var(--rule); color:var(--mute);}
+    ul.scope li:last-child{border-bottom:0;}
+    ul.scope li::before{content:"—"; position:absolute; left:0; color:var(--rule);}
+
+    h3{font-family:var(--display); font-weight:500; font-size:1rem; margin:0 0 6px;}
+    .checklist{border-top:1px solid var(--rule); padding-top:8px;}
+    .check{padding:18px 0; border-bottom:1px solid var(--rule);}
+    .check:last-child{border-bottom:0;}
+    .check > p{color:var(--mute); margin:0 0 12px;}
+    .check table{margin-top:6px;}
+
+    p{margin:0 0 12px;} p:last-child{margin-bottom:0;}
+    a{color:var(--lime-ink); text-underline-offset:3px;}
+    .foot{margin-top:68px; border-top:1px solid var(--rule); padding-top:16px; font-size:.8rem; color:var(--mute);}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="topmeta"><span>オーナーレビュー</span><span class="dot"></span><span class="num">0083</span><span><b>Draft</b></span><span><b>2026-07-11</b></span></p>
+      <h1>governance データにも AI レビュー</h1>
+      <p class="lead">このレビューは、<b>AI レビュー記録ゲートが governance データファイルを統制の状態として扱う</b>ようにする承認を求めるものです — レジストリのみ・バックログのみの PR が独立 AI レビューなしでマージできた穴を塞ぎます。</p>
+    </header>
+
+    <section class="approval">
+      <p class="kicker">Requested Approval</p>
+      <ol class="asks">
+        <li><b>原則の採用。</b>governance データはドキュメントではなく統制の状態。<code>monitor/registry.json</code> の編集はゲートを無効化でき、<code>project-components.json</code> は CI が実行するコマンドを宣言し、<code>monitor/backlog.json</code> は判断を記録する。これらの変更には実装コードと同じ独立 AI レビュー要件を課す。</li>
+        <li><b>仕組みの採用。</b><code>check-ai-review-record.ps1</code> の実装/統制パターン一覧に3パスを追加。これらに触れる PR は新鮮な AI レビュー記録（現在の head・異なる作成者/レビュアーコンテキスト）を要求される。docs のみの PR は従来どおり対象外。</li>
+        <li><b>保守ルールの受け入れ。</b>一覧は手動管理のまま: 将来 governance データファイルが生まれたら、それを作るレビューの中で同じ変更としてこの一覧を拡張する。</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="kicker">What Changed</p>
+      <p class="sub">承認内容を実装する具体ファイル。</p>
+      <table>
+        <thead><tr><th>変更ファイル</th><th>変更内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>scripts/guardrails/check-ai-review-record.ps1</code></td><td>既定の <code>CodePathPatterns</code> に governance データ3パスを追加。各々が統制の状態である理由をコメントで明記。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/0074-*.md</code></td><td>変更ノート（英日）。</td></tr>
+          <tr><td><code>docs/{en,ja}/changelog/reviews/0083-*.html</code></td><td>本成果物（英日）。レビュー索引を再生成。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <p class="kicker">Risk</p>
+      <div class="risk">
+        <p>低。ゲートは厳しくなる方向にのみ変わり、既存の要件は一切緩めない。ビフォー/アフターを両方向で確認済み: レジストリのみの変更は従来「実装/統制ファイルなし」（exit 0）だったが、いまは記録を要求（記録なしなら exit 1）。docs のみの変更は引き続き通過。残余リスクは手動管理の一覧が新しい governance ファイルに追随しないこと — 上記の保守ルールで緩和。</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="kicker">Not Decided Here</p>
+      <ul class="scope">
+        <li>生成物のモニター HTML（<code>monitor/*.html</code>）にも記録を要求するか — 派生出力で鮮度ゲートが同期を担保するため、対象外のまま。</li>
+        <li>バックログ項目 BL-029..031（プレビュー公開の修正）— 別作業。</li>
+        <li>パターン一覧をレジストリから自動生成すること（将来の改良。3件の現状では不要）。</li>
+      </ul>
+    </section>
+
+    <section class="checklist">
+      <p class="kicker">Author Checks</p>
+
+      <div class="check" data-guardrail="standard-terminology">
+        <h3>Terminology Check</h3>
+        <p>本成果物は業界標準の用語を使い、プロジェクト固有の言い回しを標準語彙へ対応づけているか。</p>
+        <table>
+          <thead><tr><th>本成果物の用語</th><th>標準用語 / 意味</th></tr></thead>
+          <tbody>
+            <tr><td>governance データ／統制の状態</td><td>その値がどの統制を強制するかを決める設定 — policy-as-code のデータで、ドキュメントとは区別される。</td></tr>
+            <tr><td>パターン一覧（ゲートのパス指定）</td><td>CI ポリシーチェックのパスベースのスコープ指定。本ゲートが実装コードに対して既に使っていた標準的な仕組み。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="check" data-guardrail="primary-references">
+        <h3>References / Primary Sources</h3>
+        <p>本決定の根拠となる一次情報を直接確認したか。</p>
+        <table>
+          <thead><tr><th>確認した情報源</th><th>裏づける内容</th></tr></thead>
+          <tbody>
+            <tr><td>オーナー決定（2026-07-11 セッション）</td><td>「PR は必ず AI レビュー必要では？」という問い、発見された穴、governance データについて塞ぐという方向。</td></tr>
+            <tr><td><code>scripts/guardrails/check-ai-review-record.ps1</code>（パターン一覧・前後の実行）</td><td>従来の挙動（レジストリのみで exit 0）と新しい挙動（記録要求、無ければ exit 1）。</td></tr>
+            <tr><td>PR #113 の CI 実行</td><td>具体例: バックログのみの PR が記録不要のまま緑。</td></tr>
+            <tr><td>ローカル検証ログ</td><td>緑のスイート。前後比較と docs のみの対照実行。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <p class="foot">Project Shelf · オーナー向けレビュー成果物</p>
+  </main>
+</body>
+</html>
